@@ -1,0 +1,942 @@
+import React, { useEffect, useState } from "react";
+
+const EarlyBirdLanding = () => {
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const calculateTimeLeft = () => {
+    const target = new Date("2025-12-20T23:59:59+07:00").getTime();
+    const now = Date.now();
+    const diff = target - now;
+
+    if (diff <= 0) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    return { days, hours, minutes, seconds };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (!element) return;
+
+    // Hitung tinggi header (top bar + navbar)
+    const headerHeight = document.getElementById("sticky-header")?.offsetHeight || 0;
+
+    const topPosition = element.offsetTop - headerHeight - 12; // extra padding
+
+    window.scrollTo({
+      top: topPosition,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      {/* WRAPPER */}
+      <div className="mx-auto max-w-6xl px-4 pb-16">
+
+        {/* HEADER WRAPPER — sticky */}
+        <div id="sticky-header" className="sticky top-0 z-50 bg-white/80 backdrop-blur-md">
+          {/* TOP INFO BAR */}
+          <div className="bg-[#7f6b5d] text-white text-xs sm:text-sm py-2 px-4 rounded-b-xl shadow">
+            <div className="flex flex-col gap-1 items-start justify-between sm:flex-row sm:items-center">
+              <span>
+                🎉 Program Prioritas (Early Bird) PMB UNPAS – Pendaftaran 3–20 Desember | Daftar ulang 6–30 Desember
+              </span>
+              <div className="flex items-center gap-3 text-[11px] sm:text-xs">
+                <a
+                  href="tel:0222021440"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline-offset-2 hover:underline cursor-pointer">📞 Call Center PMB</a>
+                <a
+                  href="https://wa.me/62811960193?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20PMB%20UNPAS"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline-offset-2 hover:underline cursor-pointer">
+                  💬 Chat WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* NAVBAR */}
+          <header className="flex items-center justify-between py-4">
+            <a href="/" className="flex items-center gap-3">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-slate-300" >
+                  <img src="/landing_page_pmb/logo_unpas.png" alt="Logo Unpas" className="h-full w-full object-cover" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold tracking-wide">Universitas Pasundan</span>
+                  <span className="text-xs text-slate-500">Penerimaan Mahasiswa Baru 2026</span>
+                </div>
+              </div>
+            </a>
+
+            <div className="hidden md:flex items-center gap-6 text-sm">
+              <button className="text-slate-600 hover:text-[#822327] cursor-pointer" onClick={() => scrollToSection("keunggulan-unpas")}>Keunggulan UNPAS</button>
+              <button className="text-slate-600 hover:text-[#822327] cursor-pointer" onClick={() => scrollToSection("kenapa-early-bird")}>Kenapa Early Bird</button>
+              <button className="text-slate-600 hover:text-[#822327] cursor-pointer" onClick={() => scrollToSection("timeline-alur")}>Timeline &amp; Alur</button>
+              <button className="text-slate-600 hover:text-[#822327] cursor-pointer" onClick={() => scrollToSection("fakultas")}>Fakultas</button>
+              <button className="text-slate-600 hover:text-[#822327] cursor-pointer" onClick={() => scrollToSection("biaya-promo")}>Biaya &amp; Promo</button>
+            </div>
+
+            {/* HAMBURGER MENU (Mobile Only) */}
+            <button
+              className="md:hidden text-slate-700"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
+              </svg>
+            </button>
+
+            <a
+              href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:block rounded-full bg-[#7f6b5d] px-4 py-2 text-xs sm:text-sm font-semibold text-white shadow hover:bg-[#6f5e52] cursor-pointer"
+            >
+              Daftar Sekarang
+            </a>
+
+          </header>
+
+          {/* MOBILE MENU DROPDOWN */}
+          {isMenuOpen && (
+            <div className="md:hidden bg-white shadow-lg py-3 px-4 flex flex-col gap-3 text-sm">
+              <button onClick={() => { scrollToSection("keunggulan-unpas"); setIsMenuOpen(false); }}>Keunggulan UNPAS</button>
+              <button onClick={() => { scrollToSection("kenapa-early-bird"); setIsMenuOpen(false); }}>Kenapa Early Bird</button>
+              <button onClick={() => { scrollToSection("timeline-alur"); setIsMenuOpen(false); }}>Timeline &amp; Alur</button>
+              <button onClick={() => { scrollToSection("fakultas"); setIsMenuOpen(false); }}>Fakultas</button>
+              <button onClick={() => { scrollToSection("biaya-promo"); setIsMenuOpen(false); }}>Biaya &amp; Promo</button>
+
+              <a
+                href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 rounded-full bg-[#7f6b5d] px-4 py-2 text-sm text-center font-semibold text-white shadow hover:bg-[#6f5e52]"
+              >
+                Daftar Sekarang
+              </a>
+            </div>
+          )}
+        </div>
+
+        {/* HERO SECTION */}
+        <section className="mt-4 grid gap-10 md:grid-cols-2 md:items-center">
+          {/* HERO LEFT */}
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-md font-medium text-emerald-700">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              PROGRAM PRIORITAS (EARLY BIRD) PMB 2026
+            </div>
+
+            <div className="space-y-3">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-snug">
+                Daftar Lebih Awal,
+                <span className="block text-[#822327]">Amankan Kursi &amp; Keuntungan Khusus</span>
+              </h1>
+              <p className="text-sm sm:text-base text-slate-600">
+                Pendaftaran Program Prioritas (Early Bird) dibuka{" "}
+                <span className="font-semibold text-slate-800">3–20 Desember</span>{" "}
+                dan daftar ulang{" "}
+                <span className="font-semibold text-slate-800">6–30 Desember</span>. Kuota terbatas untuk fakultas
+                dan program studi favorit.
+              </p>
+            </div>
+
+            <ul className="space-y-2 text-sm text-slate-700">
+              <li className="flex gap-2">
+                <span>✅</span>
+                <span>Prioritas kursi di fakultas dan prodi pilihan*</span>
+              </li>
+              <li className="flex gap-2">
+                <span>✅</span>
+                <span>Benefit biaya Early Bird: potongan DP, potongan DPP, dan bonus pelunasan awal*</span>
+              </li>
+              <li className="flex gap-2">
+                <span>✅</span>
+                <span>Waktu lebih longgar untuk fokus persiapan UN/UTBK</span>
+              </li>
+            </ul>
+
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <a
+                href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-[#7f6b5d] px-5 py-2.5 text-sm font-semibold text-white shadow hover:bg-[#6f5e52] cursor-pointer"
+              >
+                Daftar Sekarang (3–20 Desember)
+              </a>
+              <button className="text-xs sm:text-sm text-[#822327] underline-offset-2 hover:underline cursor-pointer">
+                Lihat skema biaya &amp; promo →
+              </button>
+            </div>
+
+            <p className="text-[11px] text-slate-500">
+              *Detail skema biaya dan potensi potongan mengikuti ketentuan resmi UNPAS dan SK Program Prioritas PMB 2026.
+            </p>
+          </div>
+
+          {/* HERO RIGHT */}
+          <div className="space-y-4">
+            {/* Ilustrasi */}
+            <div className="relative overflow-hidden rounded-2xl bg-[#7f6b5d] p-6 text-white shadow-lg">
+              {/* <div className="absolute right-4 top-4 rounded-full bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur">
+                ⏰ Ditutup 20 Desember
+              </div> */}
+              <div className="absolute right-3 top-3 rounded-full bg-black/60 px-3 py-1 text-s font-semibold text-white backdrop-blur-sm shadow-md">
+                ⏰ Ditutup 20 Desember
+              </div>
+
+              <div className="rounded-xl overflow-hidden">
+                <div className="aspect-[16/9] w-full">
+                  <img
+                    src="/landing_page_pmb/mahasiswa.jpg"
+                    alt="Ilustrasi kampus / mahasiswa UNPAS"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Countdown + Mini timeline */}
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-600">Waktu tersisa hingga penutupan Early Bird</span>
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-medium text-emerald-700">
+                  Live Countdown
+                </span>
+              </div>
+
+              <div className="mt-3 flex gap-2 text-center text-xs sm:text-sm">
+                <div className="flex-1 rounded-xl bg-slate-100 py-2">
+                  <div className="text-lg font-bold">
+                    {timeLeft.days.toString().padStart(2, "0")}
+                  </div>
+                  <div className="text-[11px] text-slate-500">Hari</div>
+                </div>
+                <div className="flex-1 rounded-xl bg-slate-100 py-2">
+                  <div className="text-lg font-bold">
+                    {timeLeft.hours.toString().padStart(2, "0")}
+                  </div>
+                  <div className="text-[11px] text-slate-500">Jam</div>
+                </div>
+                <div className="flex-1 rounded-xl bg-slate-100 py-2">
+                  <div className="text-lg font-bold">
+                    {timeLeft.minutes.toString().padStart(2, "0")}
+                  </div>
+                  <div className="text-[11px] text-slate-500">Menit</div>
+                </div>
+                <div className="flex-1 rounded-xl bg-slate-100 py-2">
+                  <div className="text-lg font-bold">
+                    {timeLeft.seconds.toString().padStart(2, "0")}
+                  </div>
+                  <div className="text-[11px] text-slate-500">Detik</div>
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-2 text-[11px] sm:text-xs">
+                <div className="flex items-start gap-2">
+                  <div className="mt-0.5 h-2 w-2 rounded-full bg-[#7f6b5d]" />
+                  <div>
+                    <div className="font-semibold text-slate-800">3–20 Desember</div>
+                    <div className="text-slate-500">Pendaftaran Online Program Prioritas (Early Bird)</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <div className="mt-0.5 h-2 w-2 rounded-full bg-amber-500" />
+                  <div>
+                    <div className="font-semibold text-slate-800">6–30 Desember</div>
+                    <div className="text-slate-500">Daftar Ulang &amp; Konfirmasi Kursi</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <div className="mt-0.5 h-2 w-2 rounded-full bg-slate-700" />
+                  <div>
+                    <div className="font-semibold text-slate-800">Januari 2026</div>
+                    <div className="text-slate-500">Pembukaan Gelombang 1 (Reguler)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION: KEUNGGULAN UNPAS */}
+        <section className="mt-16" id="keunggulan-unpas">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Keunggulan UNPAS</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              Kampus swasta ternama di Bandung yang telah berdiri sejak 1960 di bawah Paguyuban Pasundan, dengan jaringan alumni yang
+              luas, rekam jejak panjang sebagai PTS unggulan di Jawa Barat, suasana akademik yang religius, dan ekosistem pembelajaran
+              yang adaptif terhadap dunia kerja modern.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-4">
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Jaringan Alumni Luas</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Alumni tersebar di berbagai sektor industri, pemerintahan, dan wirausaha, menjadi jaringan kuat bagi kariermu.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Banyak Pilihan Beasiswa</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Tersedia beragam skema beasiswa dan jalur prestasi yang dapat membantu meringankan biaya studi.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Lingkungan Religius</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Nilai keislaman dan keindonesiaan menjadi fondasi pembentukan karakter mahasiswa UNPAS.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Adaptif Dunia Kerja</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Kurikulum dan kegiatan kampus dirancang selaras dengan kebutuhan industri dan perkembangan teknologi.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION: KENAPA EARLY BIRD */}
+        <section className="mt-16" id="kenapa-early-bird">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Kenapa Harus Ambil Program Prioritas (Early Bird)?</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              Bukan sekadar daftar lebih awal, tapi strategi supaya kamu lebih siap, lebih tenang, dan berpotensi lebih hemat sesuai
+              kebijakan Program Prioritas PMB UNPAS 2026.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                🎯
+              </div>
+              <h3 className="text-sm font-semibold text-slate-900">Amankan Kursi di Fakultas Favorit</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Beberapa fakultas dan prodi memiliki persaingan yang ketat dan minat yang tinggi. Daftar di periode Early Bird meningkatkan peluangmu masuk ke bidang studi yang
+                kamu inginkan.
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                💸
+              </div>
+              <h3 className="text-sm font-semibold text-slate-900">Benefit Biaya Lebih Menguntungkan</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Potongan uang bangunan (DP) Rp 2.500.000, potongan uang kuliah (DPP) Rp 1.500.000, gratis biaya pendaftaran, dan
+                potongan Rp 1.000.000 untuk pelunasan di awal.*
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                🧠
+              </div>
+              <h3 className="text-sm font-semibold text-slate-900">Fokus ke Persiapan Akademik</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Setelah urusan pendaftaran dan daftar ulang beres, kamu bisa fokus ke UN/UTBK dan persiapan masuk kuliah tanpa beban
+                administrasi.
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-4 text-center text-[11px] text-slate-500">
+            *Syarat dan ketentuan berlaku sesuai kebijakan resmi UNPAS dan tertuang dalam SOP &amp; SK Program Prioritas PMB 2026.
+          </p>
+        </section>
+
+        {/* SECTION: TIMELINE & ALUR */}
+        <section className="mt-16" id="timeline-alur">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Timeline Program Prioritas &amp; Gelombang Lanjutan</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              Ikuti alur berikut untuk memastikan kursimu aman di UNPAS dan memahami transisi ke Gelombang 1 reguler.
+            </p>
+          </div>
+
+          <div className="mt-8">
+            {/* DESKTOP TIMELINE */}
+            <div className="hidden md:flex items-start justify-between gap-6">
+              <div className="flex-1">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#7f6b5d] text-sm font-bold text-white">
+                    1
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold uppercase text-emerald-700">3–20 Desember</div>
+                    <h3 className="text-sm font-semibold text-slate-900">Pendaftaran Online Early Bird</h3>
+                  </div>
+                </div>
+                <p className="mt-2 text-sm text-slate-600">
+                  Isi form pendaftaran, pilih fakultas &amp; prodi, upload dokumen dasar, dan ikuti instruksi pembayaran jika ada biaya lain
+                  yang ditentukan.
+                </p>
+              </div>
+
+              <div className="mt-4 h-px flex-1 bg-slate-200" />
+
+              <div className="flex-1">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-500 text-sm font-bold text-white">
+                    2
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold uppercase text-amber-600">6–30 Desember</div>
+                    <h3 className="text-sm font-semibold text-slate-900">Daftar Ulang &amp; Konfirmasi</h3>
+                  </div>
+                </div>
+                <p className="mt-2 text-sm text-slate-600">
+                  Verifikasi kelulusan (jika ada), lakukan daftar ulang, pembayaran sesuai ketentuan, dan konfirmasi pilihan fakultas &amp;
+                  prodi.
+                </p>
+              </div>
+
+              <div className="mt-4 h-px flex-1 bg-slate-200" />
+
+              <div className="flex-1">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 text-sm font-bold text-white">
+                    3
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold uppercase text-slate-600">Januari 2026</div>
+                    <h3 className="text-sm font-semibold text-slate-900">Pembukaan Gelombang 1 (Reguler)</h3>
+                  </div>
+                </div>
+                <p className="mt-2 text-sm text-slate-600">
+                  Gelombang 1 resmi dibuka untuk pendaftaran reguler dengan skema biaya normal sesuai panduan resmi.
+                </p>
+              </div>
+            </div>
+
+            {/* MOBILE TIMELINE */}
+            <div className="md:hidden mt-6 space-y-6">
+              {[
+                {
+                  step: 1,
+                  label: "3–20 Desember",
+                  title: "Pendaftaran Online Early Bird",
+                  desc: "Isi form, pilih fakultas & prodi, upload dokumen dasar.",
+                },
+                {
+                  step: 2,
+                  label: "6–30 Desember",
+                  title: "Daftar Ulang & Konfirmasi",
+                  desc: "Verifikasi kelulusan (jika ada), daftar ulang, dan konfirmasi pilihan.",
+                },
+                {
+                  step: 3,
+                  label: "Januari 2026",
+                  title: "Pembukaan Gelombang 1 (Reguler)",
+                  desc: "Gelombang 1 resmi dibuka untuk pendaftaran reguler.",
+                },
+              ].map((item, idx) => (
+                <div key={item.step} className="flex gap-3">
+                  <div className="flex flex-col items-center">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7f6b5d] text-xs font-bold text-white">
+                      {item.step}
+                    </div>
+                    {idx < 2 && <div className="mt-1 h-full w-px flex-1 bg-slate-200" />}
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-semibold uppercase text-emerald-700">{item.label}</div>
+                    <h3 className="text-sm font-semibold text-slate-900">{item.title}</h3>
+                    <p className="mt-1 text-xs text-slate-600">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-10 rounded-2xl bg-white p-5 shadow-sm">
+            <h3 className="text-sm font-semibold text-slate-900">Alur Pendaftaran Early Bird</h3>
+            <ol className="mt-3 grid gap-3 text-xs sm:text-sm md:grid-cols-3">
+              <li className="rounded-xl bg-slate-50 p-3">
+                <span className="font-semibold text-slate-800">1. Isi Form Online</span>
+                <p className="mt-1 text-slate-600">
+                  Klik &quot;Daftar Sekarang&quot;, lengkapi data diri, pilih fakultas, dan simpan akun pendaftaranmu.
+                </p>
+              </li>
+              <li className="rounded-xl bg-slate-50 p-3">
+                <span className="font-semibold text-slate-800">2. Upload Dokumen &amp; Proses Pembayaran</span>
+                <p className="mt-1 text-slate-600">
+                  Unggah dokumen yang diminta dan ikuti instruksi pembayaran sesuai ketentuan Early Bird.
+                </p>
+              </li>
+              <li className="rounded-xl bg-slate-50 p-3">
+                <span className="font-semibold text-slate-800">3. Verifikasi &amp; Daftar Ulang</span>
+                <p className="mt-1 text-slate-600">
+                  Cek pengumuman, lalu lakukan daftar ulang pada 6–30 Desember untuk mengunci kursi.
+                </p>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        {/* SECTION: FAKULTAS */}
+        <section className="mt-16" id="fakultas">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Pilih Fakultas &amp; Bidang Studi</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              UNPAS memiliki berbagai fakultas dengan program studi unggulan. Mulailah dari memilih fakultas yang paling sesuai dengan
+              minat dan rencana kariermu.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Fakultas Teknik</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Fokus pada pengembangan teknologi, rekayasa, dan inovasi di berbagai bidang teknik seperti teknik industri, informatika,
+                mesin, lingkungan, dan perencanaan wilayah.
+              </p>
+              <button className="mt-3 text-xs font-semibold text-[#822327] underline-offset-2 hover:underline cursor-pointer">
+                Lihat daftar prodi di Fakultas Teknik →
+              </button>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Fakultas Ekonomi &amp; Bisnis</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Mempelajari manajemen, akuntansi, dan ilmu ekonomi untuk menyiapkan lulusan yang siap berkarier di dunia bisnis,
+                kewirausahaan, dan keuangan.
+              </p>
+              <button className="mt-3 text-xs font-semibold text-[#822327] underline-offset-2 hover:underline cursor-pointer">
+                Lihat daftar prodi di FEB →
+              </button>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Fakultas Hukum</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Menjadi pusat kajian hukum yang melahirkan sarjana hukum profesional, kritis, dan berintegritas di bidang hukum publik
+                maupun privat.
+              </p>
+              <button className="mt-3 text-xs font-semibold text-[#822327] underline-offset-2 hover:underline cursor-pointer">
+                Lihat daftar prodi di Fakultas Hukum →
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION: BIAYA & SKEMA PROGRAM PRIORITAS */}
+        <section className="mt-16" id="biaya-promo">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Biaya &amp; Skema Program Prioritas (Early Bird)</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              Khusus pendaftar Program Prioritas, kamu mendapatkan paket benefit biaya yang lebih menguntungkan dibanding gelombang
+              reguler.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Ringkasan Benefit Biaya Program Prioritas</h3>
+              <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                <li>
+                  • Potongan uang bangunan (DP): <span className="font-semibold">Rp 2.500.000</span>
+                </li>
+                <li>
+                  • Potongan uang kuliah (DPP): <span className="font-semibold">Rp 1.500.000</span>
+                </li>
+                <li>
+                  • <span className="font-semibold">Gratis biaya pendaftaran</span> (formulir Rp 300.000)
+                </li>
+                <li>
+                  • Potongan tambahan <span className="font-semibold">Rp 1.000.000</span> bagi yang melakukan pelunasan di awal
+                </li>
+              </ul>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Catatan Penting</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Besaran potongan di atas berlaku khusus untuk periode Program Prioritas 3–20 Desember. Skema ini dapat dikombinasikan
+                dengan jalur prestasi atau beasiswa tertentu sesuai kebijakan resmi UNPAS.
+              </p>
+              <p className="mt-2 text-xs text-slate-500">
+                Detail final akan tercantum dalam panduan resmi biaya pendidikan dan keputusan Rektor/Yayasan.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 overflow-hidden rounded-2xl bg-white shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-slate-200 text-xs sm:text-sm">
+                <thead className="bg-slate-200">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold text-slate-700">Jalur / Gelombang</th>
+                    <th className="px-4 py-3 text-left font-semibold text-slate-700">Periode</th>
+                    <th className="px-4 py-3 text-left font-semibold text-slate-700">Biaya Pendaftaran</th>
+                    <th className="px-4 py-3 text-left font-semibold text-slate-700">Skema Potongan</th>
+                    <th className="px-4 py-3 text-left font-semibold text-slate-700">Catatan</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 bg-white">
+                  <tr>
+                    <td className="px-4 py-3 font-semibold text-slate-900">Program Prioritas (Early Bird)</td>
+                    <td className="px-4 py-3 text-slate-700">3–20 Desember</td>
+                    <td className="px-4 py-3 text-slate-700">Gratis (dari Rp 300.000)</td>
+                    <td className="px-4 py-3 text-slate-700">
+                      Potongan DP Rp 2.500.000 + potongan DPP Rp 1.500.000 + potongan Rp 1.000.000 untuk pelunasan awal
+                    </td>
+                    <td className="px-4 py-3 text-slate-600">
+                      Hanya berlaku untuk pendaftar dan daftar ulang sesuai periode Program Prioritas.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-semibold text-slate-900">Gelombang 1</td>
+                    <td className="px-4 py-3 text-slate-700">(Estimasi) Jan–Mar</td>
+                    <td className="px-4 py-3 text-slate-700">Rp 300.000</td>
+                    <td className="px-4 py-3 text-slate-700">Tanpa potongan Program Prioritas (skema reguler)</td>
+                    <td className="px-4 py-3 text-slate-600">
+                      Detail mengikuti panduan resmi biaya pendidikan UNPAS.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-semibold text-slate-900">Gelombang 2 &amp; 3</td>
+                    <td className="px-4 py-3 text-slate-700">(Estimasi) Apr–Agt</td>
+                    <td className="px-4 py-3 text-slate-700">Rp 300.000</td>
+                    <td className="px-4 py-3 text-slate-700">Tanpa potongan Program Prioritas (skema reguler)</td>
+                    <td className="px-4 py-3 text-slate-600">
+                      Potensi kuota lebih terbatas di beberapa prodi favorit.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* BANNER: KETENTUAN REFUND */}
+          <div className="mt-8 rounded-2xl border border-red-200 bg-red-100 p-6 shadow-sm">
+
+            {/* Text Section */}
+            <div className="w-full">
+              <p className="mt-1 text-lg text-black-800/80 font-bold">
+                Jangan khawatir! UNPAS memberi perlindungan pengembalian biaya untuk situasi tertentu.
+                Baca dokumen ketentuan resminya agar kamu mendaftar tanpa ragu.
+              </p>
+            </div>
+
+            {/* CTA Button – Full Width */}
+            <div className="w-full mt-4">
+              <a
+                href="https://s.id/unpas_pmb_refund"
+                target="_blank"
+                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#7f6b5d] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#6f5e52] transition"
+              >
+                📄 Unduh Dokumen Persetujuan Ketentuan Pengembalian Biaya Registrasi Camaba Universitas Pasundan 2026-2027
+              </a>
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* SECTION: TESTIMONI */}
+        <section className="mt-16" id="testimoni">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Cerita dari Mahasiswa &amp; Orang Tua</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              Pengalaman mereka yang memilih daftar di gelombang awal dan kini resmi menjadi bagian dari keluarga besar UNPAS.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <p className="text-sm text-slate-700">
+                "Saya daftar sejak periode Program Prioritas, jadi urusan administrasi beres lebih cepat. Setelah itu bisa fokus ke
+                persiapan UTBK tanpa mikirin pendaftaran kampus."
+              </p>
+              <div className="mt-4 text-sm font-semibold text-slate-900">Rani</div>
+              <div className="text-xs text-slate-500">Mahasiswa Teknik Informatika</div>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <p className="text-sm text-slate-700">
+                "Sebagai orang tua, kami terbantu karena jadwal dan biaya sudah jelas dari awal. Anak kami bisa lebih tenang
+                menyelesaikan sekolahnya."
+              </p>
+              <div className="mt-4 text-sm font-semibold text-slate-900">Bapak Dedi</div>
+              <div className="text-xs text-slate-500">Orang tua mahasiswa Manajemen</div>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+              <p className="text-sm text-slate-700">
+                "Program Prioritas membantu saya mengunci kursi di prodi favorit. Sekarang sudah aktif ikut kegiatan kampus dan
+                organisasi mahasiswa."
+              </p>
+              <div className="mt-4 text-sm font-semibold text-slate-900">Ajeng</div>
+              <div className="text-xs text-slate-500">Mahasiswa Ilmu Komunikasi</div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION: FAQ */}
+        {/* <section className="mt-16" id="faq">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">FAQ – Pertanyaan Seputar Program Prioritas (Early Bird)</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              Ringkasan beberapa kebijakan penting Program Prioritas sesuai SOP &amp; SK PMB UNPAS 2026. Untuk informasi lengkap,
+              tetap mengacu pada dokumen resmi yang diterbitkan oleh UNPAS.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Apa bedanya Program Prioritas dengan gelombang reguler?</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Program Prioritas dibuka lebih awal dengan kuota terbatas per fakultas serta paket benefit biaya yang lebih
+                menguntungkan (potongan DP, potongan DPP, gratis formulir, dan bonus pelunasan awal). Gelombang reguler menggunakan skema
+                biaya normal sesuai panduan resmi biaya pendidikan.
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Kalau saya diterima di PTN, apakah bisa refund?</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Peserta Program Prioritas yang diterima di perguruan tinggi negeri dapat mengajukan refund sesuai SOP Program Prioritas.
+                Besaran dan mekanisme refund mengacu pada SK Rektor tentang Program Prioritas PMB 2026. Silakan hubungi Call Center PMB di
+                <span className="font-semibold"> 0811960193</span> untuk panduan teknis pengajuan.
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-900">Bagaimana kalau saya tidak daftar ulang sampai 30 Desember?</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Jika tidak melakukan daftar ulang sampai 30 Desember, hak benefit Program Prioritas (potongan biaya dan prioritas kursi)
+                dapat dinyatakan batal sesuai ketentuan. Kamu tetap bisa melanjutkan proses pada gelombang reguler jika masih dibuka dan
+                kuota masih tersedia, mengikuti aturan yang berlaku.
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white p-4 shadow-sm md:col-span-2">
+              <h3 className="text-sm font-semibold text-slate-900">Apakah saya bisa mengubah pilihan fakultas atau program studi?</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Perubahan pilihan fakultas atau program studi dimungkinkan sepanjang mengikuti ketentuan yang berlaku, ketersediaan kuota,
+                dan jadwal yang ditetapkan dalam SOP PMB. Silakan koordinasi dengan Tim PMB melalui WhatsApp atau Call Center
+                <span className="font-semibold"> 0811960193</span> untuk informasi terbaru dan prosedur resminya.
+              </p>
+            </div>
+          </div>
+        </section> */}
+
+
+        {/* SECTION: FAQ */}
+        <section className="mt-16" id="faq">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">FAQ – Pertanyaan Seputar Program Prioritas (Early Bird)</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              Ringkasan beberapa kebijakan penting Program Prioritas sesuai SOP &amp; SK PMB UNPAS 2026.
+              Untuk informasi lengkap, tetap mengacu pada dokumen resmi yang diterbitkan oleh UNPAS.
+            </p>
+          </div>
+
+          <div className="mt-8 space-y-4">
+            {/* FAQ 1 */}
+            <details className="group rounded-2xl bg-white p-4 shadow-sm" open>
+              <summary className="cursor-pointer text-sm font-semibold text-slate-900 list-none flex justify-between items-center">
+                Apa bedanya Program Prioritas dengan gelombang reguler?
+                <span className="transition-transform group-open:rotate-180 text-slate-500">⌄</span>
+              </summary>
+
+              <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-open:max-h-96 group-open:opacity-100">
+                <p className="mt-2 text-sm text-slate-600">
+                  Program Prioritas dibuka lebih awal dengan kuota terbatas per fakultas serta paket benefit biaya
+                  yang lebih menguntungkan (potongan DP, potongan DPP, gratis formulir, dan bonus pelunasan awal).
+                  Gelombang reguler menggunakan skema biaya normal sesuai panduan resmi biaya pendidikan.
+                </p>
+              </div>
+            </details>
+
+            {/* FAQ 2 */}
+            <details className="group rounded-2xl bg-white p-4 shadow-sm">
+              <summary className="cursor-pointer text-sm font-semibold text-slate-900 list-none flex justify-between items-center">
+                Kalau saya diterima di PTN, apakah bisa refund?
+                <span className="transition-transform group-open:rotate-180 text-slate-500">⌄</span>
+              </summary>
+
+              <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-open:max-h-96 group-open:opacity-100">
+                <p className="mt-2 text-sm text-slate-600">
+                  Peserta Program Prioritas yang diterima di perguruan tinggi negeri dapat mengajukan refund sesuai SOP Program Prioritas.
+                  Besaran dan mekanisme refund mengacu pada SK Rektor tentang Program Prioritas PMB 2026.
+                  Silakan hubungi Call Center PMB di <span className="font-semibold">0811960193</span> untuk panduan teknis pengajuan.
+                  <br />
+                  <br />
+                  <a href="https://s.id/unpas_pmb_refund" target="_blank" className="text-[#822327] font-semibold underline mt-8">Dokumen Persetujuan Ketentuan Refund</a>
+                </p>
+              </div>
+            </details>
+
+            {/* FAQ 3 */}
+            <details className="group rounded-2xl bg-white p-4 shadow-sm">
+              <summary className="cursor-pointer text-sm font-semibold text-slate-900 list-none flex justify-between items-center">
+                Bagaimana kalau saya tidak daftar ulang sampai 30 Desember?
+                <span className="transition-transform group-open:rotate-180 text-slate-500">⌄</span>
+              </summary>
+
+              <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-open:max-h-96 group-open:opacity-100">
+                <p className="mt-2 text-sm text-slate-600">
+                  Jika tidak melakukan daftar ulang sampai 30 Desember, hak benefit Program Prioritas (potongan biaya dan prioritas kursi)
+                  dapat dinyatakan batal sesuai ketentuan. Kamu tetap bisa melanjutkan proses pada gelombang reguler jika masih dibuka
+                  dan kuota masih tersedia, mengikuti aturan yang berlaku.
+                </p>
+              </div>
+            </details>
+
+            {/* FAQ 4 */}
+            <details className="group rounded-2xl bg-white p-4 shadow-sm">
+              <summary className="cursor-pointer text-sm font-semibold text-slate-900 list-none flex justify-between items-center">
+                Apakah saya bisa mengubah pilihan fakultas atau program studi?
+                <span className="transition-transform group-open:rotate-180 text-slate-500">⌄</span>
+              </summary>
+
+              <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-open:max-h-96 group-open:opacity-100">
+                <p className="mt-2 text-sm text-slate-600">
+                  Perubahan pilihan fakultas atau program studi dimungkinkan sepanjang mengikuti ketentuan yang berlaku,
+                  ketersediaan kuota, dan jadwal yang ditetapkan dalam SOP PMB. Silakan koordinasi dengan Tim PMB melalui WhatsApp
+                  atau Call Center <span className="font-semibold">0811960193</span> untuk informasi terbaru dan prosedur resminya.
+                </p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        {/* SECTION: KONTAK */}
+        <section className="mt-16" id="kontak">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Butuh Bantuan? Hubungi Tim PMB UNPAS</h2>
+            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
+              Tim kami siap membantu menjawab pertanyaanmu seputar pendaftaran, biaya, jalur masuk, serta informasi fakultas dan program
+              studi.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
+              <div className="mb-2 text-2xl">💬</div>
+              <h3 className="text-sm font-semibold text-slate-900">Chat WhatsApp</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Konsultasi cepat seputar jalur masuk, fakultas, dan biaya kuliah.
+              </p>
+              <a
+                href="https://wa.me/62811960193?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20PMB%20UNPAS"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex justify-center rounded-full bg-[#7f6b5d] px-4 py-2 text-xs font-semibold text-white hover:bg-[#6f5e52] cursor-pointer"
+              >
+                Buka WhatsApp PMB
+              </a>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
+              <div className="mb-2 text-2xl">📞</div>
+              <h3 className="text-sm font-semibold text-slate-900">Call Center PMB</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Telp: <span className="font-semibold text-slate-800">(022) 2021440</span>
+                <br />
+                Senin–Jumat, 08.00–16.00 WIB
+              </p>
+              <a
+                href="tel:0222021440"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex justify-center rounded-full bg-[#7f6b5d] px-4 py-2 text-xs font-semibold text-white hover:bg-[#6f5e52] cursor-pointer"
+              >
+                Hubungi Sekarang
+              </a>
+            </div>
+
+            <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
+              <div className="mb-2 text-2xl">📍</div>
+              <h3 className="text-sm font-semibold text-slate-900">Kunjungan Langsung</h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Kampus UNPAS Tamansari
+                <br />
+                Jl. Tamansari No. 6–8, Bandung
+              </p>
+              {/* <button className="mt-3 inline-flex justify-center rounded-full border border-emerald-600 px-4 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 cursor-pointer">
+                Lihat Lokasi di Maps
+              </button> */}
+
+              <a
+                href="https://www.google.com/maps/place/Universitas+Pasundan/@-6.905366,107.6032335,17z/data=!4m14!1m7!3m6!1s0x2e68e865b85ee0d7:0x5fa28af82d475f8a!2sUniversitas+Pasundan!8m2!3d-6.905366!4d107.6081044!16s%2Fg%2F1218dxl7!3m5!1s0x2e68e865b85ee0d7:0x5fa28af82d475f8a!8m2!3d-6.905366!4d107.6081044!16s%2Fg%2F1218dxl7?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex justify-center rounded-full bg-[#7f6b5d] px-4 py-2 text-xs font-semibold text-white hover:bg-[#6f5e52] cursor-pointer"
+              >
+                Lihat Lokasi di Maps
+              </a>
+            </div>
+          </div>
+
+          <p className="mt-4 text-center text-[11px] text-slate-500">
+            Tertarik kunjungan sekolah atau rombongan? Hubungi kami untuk jadwal school visit dan campus tour di Kampus UNPAS Tamansari.
+          </p>
+        </section>
+      </div>
+
+      {/* FOOTER */}
+      <footer className="border-t border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
+            <div className="font-semibold text-slate-700">
+              Penerimaan Mahasiswa Baru 2026 – Universitas Pasundan
+            </div>
+            <div>© 2025 Universitas Pasundan. All rights reserved.</div>
+          </div>
+          <div className="flex flex-wrap gap-4">
+            <button className="hover:text-slate-700 cursor-pointer">Tentang UNPAS</button>
+            <button className="hover:text-slate-700 cursor-pointer">Fakultas &amp; Prodi</button>
+            <button className="hover:text-slate-700 cursor-pointer">Beasiswa</button>
+            <button className="hover:text-slate-700 cursor-pointer">Kebijakan Privasi</button>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default EarlyBirdLanding;
