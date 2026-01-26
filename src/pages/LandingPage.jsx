@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {
-  Scale, Users, Cog, BarChart3, BookOpen, Palette, Stethoscope, GraduationCap, Info, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, UploadCloud, CheckCircle2, Rocket
+  Scale, Users, Cog, BarChart3, BookOpen, Palette, Stethoscope, GraduationCap, Info, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, UploadCloud, CheckCircle2, Rocket, IdCard, SquarePen,
+  LaptopMinimalCheck
 } from "lucide-react";
 import ScrollToTop from "react-scroll-to-top";
-import { DATA } from "../data/PMBData";
+// import { DATA } from "../data/PMBData";
 import { motion } from "framer-motion";
+import ProdiExplorer from "../components/ProdiExplorer";
+import INFORMASI_LIST from "../data/InformasiList";
 
 const PMBLanding = () => {
-  const d = DATA;
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openInfo, setOpenInfo] = useState(null);
 
   const container = {
     hidden: { opacity: 0 },
@@ -40,81 +40,6 @@ const PMBLanding = () => {
       transition: { duration: 0.5, ease: "easeOut" },
     },
   };
-
-  const fakultasList = [
-    {
-      id: 1,
-      title: "FAKULTAS HUKUM",
-      color: "#D32F2F",
-      textColor: "white",
-      icon: <Scale className="mx-auto w-12 h-12" />,
-      link: "https://hukum.unpas.ac.id/",
-      text: "Menjadi pusat kajian hukum dengan lulusan profesional dan berintegritas di bidang hukum publik maupun privat."
-    },
-    {
-      id: 2,
-      title: "FAKULTAS ILMU SOSIAL & POLITIK",
-      color: "#003366",
-      textColor: "white",
-      icon: <Users className="mx-auto w-12 h-12" />,
-      link: "https://fisip.unpas.ac.id/",
-      text: "Mempelajari dinamika sosial, kebijakan publik, komunikasi, dan isu kesejahteraan masyarakat."
-    },
-    {
-      id: 3,
-      title: "FAKULTAS TEKNIK",
-      color: "#FF652F",
-      textColor: "white",
-      icon: <Cog className="mx-auto w-12 h-12" />,
-      link: "https://teknik.unpas.ac.id/",
-      text: "Fokus pada inovasi dan rekayasa teknologi untuk berbagai kebutuhan industri modern."
-    },
-    {
-      id: 4,
-      title: "FAKULTAS EKONOMI & BISNIS",
-      color: "#FFEB3B",
-      textColor: "black",
-      icon: <BarChart3 className="mx-auto w-12 h-12" />,
-      link: "https://feb.unpas.ac.id/main/",
-      text: "Mempelajari manajemen, akuntansi, bisnis, dan ekonomi untuk membentuk calon profesional kompetitif."
-    },
-    {
-      id: 5,
-      title: "FAKULTAS KEGURUAN & ILMU PENDIDIKAN",
-      color: "#028A0F",
-      textColor: "white",
-      icon: <BookOpen className="mx-auto w-12 h-12" />,
-      link: "https://fkip.unpas.ac.id/",
-      text: "Mengembangkan kompetensi calon pendidik yang kreatif, komunikatif, dan siap memajukan pendidikan."
-    },
-    {
-      id: 6,
-      title: "FAKULTAS ILMU SENI & SASTRA",
-      color: "#43296C",
-      textColor: "white",
-      icon: <Palette className="mx-auto w-12 h-12" />,
-      link: "https://fiss.unpas.ac.id/",
-      text: "Berfokus pada seni, desain, musik, fotografi, dan sastra untuk mengasah kreativitas serta estetika."
-    },
-    {
-      id: 7,
-      title: "FAKULTAS KEDOKTERAN",
-      color: "#005005",
-      textColor: "white",
-      icon: <Stethoscope className="mx-auto w-12 h-12" />,
-      link: "https://kedokteran.unpas.ac.id/",
-      text: "Program pendidikan kedokteran berorientasi pada kompetensi klinis, empati, dan profesionalisme."
-    },
-    {
-      id: 8,
-      title: "PASCASARJANA",
-      color: "#4197CB",
-      textColor: "black",
-      icon: <GraduationCap className="mx-auto w-12 h-12" />,
-      link: "https://pasca.unpas.ac.id/",
-      text: "Program magister & doktoral untuk meningkatkan kompetensi profesional dan kemampuan riset."
-    },
-  ];
 
   const calculateTimeLeft = () => {
     const target = new Date("2025-12-20T23:59:59+07:00").getTime();
@@ -165,8 +90,9 @@ const PMBLanding = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      {/* GOOGLE TRANSLATE ELEMENT (HIDDEN) */}
+      <div id="google_translate_element" className="hidden" />
       {/* WRAPPER */}
-
 
       {/* HEADER WRAPPER — sticky */}
       <div id="sticky-header" className="sticky top-0 z-50 bg-white/80 backdrop-blur-md">
@@ -224,12 +150,15 @@ const PMBLanding = () => {
               <button onClick={() => scrollToSection("jalur-pendaftaran")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
                 Jalur Pendaftaran
               </button>
+              <button onClick={() => scrollToSection("program-studi")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+                Program Studi
+              </button>
               <button onClick={() => scrollToSection("timeline-alur")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
-                Timeline & Alur
+                Panduan Pendaftaran
               </button>
-              <button onClick={() => scrollToSection("fakultas")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
-                Fakultas
-              </button>
+              {/* <button onClick={() => scrollToSection("informasi-pengumuman")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+                Informasi &amp; Pengumuman
+              </button> */}
               <a
                 href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
                 target="_blank"
@@ -238,12 +167,9 @@ const PMBLanding = () => {
               >
                 Biaya
               </a>
-              <button onClick={() => scrollToSection("panduan-pembayaran")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
-                Panduan Pembayaran
-              </button>
-              <button onClick={() => scrollToSection("ketentuan-refund")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+              {/* <button onClick={() => scrollToSection("ketentuan-refund")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
                 Ketentuan Refund
-              </button>
+              </button> */}
               <button onClick={() => scrollToSection("faq")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
                 FAQ
               </button>
@@ -263,15 +189,28 @@ const PMBLanding = () => {
                 </svg>
               </button>
 
-              {/* CTA */}
-              <a
-                href="https://situ2.unpas.ac.id/spmbfront/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden md:inline-flex rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700"
-              >
-                Daftar Sekarang
-              </a>
+              {/* CTA BUTTONS */}
+              <div className="hidden md:flex items-center gap-3">
+                {/* LOGIN */}
+                <a
+                  href="https://situ2.unpas.ac.id/spmbfront/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex rounded-full border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-600 hover:bg-emerald-50 transition"
+                >
+                  Login
+                </a>
+
+                {/* DAFTAR */}
+                <a
+                  href="https://situ2.unpas.ac.id/spmbfront/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700"
+                >
+                  Daftar Sekarang
+                </a>
+              </div>
             </div>
 
           </div>
@@ -281,8 +220,9 @@ const PMBLanding = () => {
         {isMenuOpen && (
           <div className="md:hidden bg-white shadow-lg py-3 px-4 flex flex-col gap-3 text-sm">
             <button onClick={() => { scrollToSection("jalur-pendaftaran"); setIsMenuOpen(false); }}>Jalur Pendaftaran</button>
-            <button onClick={() => { scrollToSection("timeline-alur"); setIsMenuOpen(false); }}>Timeline &amp; Alur</button>
-            <button onClick={() => { scrollToSection("fakultas"); setIsMenuOpen(false); }}>Fakultas</button>
+            <button onClick={() => { scrollToSection("program-studi"); setIsMenuOpen(false); }}>Program Studi</button>
+            <button onClick={() => { scrollToSection("timeline-alur"); setIsMenuOpen(false); }}>Panduan Pendaftaran</button>
+            {/* <button onClick={() => { scrollToSection("informasi-pengumuman"); setIsMenuOpen(false); }}>Informasi &amp; Pengumuman</button> */}
             <a
               href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
               target="_blank"
@@ -292,15 +232,25 @@ const PMBLanding = () => {
             >
               Biaya &amp; Cicilan
             </a>
-            <button onClick={() => { scrollToSection("panduan-pembayaran"); setIsMenuOpen(false); }}>Panduan Pembayaran</button>
-            <button onClick={() => { scrollToSection("ketentuan-refund"); setIsMenuOpen(false); }}>Ketentuan Refund</button>
+            {/* <button onClick={() => { scrollToSection("ketentuan-refund"); setIsMenuOpen(false); }}>Ketentuan Refund</button> */}
             <button onClick={() => { scrollToSection("faq"); setIsMenuOpen(false); }}>FAQ</button>
 
+            {/* LOGIN */}
+            <a
+              href="https://situ2.unpas.ac.id/spmbfront/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 rounded-full border border-emerald-600 px-4 py-2 text-sm text-center font-semibold text-emerald-600 hover:bg-emerald-50 transition"
+            >
+              Login
+            </a>
+
+            {/* DAFTAR */}
             <a
               href="https://situ2.unpas.ac.id/spmbfront/"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 rounded-full bg-emerald-600 px-4 py-2 text-sm text-center font-semibold text-white shadow hover:bg-emerald-700"
+              className="rounded-full bg-emerald-600 px-4 py-2 text-sm text-center font-semibold text-white shadow hover:bg-emerald-700"
             >
               Daftar Sekarang
             </a>
@@ -463,19 +413,30 @@ const PMBLanding = () => {
                 date: "8 Des 2025 - 20 Jan 2026",
                 icon: Repeat,
                 color: "bg-cyan-100 text-cyan-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/210#",
+                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/210",
                 status: "closed",
+                wave: "Gelombang 1"
+              },
+              {
+                title: "KIP Kuliah",
+                date: "",
+                icon: IdCard,
+                color: "bg-emerald-100 text-emerald-700",
+                link: "#",
+                status: "soon",
                 wave: "Gelombang 1"
               },
             ].map((item, idx) => {
               const Icon = item.icon;
               const isClosed = item.status === "closed";
+              const isSoon = item.status === "soon";
+              const isOpen = item.status === "open";
 
               return (
                 <div
                   key={idx}
                   className={`relative flex flex-col justify-between rounded-2xl bg-white p-5 text-center shadow-sm transition-all duration-300
-            ${isClosed ? "opacity-70" : "hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]"}`}
+            ${isOpen ? "hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]" : "opacity-70"}`}
                 >
                   {/* BADGE GELombang */}
                   {item.wave && (
@@ -487,11 +448,16 @@ const PMBLanding = () => {
                   {/* BADGE STATUS */}
                   <div
                     className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold
-              ${isClosed
-                        ? "bg-red-700 text-white"
-                        : "bg-emerald-100 text-emerald-700"}`}
+                      ${isOpen
+                        ? "bg-emerald-100 text-emerald-700"
+                        : isClosed
+                          ? "bg-red-700 text-white"
+                          : "bg-slate-200 text-slate-700"
+                      }`}
                   >
-                    {isClosed ? "DITUTUP" : "DIBUKA"}
+                    {isOpen && "DIBUKA"}
+                    {isClosed && "DITUTUP"}
+                    {isSoon && "BELUM DIBUKA"}
                   </div>
 
                   {/* CONTENT */}
@@ -509,16 +475,7 @@ const PMBLanding = () => {
                   </div>
 
                   {/* BUTTON */}
-                  {isClosed ? (
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-300 px-4 py-2 text-sm font-medium text-slate-500 cursor-pointer"
-                    >
-                      Pendaftaran Ditutup
-                    </a>
-                  ) : (
+                  {isOpen && (
                     <a
                       href={item.link}
                       target="_blank"
@@ -528,22 +485,40 @@ const PMBLanding = () => {
                       Lihat Detail
                     </a>
                   )}
+
+                  {isClosed && (
+                    <div
+                      className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-300 px-4 py-2 text-sm font-medium text-slate-500 cursor-not-allowed"
+                    >
+                      Pendaftaran Ditutup
+                    </div>
+                  )}
+
+                  {isSoon && (
+                    <div
+                      className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-600 cursor-not-allowed"
+                    >
+                      Belum Dibuka
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
         </section>
 
-        {/* SECTION: ALUR PENDAFTARAN */}
+        {/* SECTION: Program Studi */}
+        <section id="program-studi" className="mt-16">
+          <ProdiExplorer />
+        </section>
+
+        {/* SECTION: PANDUAN PENDAFTARAN */}
         <section className="mt-16" id="timeline-alur">
           {/* Header */}
           <div className="space-y-3 text-center">
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-              Alur Pendaftaran PMB UNPAS
+              Tata Cara Pendaftaran Mahasiswa Baru
             </h2>
-            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
-              Ikuti langkah-langkah berikut untuk menyelesaikan proses pendaftaran.
-            </p>
           </div>
 
           {/* List Alur */}
@@ -553,38 +528,38 @@ const PMBLanding = () => {
 
             {[
               {
-                title: "Buat akun PMB",
-                desc: "Mulai dari pembuatan akun.",
-                icon: UserPlus,
+                title: "Pilih Jalur Pendaftaran",
+                desc: "Tentukan jalur masuk sesuai pilihan dan ketentuan kampus.",
+                icon: Shuffle,
                 color: "bg-indigo-500",
                 step: 1,
               },
               {
-                title: "Pilih jalur masuk",
-                desc: "PMDK/USM sesuai kebutuhan.",
-                icon: Shuffle,
-                color: "bg-emerald-500",
+                title: "Isi Formulir Pendaftaran",
+                desc: "Lengkapi data diri pada formulir secara benar.",
+                icon: SquarePen,
+                color: "bg-amber-500",
                 step: 2,
               },
               {
-                title: "Lengkapi data & upload berkas",
-                desc: "Upload dokumen sesuai ketentuan jalur.",
-                icon: UploadCloud,
-                color: "bg-sky-500",
+                title: "Bayar Biaya Pendaftaran",
+                desc: "Lakukan pembayaran sesuai petunjuk yang tersedia.",
+                icon: CheckCircle2,
+                color: "bg-emerald-500",
                 step: 3,
               },
               {
-                title: "Seleksi/Validasi berkas",
-                desc: "Ikuti tahapan seleksi sesuai jalur yang dipilih.",
-                icon: CheckCircle2,
-                color: "bg-amber-500",
+                title: "Unggah Berkas & Ikuti Seleksi",
+                desc: "Kirim dokumen dan ikuti tahapan seleksi sesuai jadwal.",
+                icon: UploadCloud,
+                color: "bg-pink-500",
                 step: 4,
               },
               {
-                title: "Pengumuman & registrasi",
-                desc: "Pengumuman kelulusan dan registrasi ulang.",
-                icon: GraduationCap,
-                color: "bg-pink-500",
+                title: "Hasil Seleksi",
+                desc: "Login untuk melihat hasil seleksi.",
+                icon: LaptopMinimalCheck,
+                color: "bg-sky-500",
                 step: 5,
               },
             ].map((item) => (
@@ -617,115 +592,46 @@ const PMBLanding = () => {
             ))}
           </div>
 
-          {/* CTA */}
-          <div className="mt-10 rounded-2xl bg-white p-5 shadow-sm">
-            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-              <div>
-                <div className="text-sm text-slate-600">Siap memulai?</div>
-                <div className="text-base font-semibold text-slate-900">
-                  Mulai pendaftaran sekarang
-                </div>
-              </div>
-              <a
-                href="https://situ2.unpas.ac.id/spmbfront/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-5 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
+          {/* Panduan PDF */}
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+            {INFORMASI_LIST.map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
-                Mulai dari Buat Akun
-              </a>
-            </div>
-          </div>
-        </section>
+                {/* IMAGE */}
+                <div className="h-48 w-full overflow-hidden">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
 
-        {/* ========== */}
-        {/* SECTION: FAKULTAS ICONS */}
-        <section className="mt-16" id="fakultas">
-          <div className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold">Fakultas & Program Studi</h2>
-          </div>
+                {/* CONTENT */}
+                <div className="flex flex-col p-4">
+                  <div className="text-xs text-slate-500">{item.date}</div>
 
-          <div className="mt-8 grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
-            {fakultasList.map((fak) => (
-              <div key={fak.id}>
-                {/* CARD */}
-                <div
-                  className="relative rounded-2xl p-5 shadow-sm text-center transition-all duration-300 hover:shadow-lg flex flex-col justify-between min-h-[180px]"
-                  style={{ backgroundColor: fak.color, color: fak.textColor }}
-                  onMouseEnter={() => setOpenInfo(fak.id)}
-                  onMouseLeave={() => setOpenInfo(null)}
-                >
-                  {/* INFO ICON */}
-                  <button
-                    className="absolute top-2 right-2 bg-white/20 p-1.5 rounded-full hover:bg-white/30 cursor-pointer"
-                    onClick={() => setOpenInfo(openInfo === fak.id ? null : fak.id)}
-                  >
-                    <Info className="w-4 h-4 text-white" style={{ color: fak.textColor }} />
-                  </button>
+                  <h3 className="mt-2 text-sm font-semibold text-slate-900 line-clamp-2">
+                    {item.title}
+                  </h3>
 
-                  <div className="flex flex-col items-center">
-                    {fak.icon}
-                    <h3 className="mt-3 text-sm font-bold tracking-wide leading-snug">
-                      {fak.title}
-                    </h3>
+                  {/* BUTTON */}
+                  <div className="mt-auto flex justify-center pt-4">
                     <a
-                      href={fak.link}
+                      href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-3 text-xs text-white/90 hover:underline"
-                      style={{ color: fak.textColor }}
+                      className="inline-flex items-center justify-center rounded-full border border-emerald-600 px-4 py-2 text-xs font-semibold text-emerald-600 transition hover:bg-emerald-600 hover:text-white"
                     >
-                      Lihat daftar prodi →
+                      Lihat Selengkapnya →
                     </a>
                   </div>
-
-                  {/* INFO PANEL */}
-                  <div
-                    className={`overflow-hidden transition-all duration-300 bg-white/20 rounded-xl mt-3 ${openInfo === fak.id ? "max-h-40 p-3" : "max-h-0 p-0"
-                      }`} style={{ color: fak.textColor }}
-                  >
-                    <p className="text-xs leading-relaxed">{fak.text}</p>
-                  </div>
                 </div>
-
               </div>
             ))}
           </div>
-        </section>
 
-        {/* SECTION: PANDUAN PEMBAYARAN */}
-        <section className="mt-16" id="panduan-pembayaran">
-          <div className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold">
-              Panduan Pembayaran
-            </h2>
-            {/* <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
-              Panduan resmi tata cara pembayaran formulir dan daftar ulang mahasiswa baru.
-            </p> */}
-          </div>
-
-          {/* PDF Viewer (Desktop) */}
-          <div className="mt-8 hidden md:block rounded-2xl overflow-hidden shadow-sm border bg-white">
-            <iframe
-              src="/panduan_pembayaran.pdf"
-              className="w-full h-[80vh]"
-            />
-          </div>
-
-          {/* Mobile CTA */}
-          <div className="mt-6 md:hidden text-center">
-            <a
-              href="/panduan_pembayaran.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow"
-            >
-              📄 Buka Panduan Pembayaran (PDF)
-            </a>
-            <p className="mt-2 text-xs text-slate-500">
-              Disarankan dibuka layar penuh di mobile
-            </p>
-          </div>
         </section>
 
         {/* SECTION: Ketentuan Refund */}

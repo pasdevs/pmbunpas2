@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+/* Lock layout saat Google Translate bekerja */
+/* .gt-lock {
+  pointer-events: none;
+}
+
+.gt-lock * {
+  transition: none !important;
+} */
+
+/* Optional: smooth setelah selesai */
+/* body {
+  transition: opacity 0.25s ease;
+} */
