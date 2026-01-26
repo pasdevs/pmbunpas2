@@ -315,7 +315,7 @@ const JENJANG_LABEL = {
 
 const FAKULTAS_META = {
   SEMUA: {
-    pill: "bg-emerald-600 text-white",
+    pill: "bg-[#6B5B51] text-white",
   },
   FH: {
     color: "#D32F2F",
@@ -485,7 +485,7 @@ export default function ProdiExplorer() {
             <button
               key={f}
               onClick={() => setActiveFakultas(f)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer
                 ${isActive
                   ? `${meta.pill} shadow-md scale-105`
                   : "bg-white border border-slate-300 text-slate-600 hover:border-slate-400"

@@ -96,32 +96,6 @@ const PMBLanding = () => {
 
       {/* HEADER WRAPPER — sticky */}
       <div id="sticky-header" className="sticky top-0 z-50 bg-white/80 backdrop-blur-md">
-        {/* TOP INFO BAR */}
-        <div className="bg-emerald-600 text-white text-xs sm:text-sm py-2 px-4 shadow">
-          <div className="flex flex-col gap-1 items-start justify-between sm:flex-row sm:items-center">
-            {/* <span>
-                🎉 Program Prioritas (Early Bird) PMB UNPAS – Pendaftaran 3–20 Desember | Daftar ulang 6–30 Desember
-              </span> */}
-            <span>
-              🎉 Gelombang 1 Resmi Dibuka • Amankan benefit pendaftaran lebih awal
-            </span>
-            <div className="flex items-center gap-3 text-[11px] sm:text-xs">
-              <a
-                href="tel:0222021440"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline-offset-2 hover:underline cursor-pointer">📞 Call Center PMB</a>
-              <a
-                href="https://wa.me/62811960193?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20PMB%20UNPAS"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline-offset-2 hover:underline cursor-pointer">
-                💬 Chat WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-
         {/* NAVBAR */}
         <header className="py-4">
           <div className="mx-auto max-w-6xl px-4 flex items-center justify-between">
@@ -147,30 +121,30 @@ const PMBLanding = () => {
 
             {/* CENTER: MENU */}
             <div className="hidden md:flex items-center gap-6 text-sm">
-              <button onClick={() => scrollToSection("jalur-pendaftaran")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+              <button onClick={() => scrollToSection("jalur-pendaftaran")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Jalur Pendaftaran
               </button>
-              <button onClick={() => scrollToSection("program-studi")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+              <button onClick={() => scrollToSection("program-studi")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Program Studi
               </button>
-              <button onClick={() => scrollToSection("timeline-alur")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+              <button onClick={() => scrollToSection("timeline-alur")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Panduan Pendaftaran
               </button>
-              {/* <button onClick={() => scrollToSection("informasi-pengumuman")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+              {/* <button onClick={() => scrollToSection("informasi-pengumuman")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Informasi &amp; Pengumuman
               </button> */}
               <a
                 href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-600 hover:text-emerald-700"
+                className="text-slate-600 hover:text-[#5a4c43]"
               >
                 Biaya
               </a>
-              {/* <button onClick={() => scrollToSection("ketentuan-refund")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+              {/* <button onClick={() => scrollToSection("ketentuan-refund")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Ketentuan Refund
               </button> */}
-              <button onClick={() => scrollToSection("faq")} className="text-slate-600 hover:text-emerald-700 cursor-pointer">
+              <button onClick={() => scrollToSection("faq")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 FAQ
               </button>
             </div>
@@ -196,7 +170,7 @@ const PMBLanding = () => {
                   href="https://situ2.unpas.ac.id/spmbfront/login"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex rounded-full border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-600 hover:bg-emerald-50 transition"
+                  className="inline-flex rounded-full border border-[#6B5B51] px-4 py-2 text-sm font-semibold text-[#6B5B51] hover:bg-[#f3efec] transition"
                 >
                   Login
                 </a>
@@ -206,7 +180,7 @@ const PMBLanding = () => {
                   href="https://situ2.unpas.ac.id/spmbfront/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700"
+                  className="inline-flex rounded-full bg-[#6B5B51] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#5a4c43]"
                 >
                   Daftar Sekarang
                 </a>
@@ -228,7 +202,7 @@ const PMBLanding = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsMenuOpen(false)}
-              className="w-full text-center py-2 rounded-lg hover:bg-emerald-50 transition"
+              className="w-full text-center py-2 rounded-lg hover:bg-[#f3efec] transition"
             >
               Biaya &amp; Cicilan
             </a>
@@ -240,7 +214,7 @@ const PMBLanding = () => {
               href="https://situ2.unpas.ac.id/spmbfront/login"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 rounded-full border border-emerald-600 px-4 py-2 text-sm text-center font-semibold text-emerald-600 hover:bg-emerald-50 transition"
+              className="mt-2 rounded-full border border-[#6B5B51] px-4 py-2 text-sm text-center font-semibold text-[#6B5B51] hover:bg-[#f3efec] transition"
             >
               Login
             </a>
@@ -250,7 +224,7 @@ const PMBLanding = () => {
               href="https://situ2.unpas.ac.id/spmbfront/"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-emerald-600 px-4 py-2 text-sm text-center font-semibold text-white shadow hover:bg-emerald-700"
+              className="rounded-full bg-[#6B5B51] px-4 py-2 text-sm text-center font-semibold text-white shadow hover:bg-[#5a4c43]"
             >
               Daftar Sekarang
             </a>
@@ -258,29 +232,24 @@ const PMBLanding = () => {
         )}
       </div>
 
-      {/* HERO SECTION — FULL IMAGE OVERLAY (FULL BLEED) */}
-      <section className="relative w-full overflow-hidden pt-[120px] min-h-[85vh] md:min-h-screen flex items-center">
-
-        {/* Background Image */}
+      {/* HERO SECTION — LEFT ALIGNED + BROWN GRADIENT */}
+      {/* <section className="relative w-full overflow-hidden pt-[120px] min-h-[85vh] md:min-h-screen flex items-center">
         <div className="absolute inset-0">
           <img
-            src="/mahasiswa.jpg"
+            src="/mahasiswa2.jpg"
             alt="Mahasiswa UNPAS"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-emerald-800/70 to-emerald-600/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#3F3631]/90 via-[#6B5B51]/75 to-[#6B5B51]/50" />
         </div>
 
-        {/* Content */}
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
           className="relative z-10 px-6 md:px-12 text-white w-full"
         >
-          <div className="max-w-2xl space-y-6">
-
-            {/* Headline */}
+          <div className="max-w-3xl text-left space-y-6">
             <motion.h1
               variants={fadeUp}
               className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
@@ -290,7 +259,6 @@ const PMBLanding = () => {
               Mulai di Sini 🔥
             </motion.h1>
 
-            {/* Subtitle */}
             <motion.p
               variants={fadeUp}
               className="text-sm sm:text-base text-white/90"
@@ -300,16 +268,15 @@ const PMBLanding = () => {
               </span>
             </motion.p>
 
-            {/* CTA */}
             <motion.div
               variants={fadeScale}
-              className="flex flex-col sm:flex-row gap-4 pt-2"
+              className="flex flex-col sm:flex-row justify-start gap-4 pt-4"
             >
               <a
                 href="https://situ2.unpas.ac.id/spmbfront/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-emerald-700 shadow-lg hover:scale-[1.05] transition"
+                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-[#5a4c43] shadow-lg hover:scale-[1.05] transition"
               >
                 🚀 Daftar Sekarang
               </a>
@@ -323,6 +290,70 @@ const PMBLanding = () => {
                 💸 Lihat Biaya & Promo
               </a>
             </motion.div>
+
+          </div>
+        </motion.div>
+      </section> */}
+
+      {/* HERO SECTION — CENTERED + BROWN GRADIENT */}
+      <section className="relative w-full overflow-hidden pt-[120px] min-h-[90vh] md:min-h-screen flex items-center justify-center">
+        <div className="absolute inset-0">
+          <img
+            src="/mahasiswa2.jpg"
+            alt="Mahasiswa UNPAS"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#3F3631]/90 via-[#6B5B51]/75 to-[#6B5B51]/50" />
+        </div>
+
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="relative z-10 px-6 md:px-12 text-white w-full"
+        >
+          <div className="mx-auto max-w-3xl text-center space-y-6">
+            <motion.h1
+              variants={fadeUp}
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
+            >
+              Bikin Cerita Sukses
+              <span className="block text-yellow-300">Versi Kamu</span>
+              Mulai di Sini 🔥
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp}
+              className="text-sm sm:text-base text-white/90"
+            >
+              <span className="font-semibold">
+                Tempat di mana generasi hebat lahir, tumbuh, dan berkarya.
+              </span>
+            </motion.p>
+
+            <motion.div
+              variants={fadeScale}
+              className="flex flex-col sm:flex-row justify-center gap-4 pt-4"
+            >
+              <a
+                href="https://situ2.unpas.ac.id/spmbfront/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-[#5a4c43] shadow-lg hover:scale-[1.05] transition"
+              >
+                🚀 Daftar Sekarang
+              </a>
+
+              <a
+                href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full border-2 border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
+              >
+                💸 Lihat Biaya & Promo
+              </a>
+            </motion.div>
+
           </div>
         </motion.div>
       </section>
@@ -403,7 +434,7 @@ const PMBLanding = () => {
                 title: "RPL Perolehan 2025 Genap",
                 date: "8 Des 2025 - 20 Jan 2026",
                 icon: GraduationCap,
-                color: "bg-emerald-100 text-emerald-700",
+                color: "bg-[#f3efec] text-[#5a4c43]",
                 link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/209",
                 status: "closed",
                 wave: "Gelombang 1"
@@ -421,7 +452,7 @@ const PMBLanding = () => {
                 title: "KIP Kuliah",
                 date: "",
                 icon: IdCard,
-                color: "bg-emerald-100 text-emerald-700",
+                color: "bg-[#f3efec] text-[#5a4c43]",
                 link: "#",
                 status: "soon",
                 wave: "Gelombang 1"
@@ -449,7 +480,7 @@ const PMBLanding = () => {
                   <div
                     className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold
                       ${isOpen
-                        ? "bg-emerald-100 text-emerald-700"
+                        ? "bg-[#f3efec] text-[#5a4c43]"
                         : isClosed
                           ? "bg-red-700 text-white"
                           : "bg-slate-200 text-slate-700"
@@ -480,7 +511,7 @@ const PMBLanding = () => {
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-5 inline-flex items-center justify-center rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
+                      className="mt-5 inline-flex items-center justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#5a4c43]"
                     >
                       Lihat Detail
                     </a>
@@ -597,7 +628,7 @@ const PMBLanding = () => {
             {INFORMASI_LIST.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
                 {/* IMAGE */}
                 <div className="h-48 w-full overflow-hidden">
@@ -609,20 +640,23 @@ const PMBLanding = () => {
                 </div>
 
                 {/* CONTENT */}
-                <div className="flex flex-col p-4">
+                <div className="flex flex-1 flex-col p-4">
                   <div className="text-xs text-slate-500">{item.date}</div>
 
-                  <h3 className="mt-2 text-sm font-semibold text-slate-900 line-clamp-2">
+                  <h3 className="mt-2 text-sm font-bold text-slate-900 line-clamp-2">
                     {item.title}
                   </h3>
 
+                  {/* SPACER BIAR BUTTON KE BAWAH */}
+                  <div className="flex-1" />
+
                   {/* BUTTON */}
-                  <div className="mt-auto flex justify-center pt-4">
+                  <div className="pt-8 flex justify-center">
                     <a
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-full border border-emerald-600 px-4 py-2 text-xs font-semibold text-emerald-600 transition hover:bg-emerald-600 hover:text-white"
+                      className="inline-flex items-center justify-center rounded-full border border-[#6B5B51] px-4 py-2 text-xs font-semibold text-[#6B5B51] transition hover:bg-[#6B5B51] hover:text-white"
                     >
                       Lihat Selengkapnya →
                     </a>
@@ -656,7 +690,7 @@ const PMBLanding = () => {
               <a
                 href="https://s.id/unpas_pmb_refund"
                 target="_blank"
-                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow hover:bg-emerald-700 transition"
+                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
               >
                 📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Universitas Pasundan 2026-2027
               </a>
@@ -666,7 +700,7 @@ const PMBLanding = () => {
               <a
                 href="https://s.id/unpas_pmbfk_refund"
                 target="_blank"
-                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow hover:bg-emerald-700 transition"
+                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
               >
                 📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Kedokteran Universitas Pasundan 2026-2027
               </a>
@@ -809,7 +843,7 @@ const PMBLanding = () => {
                 href="https://wa.me/62811960193?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20PMB%20UNPAS"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex justify-center rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 cursor-pointer"
+                className="mt-3 inline-flex justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5a4c43] cursor-pointer"
               >
                 Buka WhatsApp PMB
               </a>
@@ -827,7 +861,7 @@ const PMBLanding = () => {
                 href="tel:0222021440"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex justify-center rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 cursor-pointer"
+                className="mt-3 inline-flex justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5a4c43] cursor-pointer"
               >
                 Hubungi Sekarang
               </a>
@@ -845,7 +879,7 @@ const PMBLanding = () => {
                 href="https://www.google.com/maps/place/Universitas+Pasundan/@-6.905366,107.6032335,17z/data=!4m14!1m7!3m6!1s0x2e68e865b85ee0d7:0x5fa28af82d475f8a!2sUniversitas+Pasundan!8m2!3d-6.905366!4d107.6081044!16s%2Fg%2F1218dxl7!3m5!1s0x2e68e865b85ee0d7:0x5fa28af82d475f8a!8m2!3d-6.905366!4d107.6081044!16s%2Fg%2F1218dxl7?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex justify-center rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 cursor-pointer"
+                className="mt-3 inline-flex justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5a4c43] cursor-pointer"
               >
                 Lihat Lokasi di Maps
               </a>
