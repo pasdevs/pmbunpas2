@@ -9,12 +9,18 @@ import INFORMASI_LIST from "../data/InformasiList";
 import { InstagramEmbed } from "react-social-media-embed";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation, Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { FloatingWhatsApp } from '@digicroz/react-floating-whatsapp'
+
+//import section
+import TestimoniSection from "../sections/TestimoniSection";
+import FaqSection from "../sections/FaqSection";
+import ContactSection from "../sections/ContactSection";
+
 
 const PMBLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -296,7 +302,7 @@ const PMBLanding = () => {
 
                 {/* DAFTAR */}
                 <a
-                  href="https://situ2.unpas.ac.id/spmbfront/"
+                  href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex rounded-full bg-[#6B5B51] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#5a4c43]"
@@ -340,7 +346,7 @@ const PMBLanding = () => {
 
             {/* DAFTAR */}
             <a
-              href="https://situ2.unpas.ac.id/spmbfront/"
+              href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full bg-[#6B5B51] px-4 py-2 text-sm text-center font-semibold text-white shadow hover:bg-[#5a4c43]"
@@ -455,7 +461,7 @@ const PMBLanding = () => {
               className="flex flex-col sm:flex-row justify-center gap-4 pt-4"
             >
               <a
-                href="https://situ2.unpas.ac.id/spmbfront/"
+                href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-[#5a4c43] shadow-lg hover:scale-[1.05] transition"
@@ -584,85 +590,86 @@ const PMBLanding = () => {
                 status: "soon",
                 wave: "Gelombang 1"
               },
-            ].map((item, idx) => {
-              const Icon = item.icon;
-              const isClosed = item.status === "closed";
-              const isSoon = item.status === "soon";
-              const isOpen = item.status === "open";
+            ].filter(item => item.status === "open")
+              .map((item, idx) => {
+                const Icon = item.icon;
+                const isClosed = item.status === "closed";
+                const isSoon = item.status === "soon";
+                const isOpen = item.status === "open";
 
-              return (
-                <motion.div
-                  variants={sectionItem}
-                  key={idx}
-                  className={`relative flex flex-col justify-between rounded-2xl bg-white p-5 text-center shadow-sm transition-all duration-300
+                return (
+                  <motion.div
+                    variants={sectionItem}
+                    key={idx}
+                    className={`relative flex flex-col justify-between rounded-2xl bg-white p-5 text-center shadow-sm transition-all duration-300
             ${isOpen ? "hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]" : "opacity-70"}`}
-                >
-                  {/* BADGE GELombang */}
-                  {item.wave && (
-                    <div className="absolute left-3 top-3 rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-700">
-                      {item.wave}
-                    </div>
-                  )}
-
-                  {/* BADGE STATUS */}
-                  <div
-                    className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold
-                      ${isOpen
-                        ? "bg-[#f3efec] text-[#5a4c43]"
-                        : isClosed
-                          ? "bg-red-700 text-white"
-                          : "bg-slate-200 text-slate-700"
-                      }`}
                   >
-                    {isOpen && "DIBUKA"}
-                    {isClosed && "DITUTUP"}
-                    {isSoon && "BELUM DIBUKA"}
-                  </div>
+                    {/* BADGE GELombang */}
+                    {item.wave && (
+                      <div className="absolute left-3 top-3 rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-700">
+                        {item.wave}
+                      </div>
+                    )}
 
-                  {/* CONTENT */}
-                  <div className="flex flex-col items-center">
-                    <div className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${item.color}`}>
-                      <Icon className="h-7 w-7" />
-                    </div>
-
-                    <h3 className="text-sm font-semibold text-slate-900">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-xs text-slate-600">
-                      {item.date}
-                    </p>
-                  </div>
-
-                  {/* BUTTON */}
-                  {isOpen && (
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-5 inline-flex items-center justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#5a4c43]"
-                    >
-                      Lihat Detail
-                    </a>
-                  )}
-
-                  {isClosed && (
+                    {/* BADGE STATUS */}
                     <div
-                      className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-300 px-4 py-2 text-sm font-medium text-slate-500 cursor-not-allowed"
+                      className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold
+                      ${isOpen
+                          ? "bg-[#f3efec] text-[#5a4c43]"
+                          : isClosed
+                            ? "bg-red-700 text-white"
+                            : "bg-slate-200 text-slate-700"
+                        }`}
                     >
-                      Pendaftaran Ditutup
+                      {isOpen && "DIBUKA"}
+                      {isClosed && "DITUTUP"}
+                      {isSoon && "BELUM DIBUKA"}
                     </div>
-                  )}
 
-                  {isSoon && (
-                    <div
-                      className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-600 cursor-not-allowed"
-                    >
-                      Belum Dibuka
+                    {/* CONTENT */}
+                    <div className="flex flex-col items-center">
+                      <div className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${item.color}`}>
+                        <Icon className="h-7 w-7" />
+                      </div>
+
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-xs text-slate-600">
+                        {item.date}
+                      </p>
                     </div>
-                  )}
-                </motion.div>
-              );
-            })}
+
+                    {/* BUTTON */}
+                    {isOpen && (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-5 inline-flex items-center justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#5a4c43]"
+                      >
+                        Lihat Detail
+                      </a>
+                    )}
+
+                    {isClosed && (
+                      <div
+                        className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-300 px-4 py-2 text-sm font-medium text-slate-500 cursor-not-allowed"
+                      >
+                        Pendaftaran Ditutup
+                      </div>
+                    )}
+
+                    {isSoon && (
+                      <div
+                        className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-600 cursor-not-allowed"
+                      >
+                        Belum Dibuka
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
           </motion.div>
         </motion.section>
 
@@ -753,13 +760,12 @@ const PMBLanding = () => {
           </div>
 
           {/* Panduan PDF */}
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          {/* <div className="mt-16 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
             {INFORMASI_LIST.map((item) => (
               <div
                 key={item.id}
                 className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
-                {/* IMAGE */}
                 <div className="h-48 w-full overflow-hidden">
                   <img
                     src={item.image}
@@ -768,7 +774,6 @@ const PMBLanding = () => {
                   />
                 </div>
 
-                {/* CONTENT */}
                 <div className="flex flex-1 flex-col p-4">
                   <div className="text-xs text-slate-500">{item.date}</div>
 
@@ -776,10 +781,8 @@ const PMBLanding = () => {
                     {item.title}
                   </h3>
 
-                  {/* SPACER BIAR BUTTON KE BAWAH */}
                   <div className="flex-1" />
 
-                  {/* BUTTON */}
                   <div className="pt-8 flex justify-center">
                     <a
                       href={item.link}
@@ -793,6 +796,101 @@ const PMBLanding = () => {
                 </div>
               </div>
             ))}
+          </div> */}
+
+          {/* Panduan PDF (Modern Horizontal Slider + Arrow) */}
+          <div className="relative mt-16">
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10" />
+
+            <button
+              className="swiper-panduan-prev absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+                strokeWidth="2.5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <button
+              className="swiper-panduan-next absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+                strokeWidth="2.5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <Swiper
+              modules={[FreeMode, Navigation, Autoplay]}
+              spaceBetween={24}
+              slidesPerView={1.15}
+              freeMode
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              grabCursor
+              navigation={{
+                prevEl: ".swiper-panduan-prev",
+                nextEl: ".swiper-panduan-next",
+              }}
+              breakpoints={{
+                640: { slidesPerView: 2.2 },
+                1024: { slidesPerView: 3.2 },
+              }}
+              className="!px-6"
+            >
+              {INFORMASI_LIST.map((item) => (
+                <SwiperSlide key={item.id} className="!h-auto">
+                  <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                    <div className="h-48 w-full overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-4">
+                      <div className="text-xs text-slate-500">{item.date}</div>
+
+                      <h3 className="mt-2 text-sm font-bold text-slate-900 line-clamp-2">
+                        {item.title}
+                      </h3>
+
+                      <div className="flex-1" />
+
+                      <div className="pt-8 flex justify-center">
+                        <a
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center rounded-full border border-[#6B5B51] px-4 py-2 text-xs font-semibold text-[#6B5B51] transition hover:bg-[#6B5B51] hover:text-white"
+                        >
+                          Lihat Selengkapnya →
+                        </a>
+                      </div>
+                    </div>
+
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </motion.section>
 
@@ -816,13 +914,39 @@ const PMBLanding = () => {
           </motion.div>
 
           {/* Slider */}
-          <motion.div variants={sectionItem} className="mt-10">
+          <motion.div variants={sectionItem} className="relative mt-10">
+
+            {/* Fade gradient kiri-kanan */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10" />
+
+            {/* Arrow Left */}
+            <button
+              className="swiper-sosmed-prev absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            {/* Arrow Right */}
+            <button
+              className="swiper-sosmed-next absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
             <Swiper
-              modules={[Navigation, Pagination, Autoplay]}
+              modules={[Navigation, Autoplay, FreeMode]}
               spaceBetween={24}
               slidesPerView={1}
-              navigation
-              pagination={{ clickable: true }}
+              navigation={{
+                prevEl: ".swiper-sosmed-prev",
+                nextEl: ".swiper-sosmed-next",
+              }}
+              freeMode
               autoplay={{
                 delay: 4500,
                 disableOnInteraction: false,
@@ -832,7 +956,7 @@ const PMBLanding = () => {
                 768: { slidesPerView: 2 },
                 1024: { slidesPerView: 3 },
               }}
-              className="pb-12"
+              className="pb-12 !px-6"
             >
               {[
                 "https://www.instagram.com/p/DRy_jdskYTR/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
@@ -855,224 +979,15 @@ const PMBLanding = () => {
           </motion.div>
         </motion.section>
 
-        {/* SECTION: Ketentuan Refund */}
-        <section className="mt-16" id="ketentuan-refund">
-          <div className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold">Ketentuan Pengembalian Biaya Registrasi Calon Mahasiswa baru UNPAS</h2>
-          </div>
-
-          {/* BANNER: KETENTUAN REFUND */}
-          <div className="mt-8 rounded-2xl border border-red-200 bg-[#ffe2e273] p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]">
-
-            {/* Text Section */}
-            <div className="w-full">
-              <p className="mt-1 text-md text-black-800/80 font-bold">
-                Jangan khawatir! UNPAS memberi perlindungan pengembalian biaya untuk situasi tertentu.
-                <br />Unduh dan baca dokumen ketentuan resminya agar kamu mendaftar tanpa ragu.
-              </p>
-            </div>
-
-            {/* CTA Button – Full Width */}
-            <div className="w-full mt-4">
-              <a
-                href="https://s.id/unpas_pmb_refund"
-                target="_blank"
-                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
-              >
-                📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Universitas Pasundan 2026-2027
-              </a>
-            </div>
-
-            <div className="w-full mt-4">
-              <a
-                href="https://s.id/unpas_pmbfk_refund"
-                target="_blank"
-                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
-              >
-                📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Kedokteran Universitas Pasundan 2026-2027
-              </a>
-            </div>
-
-          </div>
-
-        </section>
-
         {/* SECTION: TESTIMONI */}
-        <section className="mt-16" id="testimoni">
-          <div className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold">Cerita dari Mahasiswa &amp; Orang Tua</h2>
-          </div>
-
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            <div className="rounded-2xl bg-white p-5 shadow-sm">
-              <p className="text-sm text-slate-700">
-                "Saya daftar sejak periode Program Prioritas, jadi urusan administrasi beres lebih cepat. Setelah itu bisa fokus ke
-                persiapan UTBK tanpa mikirin pendaftaran kampus."
-              </p>
-              <div className="mt-4 text-sm font-semibold text-slate-900">Rani</div>
-              <div className="text-xs text-slate-500">Mahasiswa Teknik Informatika</div>
-            </div>
-
-            <div className="rounded-2xl bg-white p-5 shadow-sm">
-              <p className="text-sm text-slate-700">
-                "Sebagai orang tua, kami terbantu karena jadwal dan biaya sudah jelas dari awal. Anak kami bisa lebih tenang
-                menyelesaikan sekolahnya."
-              </p>
-              <div className="mt-4 text-sm font-semibold text-slate-900">Bapak Dedi</div>
-              <div className="text-xs text-slate-500">Orang tua mahasiswa Manajemen</div>
-            </div>
-
-            <div className="rounded-2xl bg-white p-5 shadow-sm">
-              <p className="text-sm text-slate-700">
-                "Program Prioritas membantu saya mengunci kursi di prodi favorit. Sekarang sudah aktif ikut kegiatan kampus dan
-                organisasi mahasiswa."
-              </p>
-              <div className="mt-4 text-sm font-semibold text-slate-900">Ajeng</div>
-              <div className="text-xs text-slate-500">Mahasiswa Ilmu Komunikasi</div>
-            </div>
-          </div>
-        </section>
-
+        <TestimoniSection />
+        
         {/* SECTION: FAQ */}
-        <section className="mt-16" id="faq">
-          <div className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold">FAQ – Pertanyaan Seputar PMB</h2>
-          </div>
-
-          <div className="mt-8 space-y-4">
-            {/* FAQ 1 */}
-            <details className="group rounded-2xl bg-white p-4 shadow-sm">
-              <summary className="cursor-pointer text-sm font-semibold text-slate-900 list-none flex justify-between items-center">
-                Kapan periode pendaftaran mahasiswa baru dimulai?
-                <span className="transition-transform group-open:rotate-180 text-slate-500">⌄</span>
-              </summary>
-
-              <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-open:max-h-96 group-open:opacity-100">
-                <p className="mt-2 text-sm text-slate-600">
-                  Pendaftaran mahasiswa baru Universitas Pasundan dibuka sepanjang tahun dengan beberapa gelombang penerimaan.
-                  Informasi lengkap tentang jadwal tiap gelombang dapat dilihat di website resmi PMB UNPAS.
-                </p>
-              </div>
-            </details>
-
-            {/* FAQ 2 */}
-            <details className="group rounded-2xl bg-white p-4 shadow-sm">
-              <summary className="cursor-pointer text-sm font-semibold text-slate-900 list-none flex justify-between items-center">
-                Apa saja berkas yang perlu disiapkan untuk pendaftaran?
-                <span className="transition-transform group-open:rotate-180 text-slate-500">⌄</span>
-              </summary>
-
-              <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-open:max-h-96 group-open:opacity-100">
-                <p className="mt-2 text-sm text-slate-600">
-                  Dokumen yang biasanya dibutuhkan antara lain:
-                  fotokopi ijazah atau surat keterangan lulus, KTP, dan pas foto terbaru,
-                  Pastikan semua berkas discan dengan jelas.
-                </p>
-              </div>
-            </details>
-
-            {/* FAQ 3 */}
-            <details className="group rounded-2xl bg-white p-4 shadow-sm">
-              <summary className="cursor-pointer text-sm font-semibold text-slate-900 list-none flex justify-between items-center">
-                Apakah saya bisa mengubah pilihan fakultas atau program studi?
-                <span className="transition-transform group-open:rotate-180 text-slate-500">⌄</span>
-              </summary>
-
-              <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-open:max-h-96 group-open:opacity-100">
-                <p className="mt-2 text-sm text-slate-600">
-                  Perubahan pilihan fakultas atau program studi dimungkinkan sepanjang mengikuti ketentuan yang berlaku,
-                  ketersediaan kuota, dan jadwal yang ditetapkan dalam SK PMB. Silakan menghubungi Tim PMB untuk informasi dan prosedur resminya.
-                </p>
-              </div>
-            </details>
-
-            {/* FAQ 4 */}
-            <details className="group rounded-2xl bg-white p-4 shadow-sm">
-              <summary className="cursor-pointer text-sm font-semibold text-slate-900 list-none flex justify-between items-center">
-                Kalau saya diterima di PTN, apakah bisa refund?
-                <span className="transition-transform group-open:rotate-180 text-slate-500">⌄</span>
-              </summary>
-
-              <div className="overflow-hidden transition-all duration-300 max-h-0 opacity-0 group-open:max-h-96 group-open:opacity-100">
-                <p className="mt-2 text-sm text-slate-600">
-                  Calon mahasiswa baru yang diterima di perguruan tinggi negeri dapat mengajukan refund.
-                  Besaran dan mekanisme refund mengacu pada SK PMB.
-                  <br />
-                  <br />
-                  <a href="https://s.id/unpas_pmb_refund" target="_blank" className="text-emerald-500 font-semibold underline mt-8">Dokumen Persetujuan Ketentuan Refund</a>
-                  <br />
-                  <br />
-                  <a href="https://s.id/unpas_pmbfk_refund" target="_blank" className="text-emerald-500 font-semibold underline mt-8">Dokumen Persetujuan Ketentuan Refund Kedokteran</a>
-                </p>
-              </div>
-            </details>
-          </div>
-        </section>
-
+        <FaqSection />
+        
         {/* SECTION: KONTAK */}
-        <section className="mt-16" id="kontak">
-          <div className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold">Butuh Bantuan? Hubungi Tim PMB UNPAS</h2>
-            <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600">
-              Tim kami siap membantu menjawab pertanyaanmu seputar pendaftaran, biaya, jalur masuk, serta informasi fakultas dan program
-              studi.
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
-              <div className="mb-2 text-2xl">💬</div>
-              <h3 className="text-sm font-semibold text-slate-900">Chat WhatsApp</h3>
-              <p className="mt-2 text-sm text-slate-600">
-                Konsultasi cepat seputar jalur masuk, fakultas, dan biaya kuliah.
-              </p>
-              <a
-                href="https://wa.me/62811960193?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20PMB%20UNPAS"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-flex justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5a4c43] cursor-pointer"
-              >
-                Buka WhatsApp PMB
-              </a>
-            </div>
-
-            <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
-              <div className="mb-2 text-2xl">📞</div>
-              <h3 className="text-sm font-semibold text-slate-900">Call Center PMB</h3>
-              <p className="mt-2 text-sm text-slate-600">
-                Telp: <span className="font-semibold text-slate-800">(022) 2021440</span>
-                <br />
-                Senin–Jumat, 08.00–16.00 WIB
-              </p>
-              <a
-                href="tel:0222021440"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-flex justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5a4c43] cursor-pointer"
-              >
-                Hubungi Sekarang
-              </a>
-            </div>
-
-            <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
-              <div className="mb-2 text-2xl">📍</div>
-              <h3 className="text-sm font-semibold text-slate-900">Kunjungan Langsung</h3>
-              <p className="mt-2 text-sm text-slate-600">
-                Kampus UNPAS Tamansari
-                <br />
-                Jl. Tamansari No. 6–8, Bandung
-              </p>
-              <a
-                href="https://www.google.com/maps/place/Universitas+Pasundan/@-6.905366,107.6032335,17z/data=!4m14!1m7!3m6!1s0x2e68e865b85ee0d7:0x5fa28af82d475f8a!2sUniversitas+Pasundan!8m2!3d-6.905366!4d107.6081044!16s%2Fg%2F1218dxl7!3m5!1s0x2e68e865b85ee0d7:0x5fa28af82d475f8a!8m2!3d-6.905366!4d107.6081044!16s%2Fg%2F1218dxl7?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-flex justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5a4c43] cursor-pointer"
-              >
-                Lihat Lokasi di Maps
-              </a>
-            </div>
-          </div>
-        </section>
+        <ContactSection />
+        
       </div>
 
       {/* FOOTER */}
@@ -1100,7 +1015,7 @@ const PMBLanding = () => {
           {/* BUTTON */}
           <button
             onClick={() => setLangOpen(!langOpen)}
-            className="flex h-11 px-4 items-center gap-2 rounded-xl bg-[#6B5B51]/80 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51] transition text-white text-sm font-semibold"
+            className="flex h-11 px-4 items-center gap-2 rounded-xl bg-[#6B5B51]/80 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51] transition text-white text-sm font-semibold cursor-pointer"
             translate="no"
           >
             <img
@@ -1188,7 +1103,6 @@ const PMBLanding = () => {
           boxShadow: "none",
         }}
       />
-      {/* <ScrollToTop smooth style={{ display: "flex", justifyContent: "center", alignItems: "center", bottom: "120px", right: "40px", zIndex: "9999" }} /> */}
     </div>
   );
 }
