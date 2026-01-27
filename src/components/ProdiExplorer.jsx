@@ -288,13 +288,13 @@ const DATA_PRODI = [
     jenjang: "S3",
     url: "https://situ2.unpas.ac.id/spmbfront/program-studi-detail/detail/74001",
   },
-  {
-    id: 42,
-    nama: "Pendidikan Profesi Guru",
-    fakultas: "FKIP",
-    jenjang: "Profesi",
-    url: "https://situ2.unpas.ac.id/spmbfront/program-studi-detail/detail/86904",
-  },
+  // {
+  //   id: 42,
+  //   nama: "Pendidikan Profesi Guru",
+  //   fakultas: "FKIP",
+  //   jenjang: "Profesi",
+  //   url: "https://situ2.unpas.ac.id/spmbfront/program-studi-detail/detail/86904",
+  // },
   {
     id: 43,
     nama: "Pendidikan Profesi Dokter",

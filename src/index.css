@@ -1,15 +1,22 @@
 @import "tailwindcss";
 
-/* Lock layout saat Google Translate bekerja */
-/* .gt-lock {
-  pointer-events: none;
+/* HILANGKAN TOOLBAR GOOGLE TRANSLATE */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget-icon,
+.goog-te-menu-value,
+.goog-te-gadget {
+  display: none !important;
 }
 
-.gt-lock * {
-  transition: none !important;
-} */
+body {
+  top: 0px !important;
+}
 
-/* Optional: smooth setelah selesai */
-/* body {
-  transition: opacity 0.25s ease;
-} */
+/* Kadang Google nambah margin-top ke body */
+body > .skiptranslate {
+  display: none !important;
+}
+
+html {
+  scroll-padding-top: 0 !important;
+}

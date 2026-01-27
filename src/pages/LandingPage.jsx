@@ -1,16 +1,104 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
-  Scale, Users, Cog, BarChart3, BookOpen, Palette, Stethoscope, GraduationCap, Info, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, UploadCloud, CheckCircle2, Rocket, IdCard, SquarePen,
-  LaptopMinimalCheck
+  Stethoscope, GraduationCap, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, UploadCloud, CheckCircle2, Rocket, IdCard, SquarePen, LaptopMinimalCheck
 } from "lucide-react";
 import ScrollToTop from "react-scroll-to-top";
-// import { DATA } from "../data/PMBData";
 import { motion } from "framer-motion";
 import ProdiExplorer from "../components/ProdiExplorer";
 import INFORMASI_LIST from "../data/InformasiList";
+import { InstagramEmbed } from "react-social-media-embed";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+import { FloatingWhatsApp } from '@digicroz/react-floating-whatsapp'
 
 const PMBLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const [selectedLang, setSelectedLang] = useState("id");
+  const langRef = useRef(null);
+
+  const LANGUAGES = [
+    { code: "id", short: "ID", label: "Indonesian", icon: "/icon/id.png" },
+    { code: "ar", short: "AR", label: "Arabic", icon: "/icon/ar.png" },
+    { code: "su", short: "SU", label: "Sundanese", icon: "/icon/su.png" },
+    { code: "en", short: "EN", label: "English", icon: "/icon/en.png" },
+  ];
+
+  function setGoogTrans(lang) {
+    if (lang === "id") {
+      // HAPUS COOKIE = balik ke bahasa asli
+      document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      document.cookie = "googtrans=; path=/; domain=" + window.location.hostname + "; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    } else {
+      const value = `/id/${lang}`;
+      document.cookie = `googtrans=${value}; path=/`;
+      document.cookie = `googtrans=${value}; path=/; domain=${window.location.hostname}`;
+    }
+  }
+
+  function getGoogTrans() {
+    const match = document.cookie.match(/googtrans=([^;]+)/);
+    if (!match) return null;
+    const parts = match[1].split("/");
+    return parts[2] || null;
+  }
+
+  const changeLanguage = (lang) => {
+    setGoogTrans(lang);
+
+    if (lang === "id") {
+      // Reload halaman untuk reset DOM Google Translate
+      window.location.reload();
+      return;
+    }
+
+    const tryChange = () => {
+      const select = document.querySelector(".goog-te-combo");
+      if (!select) return false;
+
+      select.value = lang;
+      select.dispatchEvent(new Event("change"));
+      return true;
+    };
+
+    let tries = 0;
+    const interval = setInterval(() => {
+      if (tryChange() || tries > 20) {
+        clearInterval(interval);
+      }
+      tries++;
+    }, 300);
+  };
+
+  useEffect(() => {
+    const saved = getGoogTrans();
+
+    if (!saved || saved === "id") {
+      setSelectedLang("id");
+      return;
+    }
+
+    if (["en", "ar", "su"].includes(saved)) {
+      setSelectedLang(saved);
+      changeLanguage(saved);
+    }
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setLangOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const container = {
     hidden: { opacity: 0 },
@@ -38,6 +126,25 @@ const PMBLanding = () => {
       opacity: 1,
       scale: 1,
       transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
+  const sectionContainer = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const sectionItem = {
+    hidden: { opacity: 0, y: 30 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
     },
   };
 
@@ -90,6 +197,18 @@ const PMBLanding = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      <FloatingWhatsApp
+        phoneNumber='62811960193'
+        accountName='Universitas Pasundan'
+        avatar='/logo_unpas.png'
+        statusMessage=''
+        chatMessage='Salam 👋 Selamat datang di Universitas Pasundan.'
+        darkMode={false}
+        allowClickAway={true}
+        allowEsc={true}
+        notification={false}
+        notificationSound={false}
+      />
       {/* GOOGLE TRANSLATE ELEMENT (HIDDEN) */}
       <div id="google_translate_element" className="hidden" />
       {/* WRAPPER */}
@@ -236,7 +355,7 @@ const PMBLanding = () => {
       {/* <section className="relative w-full overflow-hidden pt-[120px] min-h-[85vh] md:min-h-screen flex items-center">
         <div className="absolute inset-0">
           <img
-            src="/mahasiswa2.jpg"
+            src="/mahasiswa.jpg"
             alt="Mahasiswa UNPAS"
             className="h-full w-full object-cover"
           />
@@ -299,7 +418,7 @@ const PMBLanding = () => {
       <section className="relative w-full overflow-hidden pt-[120px] min-h-[90vh] md:min-h-screen flex items-center justify-center">
         <div className="absolute inset-0">
           <img
-            src="/mahasiswa2.jpg"
+            src="/mahasiswa.jpg"
             alt="Mahasiswa UNPAS"
             className="h-full w-full object-cover"
           />
@@ -359,13 +478,21 @@ const PMBLanding = () => {
       </section>
 
       <div className="mx-auto max-w-6xl px-4 pb-16">
-        {/* SECTION: JALUR PENDAFTARAN */}
-        <section className="mt-16" id="jalur-pendaftaran">
-          <div className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold">Jalur Pendaftaran PMB UNPAS</h2>
-          </div>
 
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-4">
+        {/* SECTION: JALUR PENDAFTARAN */}
+        <motion.section
+          id="jalur-pendaftaran"
+          className="mt-16"
+          variants={sectionContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <motion.div variants={sectionItem} className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Jalur Pendaftaran PMB UNPAS</h2>
+          </motion.div>
+
+          <motion.div variants={sectionContainer} className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-4">
             {[
               {
                 title: "Early Bird",
@@ -464,7 +591,8 @@ const PMBLanding = () => {
               const isOpen = item.status === "open";
 
               return (
-                <div
+                <motion.div
+                  variants={sectionItem}
                   key={idx}
                   className={`relative flex flex-col justify-between rounded-2xl bg-white p-5 text-center shadow-sm transition-all duration-300
             ${isOpen ? "hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]" : "opacity-70"}`}
@@ -532,25 +660,25 @@ const PMBLanding = () => {
                       Belum Dibuka
                     </div>
                   )}
-                </div>
+                </motion.div>
               );
             })}
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* SECTION: Program Studi */}
-        <section id="program-studi" className="mt-16">
+        <motion.section id="program-studi" className="mt-16" variants={sectionItem} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
           <ProdiExplorer />
-        </section>
+        </motion.section>
 
         {/* SECTION: PANDUAN PENDAFTARAN */}
-        <section className="mt-16" id="timeline-alur">
+        <motion.section className="mt-16" id="timeline-alur" variants={sectionItem} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
           {/* Header */}
-          <div className="space-y-3 text-center">
+          <motion.div variants={sectionItem} className="space-y-3 text-center">
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
               Tata Cara Pendaftaran Mahasiswa Baru
             </h2>
-          </div>
+          </motion.div>
 
           {/* List Alur */}
           <div className="relative mt-10 space-y-4">
@@ -594,7 +722,8 @@ const PMBLanding = () => {
                 step: 5,
               },
             ].map((item) => (
-              <div
+              <motion.div
+                variants={sectionItem}
                 key={item.step}
                 className="relative flex gap-4 rounded-2xl bg-white p-4 pl-16 shadow-sm ring-1 ring-slate-200"
               >
@@ -619,7 +748,7 @@ const PMBLanding = () => {
                 <div className="text-2xl font-black text-slate-200">
                   {item.step}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -665,8 +794,66 @@ const PMBLanding = () => {
               </div>
             ))}
           </div>
+        </motion.section>
 
-        </section>
+        {/* SECTION: SOSIAL MEDIA (SLIDER) */}
+        <motion.section
+          className="mt-20"
+          id="sosial-media"
+          variants={sectionContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {/* Header */}
+          <motion.div variants={sectionItem} className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              Kegiatan PMB UNPAS
+            </h2>
+            <p className="mx-auto max-w-2xl text-sm text-slate-600">
+              Lihat langsung keseruan kegiatan promosi PMB UNPAS ke sekolah-sekolah, Edufair, dan berbagai event pendidikan di seluruh Indonesia.
+            </p>
+          </motion.div>
+
+          {/* Slider */}
+          <motion.div variants={sectionItem} className="mt-10">
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={24}
+              slidesPerView={1}
+              navigation
+              pagination={{ clickable: true }}
+              autoplay={{
+                delay: 4500,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+              }}
+              className="pb-12"
+            >
+              {[
+                "https://www.instagram.com/p/DRy_jdskYTR/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+                "https://www.instagram.com/reel/DTwjL9MkfGV/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+                "https://www.instagram.com/reel/DTkcKWtkQmd/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+                "https://www.instagram.com/reel/DTiHmMikanU/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+                "https://www.instagram.com/reel/DTfm78GEbns/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+                "https://www.instagram.com/p/DTLAE1rEd4E/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+                "https://www.instagram.com/reel/DR_uvWGETQl/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+              ].map((url, idx) => (
+                <SwiperSlide key={idx}>
+                  <div className="flex justify-center">
+                    <div className="rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+                      <InstagramEmbed url={url} width={328} />
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </motion.div>
+        </motion.section>
 
         {/* SECTION: Ketentuan Refund */}
         <section className="mt-16" id="ketentuan-refund">
@@ -906,7 +1093,102 @@ const PMBLanding = () => {
         </div>
       </footer>
 
-      <ScrollToTop smooth style={{ display: "flex", justifyContent: "center", alignItems: "center" }} />
+      {/* FLOATING LANGUAGE — KIRI BAWAH */}
+      <div className="fixed bottom-[40px] left-[40px] z-[9999]" ref={langRef}>
+        <div className="relative">
+
+          {/* BUTTON */}
+          <button
+            onClick={() => setLangOpen(!langOpen)}
+            className="flex h-11 px-4 items-center gap-2 rounded-xl bg-[#6B5B51]/80 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51] transition text-white text-sm font-semibold"
+            translate="no"
+          >
+            <img
+              src={LANGUAGES.find(l => l.code === selectedLang).icon}
+              alt=""
+              className="w-5 h-5 object-cover"
+            />
+            {LANGUAGES.find(l => l.code === selectedLang).short}
+          </button>
+
+          {/* DROPDOWN */}
+          {langOpen && (
+            <div className="absolute bottom-14 left-0">
+              <div className="overflow-hidden rounded-xl border border-slate-300 bg-white shadow-lg min-w-[240px]" translate="no">
+
+                {LANGUAGES.map((lang) => {
+                  const isActive = lang.code === selectedLang;
+
+                  return (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setSelectedLang(lang.code);
+                        changeLanguage(lang.code);
+                        setLangOpen(false);
+                      }}
+                      className={`
+                        w-full text-left flex items-center gap-3 px-4 py-3 text-sm transition
+                        ${isActive
+                          ? "bg-[#f1f1f1] font-semibold"
+                          : "hover:bg-[#f5f5f5]"
+                        }
+                      `}
+                    >
+                      {/* ICON IMAGE */}
+                      <div className="w-6 h-6 flex-shrink-0">
+                        <img
+                          src={lang.icon}
+                          alt={lang.label}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+
+                      {/* TEXT */}
+                      <span className="text-slate-800" translate="no">
+                        {isActive ? lang.short : lang.label}
+                      </span>
+                    </button>
+                  );
+                })}
+
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+
+      <ScrollToTop
+        smooth
+        component={
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="white"
+              strokeWidth="2.5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </div>
+        }
+        style={{
+          bottom: "110px",
+          right: "45px",
+          zIndex: 9999,
+          background: "transparent",
+          boxShadow: "none",
+        }}
+      />
+      {/* <ScrollToTop smooth style={{ display: "flex", justifyContent: "center", alignItems: "center", bottom: "120px", right: "40px", zIndex: "9999" }} /> */}
     </div>
   );
 }
