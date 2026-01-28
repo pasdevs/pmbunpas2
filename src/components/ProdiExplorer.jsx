@@ -411,24 +411,25 @@ function ProdiCard({ prodi }) {
   return (
     <div className="group relative overflow-visible rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex flex-col">
       {/* Badge Fakultas */}
-      {/* <div className="mb-3">
-        <span
-          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${meta.badge}`}
-        >
-          {prodi.fakultas}
-        </span>
-      </div> */}
-
       <div className="mb-3">
-        <div className="relative inline-block group">
+        <div className="relative inline-block group focus:outline-none">
           <span
-            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold cursor-help ${meta.badge}`}
+            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold sm:cursor-help ${meta.badge}`}
           >
-            {prodi.fakultas}
+            {/* Mobile: tampilkan lengkap */}
+            <span className="inline sm:hidden">
+              {FAKULTAS_TOOLTIP[prodi.fakultas] || prodi.fakultas}
+            </span>
+
+            {/* Desktop: tampilkan singkatan */}
+            <span className="hidden sm:inline">
+              {prodi.fakultas}
+            </span>
           </span>
 
           {/* Tooltip */}
           <div className={`
+            hidden sm:block
             pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2
             whitespace-nowrap rounded-lg ${meta.pill} px-3 py-1.5 text-sm font-bold
             opacity-0 scale-95 transition-all duration-200
