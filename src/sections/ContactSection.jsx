@@ -9,8 +9,10 @@ export default function ContactSection() {
       {/* BACKGROUND */}
       <div className="absolute inset-0">
         <img
-          src="/img/gedung_unpas.jpg" 
+          src="/img/gedung_unpas.webp"
           alt="Kontak PMB UNPAS"
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover"
         />
         {/* Overlay */}

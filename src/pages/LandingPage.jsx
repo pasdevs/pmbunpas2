@@ -28,6 +28,13 @@ const PMBLanding = () => {
   const [selectedLang, setSelectedLang] = useState("id");
   const langRef = useRef(null);
 
+  const [showWA, setShowWA] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setShowWA(true), 3500);
+    return () => clearTimeout(t);
+  }, []);
+
   const badges = [
     {
       icon: ShieldCheck,
@@ -228,7 +235,7 @@ const PMBLanding = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <FloatingWhatsApp
+      {showWA && <FloatingWhatsApp
         phoneNumber='62811960193'
         accountName='Universitas Pasundan'
         avatar='/logo_unpas.png'
@@ -242,7 +249,7 @@ const PMBLanding = () => {
         buttonStyle={{
           bottom: "10px",
         }}
-      />
+      />}
       {/* GOOGLE TRANSLATE ELEMENT (HIDDEN) */}
       <div id="google_translate_element" className="hidden" />
       {/* WRAPPER */}
@@ -258,6 +265,8 @@ const PMBLanding = () => {
               <div className="h-10 w-10 rounded-full bg-slate-300">
                 <img
                   src="/logo_unpas.png"
+                  loading="lazy"
+                  decoding="async"
                   alt="Logo Unpas"
                   className="h-full w-full object-cover"
                 />
@@ -449,11 +458,15 @@ const PMBLanding = () => {
       </section> */}
 
       {/* HERO SECTION — CENTERED + BROWN GRADIENT */}
-      <section className="relative w-full overflow-hidden pt-[120px] min-h-[90vh] md:min-h-screen flex items-center justify-center">
+      {/* <section className="relative w-full overflow-hidden pt-[120px] min-h-[90vh] md:min-h-screen flex items-center justify-center"> */}
+      <section className="relative w-full overflow-hidden pt-[96px] md:pt-[120px] min-h-[90vh] md:min-h-screen flex items-start md:items-center justify-center">
         <div className="absolute inset-0">
           <img
-            src="/mahasiswa.jpg"
+            src="/mahasiswa.webp"
             alt="Mahasiswa UNPAS"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#3F3631]/90 via-[#6B5B51]/75 to-[#6B5B51]/50" />
@@ -463,9 +476,11 @@ const PMBLanding = () => {
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative z-10 px-6 md:px-12 text-white w-full"
+          // className="relative z-10 px-6 md:px-12 text-white w-full"
+          className="relative z-10 px-6 md:px-12 text-white w-full pt-6 md:pt-0"
         >
-          <div className="mx-auto max-w-3xl text-center space-y-6">
+          {/* <div className="mx-auto max-w-3xl text-center space-y-6"> */}
+          <div className="mx-auto max-w-3xl text-center space-y-4 md:space-y-6">
             <motion.h1
               variants={fadeUp}
               className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
@@ -530,9 +545,13 @@ const PMBLanding = () => {
               </div>
             </motion.div>
 
-            <motion.div
+            {/* <motion.div
               variants={fadeScale}
               className="flex flex-col sm:flex-row justify-center gap-4 pt-4"
+            > */}
+            <motion.div
+              variants={fadeScale}
+              className="flex flex-col sm:flex-row justify-center gap-3 pt-3 md:pt-4"
             >
               <a
                 href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
@@ -898,6 +917,8 @@ const PMBLanding = () => {
                       <img
                         src={item.image}
                         alt={item.title}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover"
                       />
                     </div>
@@ -1056,6 +1077,8 @@ const PMBLanding = () => {
             <img
               src={LANGUAGES.find(l => l.code === selectedLang).icon}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="w-5 h-5 object-cover"
             />
             {LANGUAGES.find(l => l.code === selectedLang).short}
@@ -1090,6 +1113,8 @@ const PMBLanding = () => {
                         <img
                           src={lang.icon}
                           alt={lang.label}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover"
                         />
                       </div>
