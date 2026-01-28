@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
-  Stethoscope, GraduationCap, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, UploadCloud, CheckCircle2, Rocket, IdCard, SquarePen, LaptopMinimalCheck
+  ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, UploadCloud, CheckCircle2, Rocket, IdCard, SquarePen, LaptopMinimalCheck
 } from "lucide-react";
 import ScrollToTop from "react-scroll-to-top";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ProdiExplorer from "../components/ProdiExplorer";
 import INFORMASI_LIST from "../data/InformasiList";
-import { InstagramEmbed } from "react-social-media-embed";
+// import { InstagramEmbed } from "react-social-media-embed";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, FreeMode } from "swiper/modules";
@@ -27,6 +27,31 @@ const PMBLanding = () => {
   const [langOpen, setLangOpen] = useState(false);
   const [selectedLang, setSelectedLang] = useState("id");
   const langRef = useRef(null);
+
+  const badges = [
+    {
+      icon: ShieldCheck,
+      text: "Di bawah naungan YPT Pasundan",
+    },
+    {
+      icon: Users,
+      text: "Paguyuban Pasundan (est. 1913)",
+    },
+    {
+      icon: GraduationCap,
+      text: "UNPAS berdiri 1960",
+    },
+  ];
+
+  const [badgeIndex, setBadgeIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBadgeIndex((prev) => (prev + 1) % badges.length);
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const LANGUAGES = [
     { code: "id", short: "ID", label: "Indonesian", icon: "/img/id.png" },
@@ -459,6 +484,52 @@ const PMBLanding = () => {
               </span>
             </motion.p>
 
+            {/* ========== BADGE DESKTOP ========== */}
+            <motion.div
+              variants={fadeUp}
+              className="
+                hidden md:flex
+                flex-wrap
+                justify-center
+                gap-3 pt-2
+              "
+            >
+              {badges.map((b, i) => {
+                const Icon = b.icon;
+                return (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-[13px] font-semibold text-slate-700 shadow-sm hover:-translate-y-0.5 transition"
+                  >
+                    <Icon className="h-5 w-5 text-slate-600" />
+                    <span>{b.text}</span>
+                  </div>
+                );
+              })}
+            </motion.div>
+
+            {/* ========== BADGE MOBILE ROTATE ========== */}
+            <motion.div variants={fadeUp} className="md:hidden pt-2">
+              <div className="flex justify-center min-h-[44px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={badgeIndex}
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-[13px] font-semibold text-slate-700 shadow-sm"
+                  >
+                    {(() => {
+                      const Icon = badges[badgeIndex].icon;
+                      return <Icon className="h-5 w-5 text-slate-600" />;
+                    })()}
+                    <span>{badges[badgeIndex].text}</span>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </motion.div>
+
             <motion.div
               variants={fadeScale}
               className="flex flex-col sm:flex-row justify-center gap-4 pt-4"
@@ -860,7 +931,7 @@ const PMBLanding = () => {
         </motion.section>
 
         {/* SECTION: SOSIAL MEDIA (SLIDER) */}
-        <motion.section
+        {/* <motion.section
           className="mt-20"
           id="sosial-media"
           variants={sectionContainer}
@@ -868,7 +939,6 @@ const PMBLanding = () => {
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {/* Header */}
           <motion.div variants={sectionItem} className="space-y-3 text-center">
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
               Kegiatan PMB UNPAS
@@ -878,14 +948,11 @@ const PMBLanding = () => {
             </p>
           </motion.div>
 
-          {/* Slider */}
           <motion.div variants={sectionItem} className="relative mt-10">
 
-            {/* Fade gradient kiri-kanan */}
             <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
             <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10" />
 
-            {/* Arrow Left */}
             <button
               className="swiper-sosmed-prev absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
             >
@@ -894,7 +961,6 @@ const PMBLanding = () => {
               </svg>
             </button>
 
-            {/* Arrow Right */}
             <button
               className="swiper-sosmed-next absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
             >
@@ -942,7 +1008,7 @@ const PMBLanding = () => {
               ))}
             </Swiper>
           </motion.div>
-        </motion.section>
+        </motion.section> */}
 
         {/* SECTION: TESTIMONI */}
         <TestimoniSection />
