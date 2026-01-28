@@ -29,10 +29,10 @@ const PMBLanding = () => {
   const langRef = useRef(null);
 
   const LANGUAGES = [
-    { code: "id", short: "ID", label: "Indonesian", icon: "/icon/id.png" },
-    { code: "ar", short: "AR", label: "Arabic", icon: "/icon/ar.png" },
-    { code: "su", short: "SU", label: "Sundanese", icon: "/icon/su.png" },
-    { code: "en", short: "EN", label: "English", icon: "/icon/en.png" },
+    { code: "id", short: "ID", label: "Indonesian", icon: "/img/id.png" },
+    { code: "ar", short: "AR", label: "Arabic", icon: "/img/ar.png" },
+    { code: "su", short: "SU", label: "Sundanese", icon: "/img/su.png" },
+    { code: "en", short: "EN", label: "English", icon: "/img/en.png" },
   ];
 
   function setGoogTrans(lang) {
@@ -214,6 +214,9 @@ const PMBLanding = () => {
         allowEsc={true}
         notification={false}
         notificationSound={false}
+        buttonStyle={{
+          bottom: "10px",
+        }}
       />
       {/* GOOGLE TRANSLATE ELEMENT (HIDDEN) */}
       <div id="google_translate_element" className="hidden" />
@@ -483,6 +486,7 @@ const PMBLanding = () => {
         </motion.div>
       </section>
 
+      {/* wrapper for all sections */}
       <div className="mx-auto max-w-6xl px-4 pb-16">
 
         {/* SECTION: JALUR PENDAFTARAN */}
@@ -759,45 +763,6 @@ const PMBLanding = () => {
             ))}
           </div>
 
-          {/* Panduan PDF */}
-          {/* <div className="mt-16 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {INFORMASI_LIST.map((item) => (
-              <div
-                key={item.id}
-                className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-              >
-                <div className="h-48 w-full overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-
-                <div className="flex flex-1 flex-col p-4">
-                  <div className="text-xs text-slate-500">{item.date}</div>
-
-                  <h3 className="mt-2 text-sm font-bold text-slate-900 line-clamp-2">
-                    {item.title}
-                  </h3>
-
-                  <div className="flex-1" />
-
-                  <div className="pt-8 flex justify-center">
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-full border border-[#6B5B51] px-4 py-2 text-xs font-semibold text-[#6B5B51] transition hover:bg-[#6B5B51] hover:text-white"
-                    >
-                      Lihat Selengkapnya →
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div> */}
-
           {/* Panduan PDF (Modern Horizontal Slider + Arrow) */}
           <div className="relative mt-16">
             <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
@@ -981,14 +946,18 @@ const PMBLanding = () => {
 
         {/* SECTION: TESTIMONI */}
         <TestimoniSection />
-        
+
         {/* SECTION: FAQ */}
         <FaqSection />
-        
+
         {/* SECTION: KONTAK */}
-        <ContactSection />
-        
+        {/* <ContactSection /> */}
+
       </div>
+
+      {/* SECTION: KONTAK */}
+      <ContactSection />
+
 
       {/* FOOTER */}
       <footer className="border-t border-slate-200 bg-white">
@@ -1009,7 +978,7 @@ const PMBLanding = () => {
       </footer>
 
       {/* FLOATING LANGUAGE — KIRI BAWAH */}
-      <div className="fixed bottom-[40px] left-[40px] z-[9999]" ref={langRef}>
+      <div className="fixed bottom-[10px] left-[40px] z-[9999]" ref={langRef}>
         <div className="relative">
 
           {/* BUTTON */}
@@ -1096,7 +1065,7 @@ const PMBLanding = () => {
           </div>
         }
         style={{
-          bottom: "110px",
+          bottom: "90px",
           right: "45px",
           zIndex: 9999,
           background: "transparent",

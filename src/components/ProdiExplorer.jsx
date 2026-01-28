@@ -306,6 +306,30 @@ const DATA_PRODI = [
 
 const FAKULTAS = ["SEMUA", "FH", "FISIP", "FT", "FEB", "FKIP", "FISS", "FK", "Pascasarjana"];
 
+const FAKULTAS_LABEL = {
+  SEMUA: "Semua Fakultas",
+  FH: "Hukum (FH)",
+  FT: "Teknik (FT)",
+  FEB: "Ekonomi & Bisnis (FEB)",
+  FKIP: "Pendidikan (FKIP)",
+  FISIP: "Sosial & Politik (FISIP)",
+  FISS: "Seni & Sastra (FISS)",
+  FK: "Kedokteran (FK)",
+  Pascasarjana: "Pascasarjana",
+};
+
+const FAKULTAS_TOOLTIP = {
+  FH: "Fakultas Hukum",
+  FISIP: "Fakultas Ilmu Sosial dan Ilmu Politik",
+  FT: "Fakultas Teknik",
+  FEB: "Fakultas Ekonomi dan Bisnis",
+  FKIP: "Fakultas Keguruan dan Ilmu Pendidikan",
+  FISS: "Fakultas Ilmu Seni dan Sastra",
+  FK: "Fakultas Kedokteran",
+  Pascasarjana: "Program Pascasarjana",
+  Profesi: "Program Profesi",
+};
+
 const JENJANG_LABEL = {
   S1: "Program Sarjana (S1)",
   S2: "Program Magister (S2)",
@@ -385,14 +409,35 @@ function ProdiCard({ prodi }) {
   const labelJenjang = JENJANG_LABEL[prodi.jenjang] || prodi.jenjang;
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex flex-col">
+    <div className="group relative overflow-visible rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex flex-col">
       {/* Badge Fakultas */}
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <span
           className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${meta.badge}`}
         >
           {prodi.fakultas}
         </span>
+      </div> */}
+
+      <div className="mb-3">
+        <div className="relative inline-block group">
+          <span
+            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold cursor-help ${meta.badge}`}
+          >
+            {prodi.fakultas}
+          </span>
+
+          {/* Tooltip */}
+          <div className={`
+            pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+            whitespace-nowrap rounded-lg ${meta.pill} px-3 py-1.5 text-sm font-bold
+            opacity-0 scale-95 transition-all duration-200
+            group-hover:opacity-100 group-hover:scale-100
+            shadow-lg z-50
+          `}>
+            {FAKULTAS_TOOLTIP[prodi.fakultas] || prodi.fakultas}
+          </div>
+        </div>
       </div>
 
       {/* Judul */}
@@ -485,13 +530,17 @@ export default function ProdiExplorer() {
             <button
               key={f}
               onClick={() => setActiveFakultas(f)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer
+              className={`
+                relative px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer
+                overflow-hidden
                 ${isActive
-                  ? `${meta.pill} shadow-md scale-105`
+                  ? `${meta.pill} shadow-lg`
                   : "bg-white border border-slate-300 text-slate-600 hover:border-slate-400"
-                }`}
+                }
+                hover:px-8
+              `}
             >
-              {f}
+              {FAKULTAS_LABEL[f] || f}
             </button>
           );
         })}
