@@ -55,20 +55,32 @@
   <div id="google_translate_element" style="display:none;"></div>
 
   <script>
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement(
-        {
-          pageLanguage: 'id',
-          includedLanguages: 'id,en,ar,su',
-          autoDisplay: false
-        },
-        'google_translate_element'
-      );
-    }
-  </script>
+    function loadGoogleTranslate() {
+      if (window.google && window.google.translate) return;
 
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-    type="text/javascript"></script>
+      window.googleTranslateElementInit = function () {
+        new google.translate.TranslateElement(
+          {
+            pageLanguage: 'id',
+            includedLanguages: 'id,en,ar,su',
+            autoDisplay: false
+          },
+          'google_translate_element'
+        );
+      };
+
+      const s = document.createElement("script");
+      s.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      s.async = true;
+      s.defer = true;
+      document.body.appendChild(s);
+    }
+
+    // LOAD SETELAH PAGE SELESAI
+    window.addEventListener("load", function () {
+      setTimeout(loadGoogleTranslate, 1500);
+    });
+  </script>
 
   <script type="module" src="/src/main.jsx"></script>
 </body>

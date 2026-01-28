@@ -6,7 +6,6 @@ import ScrollToTop from "react-scroll-to-top";
 import { motion, AnimatePresence } from "framer-motion";
 import ProdiExplorer from "../components/ProdiExplorer";
 import INFORMASI_LIST from "../data/InformasiList";
-// import { InstagramEmbed } from "react-social-media-embed";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, FreeMode } from "swiper/modules";
@@ -393,69 +392,6 @@ const PMBLanding = () => {
           </div>
         )}
       </div>
-
-      {/* HERO SECTION — LEFT ALIGNED + BROWN GRADIENT */}
-      {/* <section className="relative w-full overflow-hidden pt-[120px] min-h-[85vh] md:min-h-screen flex items-center">
-        <div className="absolute inset-0">
-          <img
-            src="/mahasiswa.jpg"
-            alt="Mahasiswa UNPAS"
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#3F3631]/90 via-[#6B5B51]/75 to-[#6B5B51]/50" />
-        </div>
-
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="relative z-10 px-6 md:px-12 text-white w-full"
-        >
-          <div className="max-w-3xl text-left space-y-6">
-            <motion.h1
-              variants={fadeUp}
-              className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
-            >
-              Bikin Cerita Sukses
-              <span className="block text-yellow-300">Versi Kamu</span>
-              Mulai di Sini 🔥
-            </motion.h1>
-
-            <motion.p
-              variants={fadeUp}
-              className="text-sm sm:text-base text-white/90"
-            >
-              <span className="font-semibold">
-                Tempat di mana generasi hebat lahir, tumbuh, dan berkarya.
-              </span>
-            </motion.p>
-
-            <motion.div
-              variants={fadeScale}
-              className="flex flex-col sm:flex-row justify-start gap-4 pt-4"
-            >
-              <a
-                href="https://situ2.unpas.ac.id/spmbfront/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-[#5a4c43] shadow-lg hover:scale-[1.05] transition"
-              >
-                🚀 Daftar Sekarang
-              </a>
-
-              <a
-                href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full border-2 border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
-              >
-                💸 Lihat Biaya & Promo
-              </a>
-            </motion.div>
-
-          </div>
-        </motion.div>
-      </section> */}
 
       {/* HERO SECTION — CENTERED + BROWN GRADIENT */}
       {/* <section className="relative w-full overflow-hidden pt-[120px] min-h-[90vh] md:min-h-screen flex items-center justify-center"> */}
@@ -950,86 +886,6 @@ const PMBLanding = () => {
             </Swiper>
           </div>
         </motion.section>
-
-        {/* SECTION: SOSIAL MEDIA (SLIDER) */}
-        {/* <motion.section
-          className="mt-20"
-          id="sosial-media"
-          variants={sectionContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          <motion.div variants={sectionItem} className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-              Kegiatan PMB UNPAS
-            </h2>
-            <p className="mx-auto max-w-2xl text-sm text-slate-600">
-              Lihat langsung keseruan kegiatan promosi PMB UNPAS ke sekolah-sekolah, Edufair, dan berbagai event pendidikan di seluruh Indonesia.
-            </p>
-          </motion.div>
-
-          <motion.div variants={sectionItem} className="relative mt-10">
-
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10" />
-
-            <button
-              className="swiper-sosmed-prev absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <button
-              className="swiper-sosmed-next absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-
-            <Swiper
-              modules={[Navigation, Autoplay, FreeMode]}
-              spaceBetween={24}
-              slidesPerView={1}
-              navigation={{
-                prevEl: ".swiper-sosmed-prev",
-                nextEl: ".swiper-sosmed-next",
-              }}
-              freeMode
-              autoplay={{
-                delay: 4500,
-                disableOnInteraction: false,
-              }}
-              breakpoints={{
-                640: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-              }}
-              className="pb-12 !px-6"
-            >
-              {[
-                "https://www.instagram.com/p/DRy_jdskYTR/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-                "https://www.instagram.com/reel/DTwjL9MkfGV/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-                "https://www.instagram.com/reel/DTkcKWtkQmd/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-                "https://www.instagram.com/reel/DTiHmMikanU/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-                "https://www.instagram.com/reel/DTfm78GEbns/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-                "https://www.instagram.com/p/DTLAE1rEd4E/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-                "https://www.instagram.com/reel/DR_uvWGETQl/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
-              ].map((url, idx) => (
-                <SwiperSlide key={idx}>
-                  <div className="flex justify-center">
-                    <div className="rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-                      <InstagramEmbed url={url} width={328} />
-                    </div>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </motion.div>
-        </motion.section> */}
 
         {/* SECTION: TESTIMONI */}
         <TestimoniSection />
