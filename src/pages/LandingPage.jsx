@@ -337,14 +337,14 @@ const PMBLanding = () => {
                 </a>
 
                 {/* DAFTAR */}
-                <a
+                {/* <a
                   href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex rounded-full bg-[#6B5B51] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#5a4c43]"
                 >
                   Daftar Sekarang
-                </a>
+                </a> */}
               </div>
             </div>
 
@@ -381,14 +381,14 @@ const PMBLanding = () => {
             </a>
 
             {/* DAFTAR */}
-            <a
+            {/* <a
               href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full bg-[#6B5B51] px-4 py-2 text-sm text-center font-semibold text-white shadow hover:bg-[#5a4c43]"
             >
               Daftar Sekarang
-            </a>
+            </a> */}
           </div>
         )}
       </div>
@@ -489,14 +489,14 @@ const PMBLanding = () => {
               variants={fadeScale}
               className="flex flex-col sm:flex-row justify-center gap-3 pt-3 md:pt-4"
             >
-              <a
+              {/* <a
                 href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-[#5a4c43] shadow-lg hover:scale-[1.05] transition"
               >
                 🚀 Daftar Sekarang
-              </a>
+              </a> */}
 
               <a
                 href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
@@ -504,7 +504,7 @@ const PMBLanding = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full border-2 border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
               >
-                💸 Lihat Biaya & Promo
+                💸 Lihat Biaya
               </a>
             </motion.div>
 
@@ -886,6 +886,48 @@ const PMBLanding = () => {
             </Swiper>
           </div>
         </motion.section>
+
+        {/* SECTION: Ketentuan Refund */}
+        <section className="mt-16" id="ketentuan-refund">
+          <div className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold">Ketentuan Pengembalian Biaya Registrasi Calon Mahasiswa baru UNPAS</h2>
+          </div>
+
+          {/* BANNER: KETENTUAN REFUND */}
+          <div className="mt-8 rounded-2xl border border-red-200 bg-[#ffe2e273] p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]">
+
+            {/* Text Section */}
+            <div className="w-full">
+              <p className="mt-1 text-md text-black-800/80 font-bold">
+                Jangan khawatir! UNPAS memberi perlindungan pengembalian biaya untuk situasi tertentu.
+                <br />Unduh dan baca dokumen ketentuan resminya agar kamu mendaftar tanpa ragu.
+              </p>
+            </div>
+
+            {/* CTA Button – Full Width */}
+            <div className="w-full mt-4">
+              <a
+                href="https://s.id/unpas_pmb_refund"
+                target="_blank"
+                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
+              >
+                📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Universitas Pasundan 2026-2027
+              </a>
+            </div>
+
+            <div className="w-full mt-4">
+              <a
+                href="https://s.id/unpas_pmbfk_refund"
+                target="_blank"
+                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
+              >
+                📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Kedokteran Universitas Pasundan 2026-2027
+              </a>
+            </div>
+
+          </div>
+
+        </section>
 
         {/* SECTION: TESTIMONI */}
         <TestimoniSection />
