@@ -29,8 +29,18 @@ const PMBLanding = () => {
 
   const [showWA, setShowWA] = useState(false);
 
+  const handleClickWhatsApp = () => {
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: "click_whatsapp",
+        source: "floating_whatsapp",
+        page: "pmb.unpas.ac.id",
+      });
+    }
+  };
+
   useEffect(() => {
-    const t = setTimeout(() => setShowWA(true), 3500);
+    const t = setTimeout(() => setShowWA(true), 2000);
     return () => clearTimeout(t);
   }, []);
 
@@ -278,9 +288,8 @@ const PMBLanding = () => {
         allowEsc={true}
         notification={false}
         notificationSound={false}
-        buttonStyle={{
-          bottom: "10px",
-        }}
+        buttonStyle={{ bottom: "10px" }}
+        onClick={handleClickWhatsApp}
       />}
       {/* GOOGLE TRANSLATE ELEMENT (HIDDEN) */}
       <div id="google_translate_element" className="hidden" />
