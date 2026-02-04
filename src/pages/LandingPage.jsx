@@ -34,6 +34,39 @@ const PMBLanding = () => {
     return () => clearTimeout(t);
   }, []);
 
+  const steps = [
+    {
+      id: 1,
+      title: "Pilih Jalur Pendaftaran",
+      desc: "Tentukan jalur masuk sesuai pilihan dan ketentuan kampus Universitas Pasundan.",
+    },
+    {
+      id: 2,
+      title: "Isi Formulir Pendaftaran",
+      desc: "Lengkapi data diri secara lengkap dan benar pada formulir pendaftaran online.",
+    },
+    {
+      id: 3,
+      title: "Bayar Biaya Pendaftaran",
+      desc: "Lakukan pembayaran biaya pendaftaran sesuai instruksi yang tersedia.",
+    },
+    {
+      id: 4,
+      title: "Unggah Berkas & Ikuti Seleksi",
+      desc: "Unggah dokumen persyaratan dan ikuti tahapan seleksi sesuai jadwal.",
+    },
+    {
+      id: 5,
+      title: "Hasil Seleksi",
+      desc: "Login ke akun PMB untuk melihat hasil seleksi, serta informasi lanjutan registrasi mahasiswa baru.",
+      cta: true,
+      ctaLabel: "Login PMB & Lihat Hasil Seleksi",
+      ctaLink: "https://situ2.unpas.ac.id/spmbfront/login",
+    },
+  ];
+
+  const [activeStep, setActiveStep] = useState(1);
+
   const badges = [
     {
       icon: ShieldCheck,
@@ -400,8 +433,7 @@ const PMBLanding = () => {
           <img
             src="/mahasiswa.webp"
             alt="Mahasiswa UNPAS"
-            fetchpriority="high"
-            loading="eager"
+            loading="lazy"
             decoding="async"
             className="h-full w-full object-cover"
           />
@@ -718,75 +750,142 @@ const PMBLanding = () => {
           </motion.div>
 
           {/* List Alur */}
-          <div className="relative mt-10 space-y-4">
-            {/* Vertical line */}
-            <div className="absolute left-[22px] top-0 h-full w-px bg-slate-200" />
+          {/* ===== WIZARD STEPPER ===== */}
+          <div className="mt-10">
 
-            {[
-              {
-                title: "Pilih Jalur Pendaftaran",
-                desc: "Tentukan jalur masuk sesuai pilihan dan ketentuan kampus.",
-                icon: Shuffle,
-                color: "bg-indigo-500",
-                step: 1,
-              },
-              {
-                title: "Isi Formulir Pendaftaran",
-                desc: "Lengkapi data diri pada formulir secara benar.",
-                icon: SquarePen,
-                color: "bg-amber-500",
-                step: 2,
-              },
-              {
-                title: "Bayar Biaya Pendaftaran",
-                desc: "Lakukan pembayaran sesuai petunjuk yang tersedia.",
-                icon: CheckCircle2,
-                color: "bg-emerald-500",
-                step: 3,
-              },
-              {
-                title: "Unggah Berkas & Ikuti Seleksi",
-                desc: "Kirim dokumen dan ikuti tahapan seleksi sesuai jadwal.",
-                icon: UploadCloud,
-                color: "bg-pink-500",
-                step: 4,
-              },
-              {
-                title: "Hasil Seleksi",
-                desc: "Login untuk melihat hasil seleksi.",
-                icon: LaptopMinimalCheck,
-                color: "bg-sky-500",
-                step: 5,
-              },
-            ].map((item) => (
-              <motion.div
-                variants={sectionItem}
-                key={item.step}
-                className="relative flex gap-4 rounded-2xl bg-white p-4 pl-16 shadow-sm ring-1 ring-slate-200"
-              >
-                {/* Icon */}
-                <div
-                  className={`absolute left-3 top-4 flex h-10 w-10 items-center justify-center rounded-2xl ${item.color} text-white`}
+            {/* STEP INDICATOR */}
+            <div className="hidden md:flex items-center justify-between relative">
+              {/* LINE */}
+              <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-slate-200 -z-10" />
+
+              {steps.map((step) => (
+                <button
+                  key={step.id}
+                  onClick={() => setActiveStep(step.id)}
+                  className="flex flex-col items-center group cursor-pointer"
                 >
-                  <item.icon className="h-5 w-5" />
-                </div>
-
-                {/* Content */}
-                <div className="flex-1">
-                  <div className="text-sm font-semibold text-slate-900">
-                    {item.title}
+                  <div
+                    className={`h-10 w-10 flex items-center justify-center rounded-full font-bold transition
+                      ${activeStep >= step.id
+                        ? "bg-[#6B5B51] text-white"
+                        : "bg-white border-2 border-slate-300 text-slate-400"
+                      }`}
+                  >
+                    {step.id}
                   </div>
-                  <div className="mt-1 text-sm text-slate-600">
-                    {item.desc}
-                  </div>
-                </div>
+                  <span
+                    className={`mt-2 text-xs font-semibold text-center
+                    ${activeStep === step.id ? "text-[#6B5B51]" : "text-slate-400"}
+                    `}
+                  >
+                    {step.title}
+                  </span>
+                </button>
+              ))}
+            </div>
 
-                {/* Step number */}
-                <div className="text-2xl font-black text-slate-200">
-                  {item.step}
+            {/* CONTENT BOX */}
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-slate-900">
+                {steps[activeStep - 1].title}
+              </h3>
+              <p className="mt-2 text-slate-600">
+                {steps[activeStep - 1].desc}
+              </p>
+
+              {/* CTA KHUSUS STEP HASIL SELEKSI */}
+              {steps[activeStep - 1].cta && (
+                <div className="mt-4">
+                  <a
+                    href={steps[activeStep - 1].ctaLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-full bg-[#6B5B51] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5a4c43] transition"
+                  >
+                    🔐 {steps[activeStep - 1].ctaLabel}
+                  </a>
+
+                  {/* <p className="mt-2 text-xs text-slate-500">
+                    *) Gunakan akun yang dibuat saat pendaftaran untuk melihat hasil seleksi.
+                  </p> */}
                 </div>
-              </motion.div>
+              )}
+
+              {/* ACTION */}
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  disabled={activeStep === 1}
+                  onClick={() => setActiveStep(prev => prev - 1)}
+                  className="rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-600 disabled:opacity-40 cursor-pointer"
+                >
+                  Back
+                </button>
+
+                <button
+                  disabled={activeStep === steps.length}
+                  onClick={() => setActiveStep(prev => prev + 1)}
+                  className="rounded-full bg-[#6B5B51] px-6 py-2 text-sm font-semibold text-white hover:bg-[#5a4c43] disabled:opacity-40 cursor-pointer"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* ===== MOBILE WIZARD ===== */}
+          <div className="mt-10 md:hidden space-y-4">
+
+            {steps.map((step) => (
+              <div
+                key={step.id}
+                className={`rounded-2xl border p-4 transition
+                  ${activeStep === step.id
+                    ? "border-[#6B5B51] bg-[#f3efec]"
+                    : "border-slate-200 bg-white"
+                  }`}
+              >
+                <button
+                  onClick={() => setActiveStep(step.id)}
+                  className="flex items-center gap-4 w-full text-left"
+                >
+                  <div
+                    className={`h-9 w-9 flex items-center justify-center rounded-full font-bold
+                      ${activeStep >= step.id
+                        ? "bg-[#6B5B51] text-white"
+                        : "bg-slate-200 text-slate-500"
+                      }`}
+                  >
+                    {step.id}
+                  </div>
+
+                  <div>
+                    <div className="font-semibold text-slate-900">
+                      {step.title}
+                    </div>
+                  </div>
+                </button>
+
+                {activeStep === step.id && (
+                  <>
+                    <p className="mt-3 text-sm text-slate-600">
+                      {step.desc}
+                    </p>
+
+                    {step.cta && (
+                      <a
+                        href={step.ctaLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[#6B5B51] px-4 py-3 text-sm font-semibold text-white hover:bg-[#5a4c43] transition"
+                      >
+                        🔐 {step.ctaLabel}
+                      </a>
+                    )}
+                  </>
+                )}
+              </div>
             ))}
+
           </div>
 
           {/* Panduan PDF (Modern Horizontal Slider + Arrow) */}
@@ -894,7 +993,7 @@ const PMBLanding = () => {
           </div>
 
           {/* BANNER: KETENTUAN REFUND */}
-          <div className="mt-8 rounded-2xl border border-red-200 bg-[#ffe2e273] p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]">
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-[#F3EFEC] p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]">
 
             {/* Text Section */}
             <div className="w-full">
