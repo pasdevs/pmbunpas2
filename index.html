@@ -4,9 +4,38 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="/logo_unpas.ico" />
+  <link rel="apple-touch-icon" href="/logo_unpas.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Web site created by SPDPTIK Unpas" />
-  <title>Universitas Pasundan - PMB</title>
+
+  <meta http-equiv="content-language" content="id" />
+
+  <!-- <title>Universitas Pasundan - PMB</title>
+  <meta name="description" content="Web site created by SPDPTIK Unpas" /> -->
+
+  <title>Penerimaan Mahasiswa Baru UNPAS</title>
+  <meta name="description"
+    content="Penerimaan Mahasiswa Baru UNPAS 2026 resmi dibuka. Informasi biaya kuliah, program studi, dan jalur pendaftaran Universitas Pasundan tersedia lengkap di sini." />
+  <meta name="keywords"
+    content="PMB UNPAS 2026, Penerimaan Mahasiswa Baru UNPAS 2026, Biaya Kuliah UNPAS, Jurusan UNPAS, Jalur Pendaftaran UNPAS, Program Studi UNPAS, Kuliah Murah UNPAS" />
+  <meta name="author" content="Universitas Pasundan" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://pmb.unpas.ac.id" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Penerimaan Mahasiswa Baru UNPAS 2026 | PMB Resmi" />
+  <meta property="og:description"
+    content="Daftar kuliah di Universitas Pasundan tahun 2026 sekarang juga. Cek biaya dan program studi lengkap." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pmb.unpas.ac.id" />
+  <meta property="og:image" content="https://pmb.unpas.ac.id/og-image.jpg" />
+  <meta property="og:locale" content="id_ID" />
+  <meta property="og:site_name" content="PMB UNPAS" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Penerimaan Mahasiswa Baru UNPAS 2026 | PMB Resmi" />
+  <meta name="twitter:description" content="Daftar kuliah di Universitas Pasundan tahun 2026 sekarang juga." />
+  <meta name="twitter:image" content="https://pmb.unpas.ac.id/og-image.jpg" />
 
   <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
@@ -37,8 +66,42 @@
   </script> -->
   <!-- End Meta Pixel Code -->
 
-  <script type="module" crossorigin src="/assets/index-Ck2c1JfI.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-ATkbDHtk.css">
+  <!-- Structured Data - Universitas -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollegeOrUniversity",
+    "name": "Universitas Pasundan",
+    "alternateName": "UNPAS",
+    "url": "https://pmb.unpas.ac.id",
+    "logo": "https://pmb.unpas.ac.id/logo_unpas.png",
+    "sameAs": [
+    "https://www.instagram.com/univ_pasundan/",
+    "https://www.facebook.com/universitaspasundan",
+    "https://www.youtube.com/@UniversitasPasundanOfficial"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bandung",
+      "addressRegion": "Jawa Barat",
+      "addressCountry": "ID"
+    }
+  }
+  </script>
+
+  <!-- Structured Data - Website -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Penerimaan Mahasiswa Baru UNPAS",
+    "url": "https://pmb.unpas.ac.id",
+    "inLanguage": "id-ID"
+  }
+  </script>
+
+  <script type="module" crossorigin src="/assets/index-DQnN0_fz.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BmK8lAES.css">
 </head>
 
 <body>
@@ -51,7 +114,39 @@
   <!-- <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=873313821936679&ev=PageView&noscript=1" /></noscript> -->
 
-  <div id="root"></div>
+  <div id="root"></div>
+
+  <!-- Google Translate (hidden) -->
+  <div id="google_translate_element" style="display:none;"></div>
+
+  <script>
+    function loadGoogleTranslate() {
+      if (window.google && window.google.translate) return;
+
+      window.googleTranslateElementInit = function () {
+        new google.translate.TranslateElement(
+          {
+            pageLanguage: 'id',
+            includedLanguages: 'id,en,ar,su',
+            autoDisplay: false
+          },
+          'google_translate_element'
+        );
+      };
+
+      const s = document.createElement("script");
+      s.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      s.async = true;
+      s.defer = true;
+      document.body.appendChild(s);
+    }
+
+    // LOAD SETELAH PAGE SELESAI
+    window.addEventListener("load", function () {
+      setTimeout(loadGoogleTranslate, 1500);
+    });
+  </script>
+
 </body>
 
 </html>
