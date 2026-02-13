@@ -342,7 +342,7 @@ const PMBLanding = () => {
                 rel="noopener noreferrer"
                 className="text-slate-600 hover:text-[#5a4c43]"
               >
-                Biaya
+                Biaya Pendidikan
               </a>
               {/* <button onClick={() => scrollToSection("ketentuan-refund")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Ketentuan Refund
@@ -407,7 +407,7 @@ const PMBLanding = () => {
               onClick={() => setIsMenuOpen(false)}
               className="w-full text-center py-2 rounded-lg hover:bg-[#f3efec] transition"
             >
-              Biaya &amp; Cicilan
+              Biaya Pendidikan
             </a>
             {/* <button onClick={() => { scrollToSection("ketentuan-refund"); setIsMenuOpen(false); }}>Ketentuan Refund</button> */}
             {/* <button onClick={() => { scrollToSection("faq"); setIsMenuOpen(false); }}>FAQ</button> */}

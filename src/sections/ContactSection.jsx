@@ -28,7 +28,10 @@ export default function ContactSection() {
                   <span className="font-semibold">Email:</span> pmb@unpas.ac.id
                 </p>
                 <p>
-                  <span className="font-semibold">Whatsapp:</span> 62811960193
+                  <span className="font-semibold">Telepon :</span> 622-2021440
+                </p>
+                <p>
+                  <span className="font-semibold">Fax :</span> 622-2021440
                 </p>
                 <p>
                   <span className="font-semibold">Alamat:</span> Jl. Tamansari No.4-8 Kota Bandung
@@ -36,12 +39,12 @@ export default function ContactSection() {
               </div>
 
               {/* Social Media Icons */}
-              <div className="mt-6 flex gap-3">
+              <div className="mt-6 flex gap-0">
                 <a
                   href="https://www.instagram.com/univ_pasundan/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-white hover:bg-white hover:text-[#180404] transition"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-white hover:bg-white hover:text-[#180404] transition"
                   aria-label="Instagram"
                 >
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -52,7 +55,7 @@ export default function ContactSection() {
                   href="https://www.facebook.com/universitaspasundan"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-500 bg-blue-500 text-white hover:bg-blue-600 transition"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-500 bg-blue-500 text-white hover:bg-blue-600 transition"
                   aria-label="Facebook"
                 >
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -63,7 +66,7 @@ export default function ContactSection() {
                   href="https://twitter.com/univ_pasundan"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-white hover:bg-white hover:text-[#180404] transition"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-white hover:bg-white hover:text-[#180404] transition"
                   aria-label="X (Twitter)"
                 >
                   <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -74,7 +77,7 @@ export default function ContactSection() {
                   href="https://www.tiktok.com/@univ_pasundan"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-white hover:bg-white hover:text-[#180404] transition"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-white hover:bg-white hover:text-[#180404] transition"
                   aria-label="TikTok"
                 >
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -85,7 +88,7 @@ export default function ContactSection() {
                   href="https://www.youtube.com/c/UniversitasPasundanOfficial"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-600 bg-red-600 text-white hover:bg-red-700 transition"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-red-600 bg-red-600 text-white hover:bg-red-700 transition"
                   aria-label="YouTube"
                 >
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -112,10 +115,10 @@ export default function ContactSection() {
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
                   >
-                    Tentang Unpas
+                    Universitas Pasundan
                   </a>
                   <a
-                    href="https://hukum.unpas.ac.id/"
+                    href="https://www.unpas.ac.id/fakultas-dan-program/fakultas-hukum/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
@@ -123,7 +126,7 @@ export default function ContactSection() {
                     Fakultas Hukum
                   </a>
                   <a
-                    href="https://fisip.unpas.ac.id/"
+                    href="https://www.unpas.ac.id/fakultas-dan-program/fakultas-ilmu-sosial-dan-ilmu-politik/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
@@ -131,7 +134,7 @@ export default function ContactSection() {
                     Fakultas Ilmu Sosial & Ilmu Politik
                   </a>
                   <a
-                    href="https://teknik.unpas.ac.id/"
+                    href="https://www.unpas.ac.id/fakultas-dan-program/fakultas-teknik/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
@@ -139,7 +142,7 @@ export default function ContactSection() {
                     Fakultas Teknik
                   </a>
                   <a
-                    href="https://feb.unpas.ac.id/"
+                    href="https://www.unpas.ac.id/fakultas-dan-program/fakultas-ekonomi-bisnis/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
@@ -151,7 +154,7 @@ export default function ContactSection() {
                 {/* KOLOM 2 (KANAN) */}
                 <div className="space-y-3">
                   <a
-                    href="https://fkip.unpas.ac.id/"
+                    href="https://www.unpas.ac.id/fakultas-dan-program/fakultas-keguruan-dan-ilmu-pendidikan/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
@@ -159,7 +162,7 @@ export default function ContactSection() {
                     Fakultas Keguruan & Ilmu Pendidikan
                   </a>
                   <a
-                    href="https://fiss.unpas.ac.id/"
+                    href="https://www.unpas.ac.id/fakultas-dan-program/fakultas-ilmu-seni-dan-sastra/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
@@ -167,7 +170,7 @@ export default function ContactSection() {
                     Fakultas Ilmu Seni & Sastra
                   </a>
                   <a
-                    href="https://kedokteran.unpas.ac.id/"
+                    href="https://www.unpas.ac.id/fakultas-dan-program/fakultas-kedokteran/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
@@ -175,7 +178,7 @@ export default function ContactSection() {
                     Fakultas Kedokteran
                   </a>
                   <a
-                    href="https://pasca.unpas.ac.id/"
+                    href="https://www.unpas.ac.id/fakultas-dan-program/pascasarjana/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block hover:text-[#ffc042] transition"
@@ -192,12 +195,19 @@ export default function ContactSection() {
           <div className="pt-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-white text-sm">
               {/* Kampus I */}
-              <div className="bg-[#2a1a10]/50 p-4 rounded-lg border border-[#6b5b51]/30">
+              <div className="bg-[#2a1a10]/50 p-4 rounded-lg">
                 <div className="flex items-start gap-2 mb-2">
-                  <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                   </svg>
-                  <h4 className="font-bold">Kampus I</h4>
+                  <a
+                    href="https://share.google/2xtDKmkch4HQuJpzD"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold hover:text-[#ffc042] transition"
+                  >
+                    Kampus I
+                  </a>
                 </div>
                 <p className="text-xs mb-1">Telepon: 022-4262922</p>
                 <p className="text-xs mb-1">Fax: 022-426222</p>
@@ -205,12 +215,19 @@ export default function ContactSection() {
               </div>
 
               {/* Kampus II */}
-              <div className="bg-[#2a1a10]/50 p-4 rounded-lg border border-[#6b5b51]/30">
+              <div className="bg-[#2a1a10]/50 p-4 rounded-lg">
                 <div className="flex items-start gap-2 mb-2">
-                  <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                   </svg>
-                  <h4 className="font-bold">Kampus II</h4>
+                  <a
+                    href="https://share.google/8uT2b15CJfgVZ8Ble"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold hover:text-[#ffc042] transition"
+                  >
+                    Kampus II
+                  </a>
                 </div>
                 <p className="text-xs mb-1">Telepon: 622-2021440</p>
                 <p className="text-xs mb-1">Fax: 622-2021440</p>
@@ -218,9 +235,9 @@ export default function ContactSection() {
               </div>
 
               {/* Kampus III */}
-              <div className="bg-[#2a1a10]/50 p-4 rounded-lg border border-[#6b5b51]/30">
+              <div className="bg-[#2a1a10]/50 p-4 rounded-lg">
                 <div className="flex items-start gap-2 mb-2">
-                  <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                   </svg>
                   <h4 className="font-bold">Kampus III</h4>
@@ -231,12 +248,19 @@ export default function ContactSection() {
               </div>
 
               {/* Kampus IV */}
-              <div className="bg-[#2a1a10]/50 p-4 rounded-lg border border-[#6b5b51]/30">
+              <div className="bg-[#2a1a10]/50 p-4 rounded-lg">
                 <div className="flex items-start gap-2 mb-2">
-                  <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                   </svg>
-                  <h4 className="font-bold">Kampus IV</h4>
+                  <a
+                    href="https://share.google/Wflaux3hKPhHpMXCV"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold hover:text-[#ffc042] transition"
+                  >
+                    Kampus IV
+                  </a>
                 </div>
                 <p className="text-xs mb-1">Telepon: 022-2021440</p>
                 <p className="text-xs mb-1">Fax: 022-2021440</p>
@@ -244,12 +268,19 @@ export default function ContactSection() {
               </div>
 
               {/* Kampus V */}
-              <div className="bg-[#2a1a10]/50 p-4 rounded-lg border border-[#6b5b51]/30">
+              <div className="bg-[#2a1a10]/50 p-4 rounded-lg">
                 <div className="flex items-start gap-2 mb-2">
-                  <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                   </svg>
-                  <h4 className="font-bold">Kampus V</h4>
+                  <a
+                    href="https://share.google/FxcjBqZjSzD8a4MNP"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold hover:text-[#ffc042] transition"
+                  >
+                    Kampus V
+                  </a>
                 </div>
                 <p className="text-xs mb-1">Telepon: 022-4210243</p>
                 <p className="text-xs mb-1">Fax: 022-4210243</p>
