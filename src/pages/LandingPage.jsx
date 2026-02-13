@@ -347,9 +347,9 @@ const PMBLanding = () => {
               {/* <button onClick={() => scrollToSection("ketentuan-refund")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Ketentuan Refund
               </button> */}
-              <button onClick={() => scrollToSection("faq")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
+              {/* <button onClick={() => scrollToSection("faq")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 FAQ
-              </button>
+              </button> */}
             </div>
 
             {/* RIGHT: CTA + HAMBURGER */}
@@ -375,7 +375,7 @@ const PMBLanding = () => {
                   rel="noopener noreferrer"
                   className="inline-flex rounded-full border border-[#6B5B51] px-4 py-2 text-sm font-semibold text-[#6B5B51] hover:bg-[#f3efec] transition"
                 >
-                  Login
+                  Login PMB
                 </a>
 
                 {/* DAFTAR */}
@@ -410,7 +410,7 @@ const PMBLanding = () => {
               Biaya &amp; Cicilan
             </a>
             {/* <button onClick={() => { scrollToSection("ketentuan-refund"); setIsMenuOpen(false); }}>Ketentuan Refund</button> */}
-            <button onClick={() => { scrollToSection("faq"); setIsMenuOpen(false); }}>FAQ</button>
+            {/* <button onClick={() => { scrollToSection("faq"); setIsMenuOpen(false); }}>FAQ</button> */}
 
             {/* LOGIN */}
             <a
@@ -419,7 +419,7 @@ const PMBLanding = () => {
               rel="noopener noreferrer"
               className="mt-2 rounded-full border border-[#6B5B51] px-4 py-2 text-sm text-center font-semibold text-[#6B5B51] hover:bg-[#f3efec] transition"
             >
-              Login
+              Login PMB
             </a>
 
             {/* DAFTAR */}
@@ -1051,21 +1051,14 @@ const PMBLanding = () => {
       {/* SECTION: KONTAK */}
       <ContactSection />
 
-
       {/* FOOTER */}
       <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
+        <div className="mx-auto max-w-6xl px-4 py-6 text-center">
+          <div className="space-y-1 text-xs text-slate-500">
             <div className="font-semibold text-slate-700">
-              Penerimaan Mahasiswa Baru 2026 – Universitas Pasundan
+              Penerimaan Mahasiswa Baru {new Date().getFullYear()} – Universitas Pasundan
             </div>
-            <div>© 2026 Universitas Pasundan. All rights reserved.</div>
-          </div>
-          <div className="flex flex-wrap gap-4">
-            <button className="hover:text-slate-700 cursor-pointer">Tentang UNPAS</button>
-            <button className="hover:text-slate-700 cursor-pointer">Fakultas &amp; Prodi</button>
-            <button className="hover:text-slate-700 cursor-pointer">Beasiswa</button>
-            <button className="hover:text-slate-700 cursor-pointer">Kebijakan Privasi</button>
+            <div>© {new Date().getFullYear()} Universitas Pasundan. All rights reserved.</div>
           </div>
         </div>
       </footer>
@@ -1143,11 +1136,11 @@ const PMBLanding = () => {
       <ScrollToTop
         smooth
         component={
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition">
+          <div className="flex h-8 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
+              width="15"
+              height="15"
               fill="none"
               viewBox="0 0 24 24"
               stroke="white"
