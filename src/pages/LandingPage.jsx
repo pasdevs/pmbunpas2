@@ -337,7 +337,7 @@ const PMBLanding = () => {
                 Informasi &amp; Pengumuman
               </button> */}
               <a
-                href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
+                href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-600 hover:text-[#5a4c43]"
@@ -401,7 +401,7 @@ const PMBLanding = () => {
             <button onClick={() => { scrollToSection("timeline-alur"); setIsMenuOpen(false); }}>Panduan Pendaftaran</button>
             {/* <button onClick={() => { scrollToSection("informasi-pengumuman"); setIsMenuOpen(false); }}>Informasi &amp; Pengumuman</button> */}
             <a
-              href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
+              href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsMenuOpen(false)}
@@ -540,7 +540,7 @@ const PMBLanding = () => {
               </a> */}
 
               <a
-                href="https://pmb.unpas.ac.id/biaya/rincian-lengkap/"
+                href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full border-2 border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
