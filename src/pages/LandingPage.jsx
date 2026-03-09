@@ -547,6 +547,38 @@ const PMBLanding = () => {
               >
                 💸 Lihat Biaya
               </a>
+
+              {/* BUTTON RISET KAMPUS */}
+              <a
+                href="https://pmb.unpas.ac.id/riset-kampus"
+                onClick={() => {
+                  // EVENT GTM
+                  window.dataLayer = window.dataLayer || [];
+                  window.dataLayer.push({
+                    event: "click_riset_kampus",
+                    button_name: "Riset Kampus Bandung",
+                    location: "hero_section"
+                  });
+
+                  // EVENT META PIXEL
+                  if (window.fbq) {
+                    window.fbq('trackCustom', 'ClickRisetKampus', {
+                      button_name: "Riset Kampus Bandung",
+                      location: "hero_section"
+                    });
+                  }
+                }}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative inline-flex items-center justify-center gap-2 bg-[#f5a623] text-black font-bold rounded-[100px] px-6 py-3 hover:brightness-95 transition"
+              >
+                🔍 Riset Kampus Bandung
+
+                {/* BADGE NEW */}
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-[2px] rounded-full">
+                  NEW
+                </span>
+              </a>
             </motion.div>
 
           </div>
