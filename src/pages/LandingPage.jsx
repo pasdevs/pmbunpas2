@@ -247,11 +247,38 @@ const PMBLanding = () => {
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
+  // Urgency bar countdown — Pra-SNBP deadline
+  const URGENCY_DEADLINE = "2026-03-25T23:59:59+07:00";
+  const URGENCY_KUOTA_TERISI = 142;
+  const URGENCY_KUOTA_TOTAL = 200;
+
+  const calculateUrgencyTimeLeft = () => {
+    const target = new Date(URGENCY_DEADLINE).getTime();
+    const now = Date.now();
+    const diff = target - now;
+    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    return {
+      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((diff / (1000 * 60)) % 60),
+      seconds: Math.floor((diff / 1000) % 60),
+    };
+  };
+
+  const [urgencyTimeLeft, setUrgencyTimeLeft] = useState(calculateUrgencyTimeLeft());
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setUrgencyTimeLeft(calculateUrgencyTimeLeft());
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -433,11 +460,63 @@ const PMBLanding = () => {
             </a> */}
           </div>
         )}
+
+        {/* URGENCY BAR — Pra-SNBP */}
+        <div className="bg-[#3F3631] overflow-hidden">
+          {/* Row 1: label + countdown */}
+          <div className="mx-auto max-w-6xl px-4 py-1.5 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              {/* Pulse dot */}
+              <span className="relative flex-shrink-0 flex items-center justify-center w-3 h-3">
+                <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-yellow-400 opacity-60" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-yellow-400" />
+              </span>
+              <span className="text-[11px] font-bold text-slate-300 truncate">
+                <span className="text-yellow-300">Pra-SNBP</span>
+                {" — "}Potongan DP{" "}
+                <span className="text-emerald-300 font-extrabold">Rp 2 Juta</span>
+                <span className="text-slate-400 hidden sm:inline"> · Berakhir dalam:</span>
+              </span>
+            </div>
+            {/* Countdown */}
+            <div className="flex items-center gap-1 flex-shrink-0">
+              <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.days).padStart(2, "0")}</div>
+                <div className="text-white text-[7px] font-bold uppercase tracking-wide">Hari</div>
+              </div>
+              <span className="text-white text-xs font-bold">:</span>
+              <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.hours).padStart(2, "0")}</div>
+                <div className="text-white text-[7px] font-bold uppercase tracking-wide">Jam</div>
+              </div>
+              <span className="text-white text-xs font-bold">:</span>
+              <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.minutes).padStart(2, "0")}</div>
+                <div className="text-white text-[7px] font-bold uppercase tracking-wide">Min</div>
+              </div>
+            </div>
+          </div>
+          {/* Row 2: quota bar */}
+          <div className="mx-auto max-w-6xl px-4 pb-1.5 flex items-center gap-2">
+            <span className="text-[9.5px] text-slate-400 font-semibold whitespace-nowrap">
+              Kuota: <span className="text-yellow-400">{URGENCY_KUOTA_TERISI} / {URGENCY_KUOTA_TOTAL}</span>
+            </span>
+            <div className="flex-1 h-[3px] bg-white/10 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-teal-400 to-yellow-400 transition-all duration-700"
+                style={{ width: `${Math.round(URGENCY_KUOTA_TERISI / URGENCY_KUOTA_TOTAL * 100)}%` }}
+              />
+            </div>
+            <span className="text-[9.5px] font-extrabold text-yellow-400">
+              {Math.round(URGENCY_KUOTA_TERISI / URGENCY_KUOTA_TOTAL * 100)}%
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* HERO SECTION — CENTERED + BROWN GRADIENT */}
       {/* <section className="relative w-full overflow-hidden pt-[120px] min-h-[90vh] md:min-h-screen flex items-center justify-center"> */}
-      <section className="relative w-full overflow-hidden pt-[96px] md:pt-[120px] min-h-[90vh] md:min-h-screen flex items-start md:items-center justify-center">
+      <section className="relative w-full overflow-hidden pt-[148px] md:pt-[160px] min-h-[90vh] md:min-h-screen flex items-start md:items-center justify-center">
         <div className="absolute inset-0">
           <img
             src="/mahasiswa.webp"
@@ -543,7 +622,8 @@ const PMBLanding = () => {
                 href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full border-2 border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
+                // className="inline-flex items-center justify-center rounded-full border-2 border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
+                className="relative inline-flex items-center justify-center gap-2 bg-[#f5a623] text-black font-bold rounded-[100px] px-6 py-3 hover:brightness-95 transition"
               >
                 💸 Lihat Biaya
               </a>
@@ -570,14 +650,15 @@ const PMBLanding = () => {
                 }}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative inline-flex items-center justify-center gap-2 bg-[#f5a623] text-black font-bold rounded-[100px] px-6 py-3 hover:brightness-95 transition"
+                // className="relative inline-flex items-center justify-center gap-2 bg-[#f5a623] text-black font-bold rounded-[100px] px-6 py-3 hover:brightness-95 transition"
+                className="inline-flex items-center justify-center rounded-full border-2 border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
               >
                 🔍 Riset Kampus Bandung
 
                 {/* BADGE NEW */}
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-[2px] rounded-full">
+                {/* <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-[2px] rounded-full">
                   NEW
-                </span>
+                </span> */}
               </a>
             </motion.div>
 
@@ -779,6 +860,127 @@ const PMBLanding = () => {
         {/* SECTION: Program Studi */}
         <motion.section id="program-studi" className="mt-16" variants={sectionItem} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
           <ProdiExplorer />
+        </motion.section>
+
+        {/* SECTION: CTA GELOMBANG PRA-SNBP */}
+        <motion.section className="mt-16 px-4" variants={sectionItem} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
+          <div className="relative overflow-hidden rounded-2xl"
+            style={{ background: "linear-gradient(150deg, #2e2320 0%, #3F3631 45%, #4a3c37 100%)" }}>
+            {/* decorative radial glow */}
+            <div className="pointer-events-none absolute -top-20 -right-16 w-56 h-56 rounded-full"
+              style={{ background: "radial-gradient(circle, rgba(234,179,8,0.12) 0%, transparent 70%)" }} />
+            <div className="pointer-events-none absolute -bottom-12 -left-10 w-40 h-40 rounded-full"
+              style={{ background: "radial-gradient(circle, rgba(107,91,81,0.25) 0%, transparent 70%)" }} />
+
+            <div className="relative z-10 px-6 py-8 md:px-10 md:py-10">
+
+              {/* Eyebrow */}
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-yellow-400/25 bg-yellow-400/10 px-4 py-1.5">
+                <span className="relative flex h-2 w-2 flex-shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-yellow-400" />
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-300">Gelombang Pra-SNBP Sedang Berlaku</span>
+              </div>
+
+              {/* Heading */}
+              <h2 className="mb-2 text-2xl font-extrabold leading-tight text-white md:text-3xl">
+                Jangan Sampai Kehilangan<br />
+                Potongan <span className="text-yellow-300">Rp 2 Juta</span>
+              </h2>
+              <p className="mb-7 text-sm font-medium text-slate-400">
+                Setelah 25 Maret, potongan turun jadi Rp 1,5 juta — dan kuota semakin sedikit.
+              </p>
+
+              {/* Countdown */}
+              <div className="mb-6 flex justify-center gap-3">
+                {[
+                  { val: urgencyTimeLeft.days, lbl: "Hari" },
+                  { val: urgencyTimeLeft.hours, lbl: "Jam" },
+                  { val: urgencyTimeLeft.minutes, lbl: "Menit" },
+                  { val: urgencyTimeLeft.seconds, lbl: "Detik" },
+                ].map(({ val, lbl }, i, arr) => (
+                  <React.Fragment key={lbl}>
+                    <div className="text-center">
+                      <div className="flex min-w-[52px] items-center justify-center rounded-xl border border-white/10 bg-white/6 py-2"
+                        style={{ background: "rgba(255,255,255,0.06)" }}>
+                        <span className="text-2xl font-black leading-none text-white md:text-3xl">
+                          {String(val).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 text-[9px] font-bold uppercase tracking-wider text-slate-500">{lbl}</div>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="flex items-center pb-5 text-xl font-bold text-white/20">:</div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              {/* Warning */}
+              <div className="mb-5 flex items-center gap-3 rounded-lg border border-red-500/20 bg-red-500/8 px-4 py-3"
+                style={{ background: "rgba(239,68,68,0.07)" }}>
+                <span className="flex-shrink-0 text-base">⚠️</span>
+                <p className="text-xs font-semibold leading-snug text-red-300">
+                  Yang daftar kemarin udah hemat Rp 2 juta. Kamu kapan?
+                </p>
+              </div>
+
+              {/* Comparison gelombang */}
+              <div className="mb-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <div className="rounded-xl border border-teal-400/30 px-3 py-3 text-center"
+                  style={{ background: "rgba(20,184,166,0.07)" }}>
+                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-teal-400">Pra-SNBP</div>
+                  <div className="text-2xl font-black text-teal-300 md:text-2xl">−Rp 2jt</div>
+                  <div className="mt-2 inline-block rounded-sm bg-teal-400/15 px-2 py-0.5 text-[9px] font-bold text-teal-400">SEKARANG</div>
+                </div>
+                <div className="rounded-xl border border-white/10 px-3 py-3 text-center"
+                  style={{ background: "rgba(255,255,255,0.07)" }}>
+                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-300">Pasca-SNBP</div>
+                  <div className="text-2xl font-black text-white md:text-2xl">−Rp 1,5jt</div>
+                  <div className="mt-2 text-[10px] font-semibold text-slate-400">Apr 2026</div>
+                </div>
+                <div className="rounded-xl border border-white/10 px-3 py-3 text-center"
+                  style={{ background: "rgba(255,255,255,0.07)" }}>
+                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-300">Pasca-SNBT</div>
+                  <div className="text-2xl font-black text-white md:text-2xl">−Rp 1jt</div>
+                  <div className="mt-2 text-[10px] font-semibold text-slate-400">Mei 2026</div>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col gap-3">
+                <a
+                  href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-yellow-400 px-6 py-4 text-sm font-extrabold text-[#2e2320] shadow-lg transition hover:bg-yellow-300"
+                  style={{ boxShadow: "0 4px 20px rgba(234,179,8,0.3)" }}
+                >
+                  Daftar Sekarang &amp; Amankan Potongan →
+                </a>
+                <a
+                  href="https://pmb.unpas.ac.id/quiz"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/12 px-6 py-3 text-xs font-semibold text-slate-300 transition hover:border-white/25 hover:bg-white/5"
+                  style={{ borderColor: "rgba(255,255,255,0.12)" }}
+                >
+                  🎯 Belum yakin? Coba Tes Kecocokan Prodi (2 menit)
+                </a>
+              </div>
+
+              {/* Trust */}
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
+                {["Akreditasi Unggul", "27 Prodi S1", "1.900+ Sudah Daftar"].map((t) => (
+                  <span key={t} className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
+                    <span className="text-emerald-400 font-bold">✓</span>{t}
+                  </span>
+                ))}
+              </div>
+
+            </div>
+          </div>
         </motion.section>
 
         {/* SECTION: PANDUAN PENDAFTARAN */}
