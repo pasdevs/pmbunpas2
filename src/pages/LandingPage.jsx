@@ -44,6 +44,17 @@ const PMBLanding = () => {
     return () => clearTimeout(t);
   }, []);
 
+  // UTM tracking — deteksi scan QR / spanduk
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("utm_source") === "spanduk") {
+      fbq("trackCustom", "ScanSpanduk", {
+        lokasi: urlParams.get("utm_content"), 
+        campaign: urlParams.get("utm_campaign"),
+      });
+    }
+  }, []);
+
   const steps = [
     {
       id: 1,
