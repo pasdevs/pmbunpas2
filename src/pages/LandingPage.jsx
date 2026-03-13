@@ -60,32 +60,32 @@ const PMBLanding = () => {
       id: 1,
       title: "1. Pilih Jalur Pendaftaran",
       desc: "Tentukan jalur masuk sesuai pilihan dan ketentuan kampus Universitas Pasundan.",
-      image: "/panduan/1_jalur_pendaftraran.webp"
+      image: "/img/1_jalur_pendaftraran.webp"
     },
     {
       id: 2,
       title: "2. Isi Formulir Pendaftaran",
       desc: "Lengkapi data diri secara lengkap dan benar pada formulir pendaftaran online.",
-      image: "/panduan/2_isi_formulir_pendaftaran.webp"
+      image: "/img/2_isi_formulir_pendaftaran.webp"
     },
     {
       id: 3,
       title: "3. Pembayaran Formulir Pendaftaran",
       desc: "Lakukan pembayaran biaya pendaftaran sesuai instruksi yang tersedia.",
-      image: "/panduan/3_pembayaran_formulir.webp"
+      image: "/img/3_pembayaran_formulir.webp"
     },
     {
       id: 4,
       title: "4. Unggah Berkas & Ikuti Seleksi",
       desc: "Unggah dokumen persyaratan dan ikuti tahapan seleksi sesuai jadwal.",
-      image: "/panduan/4_unggah_berkas_pendaftaran.webp",
+      image: "/img/4_unggah_berkas_pendaftaran.webp",
       seleksi: true
     },
     {
       id: 5,
       title: "5. Lihat Hasil Seleksi",
       desc: "Login ke akun PMB untuk melihat hasil seleksi, serta informasi lanjutan registrasi mahasiswa baru.",
-      image: "/panduan/5_hasil_seleksi.webp",
+      image: "/img/5_hasil_seleksi.webp",
       cta: true,
       ctaLabel: "Login PMB & Lihat Hasil Seleksi",
       ctaLink: "https://situ2.unpas.ac.id/spmbfront/login",
@@ -953,7 +953,7 @@ const PMBLanding = () => {
                         Ikuti Proses Seleksi (Sesuai Jalur yang Dipilih)
                       </h3>
                       <img
-                        src="/panduan/4_proses_seleksi_cbt.webp"
+                        src="/img/4_proses_seleksi_cbt.webp"
                         alt="proses seleksi"
                         className="w-lg rounded-xl border border-slate-200 shadow-sm mx-auto"
                       />
