@@ -49,7 +49,7 @@ const PMBLanding = () => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("utm_source") === "spanduk") {
       fbq("trackCustom", "ScanSpanduk", {
-        lokasi: urlParams.get("utm_content"), 
+        lokasi: urlParams.get("utm_content"),
         campaign: urlParams.get("utm_campaign"),
       });
     }
@@ -58,28 +58,34 @@ const PMBLanding = () => {
   const steps = [
     {
       id: 1,
-      title: "Pilih Jalur Pendaftaran",
+      title: "1. Pilih Jalur Pendaftaran",
       desc: "Tentukan jalur masuk sesuai pilihan dan ketentuan kampus Universitas Pasundan.",
+      image: "/panduan/1_jalur_pendaftraran.webp"
     },
     {
       id: 2,
-      title: "Isi Formulir Pendaftaran",
+      title: "2. Isi Formulir Pendaftaran",
       desc: "Lengkapi data diri secara lengkap dan benar pada formulir pendaftaran online.",
+      image: "/panduan/2_isi_formulir_pendaftaran.webp"
     },
     {
       id: 3,
-      title: "Bayar Biaya Pendaftaran",
+      title: "3. Pembayaran Formulir Pendaftaran",
       desc: "Lakukan pembayaran biaya pendaftaran sesuai instruksi yang tersedia.",
+      image: "/panduan/3_pembayaran_formulir.webp"
     },
     {
       id: 4,
-      title: "Unggah Berkas & Ikuti Seleksi",
+      title: "4. Unggah Berkas & Ikuti Seleksi",
       desc: "Unggah dokumen persyaratan dan ikuti tahapan seleksi sesuai jadwal.",
+      image: "/panduan/4_unggah_berkas_pendaftaran.webp",
+      seleksi: true
     },
     {
       id: 5,
-      title: "Hasil Seleksi",
+      title: "5. Lihat Hasil Seleksi",
       desc: "Login ke akun PMB untuk melihat hasil seleksi, serta informasi lanjutan registrasi mahasiswa baru.",
+      image: "/panduan/5_hasil_seleksi.webp",
       cta: true,
       ctaLabel: "Login PMB & Lihat Hasil Seleksi",
       ctaLink: "https://situ2.unpas.ac.id/spmbfront/login",
@@ -365,11 +371,11 @@ const PMBLanding = () => {
               <button onClick={() => scrollToSection("jalur-pendaftaran")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Jalur Pendaftaran
               </button>
-              <button onClick={() => scrollToSection("program-studi")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
-                Program Studi
-              </button>
               <button onClick={() => scrollToSection("timeline-alur")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Panduan Pendaftaran
+              </button>
+              <button onClick={() => scrollToSection("program-studi")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
+                Program Studi
               </button>
               {/* <button onClick={() => scrollToSection("informasi-pengumuman")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Informasi &amp; Pengumuman
@@ -435,8 +441,8 @@ const PMBLanding = () => {
         {isMenuOpen && (
           <div className="md:hidden bg-white shadow-lg py-3 px-4 flex flex-col gap-3 text-sm">
             <button onClick={() => { scrollToSection("jalur-pendaftaran"); setIsMenuOpen(false); }}>Jalur Pendaftaran</button>
-            <button onClick={() => { scrollToSection("program-studi"); setIsMenuOpen(false); }}>Program Studi</button>
             <button onClick={() => { scrollToSection("timeline-alur"); setIsMenuOpen(false); }}>Panduan Pendaftaran</button>
+            <button onClick={() => { scrollToSection("program-studi"); setIsMenuOpen(false); }}>Program Studi</button>
             {/* <button onClick={() => { scrollToSection("informasi-pengumuman"); setIsMenuOpen(false); }}>Informasi &amp; Pengumuman</button> */}
             <a
               href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
@@ -868,6 +874,153 @@ const PMBLanding = () => {
           </motion.div>
         </motion.section>
 
+
+        {/* SECTION: PANDUAN PENDAFTARAN version 2 */}
+        <motion.section
+          className="mt-16"
+          id="timeline-alur"
+          variants={sectionItem}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {/* Header */}
+          <motion.div variants={sectionItem} className="space-y-3 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              Panduan Pendaftaran Mahasiswa Baru
+            </h2>
+          </motion.div>
+
+          {/* ===== WIZARD STEPPER ===== */}
+          <div className="mt-10">
+
+            {/* STEP INDICATOR */}
+            <div className="hidden md:flex items-center justify-between relative">
+              {/* LINE */}
+              <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-slate-200 -z-10" />
+
+              {steps.map((step) => (
+                <button
+                  key={step.id}
+                  onClick={() => setActiveStep(step.id)}
+                  className="flex flex-col items-center group cursor-pointer"
+                >
+                  <div
+                    className={`h-10 w-10 flex items-center justify-center rounded-full font-bold transition
+            ${activeStep >= step.id
+                        ? "bg-[#6B5B51] text-white"
+                        : "bg-white border-2 border-slate-300 text-slate-400"
+                      }`}
+                  >
+                    {step.id}
+                  </div>
+
+                  <span
+                    className={`mt-2 text-xs font-semibold text-center
+            ${activeStep === step.id
+                        ? "text-[#6B5B51]"
+                        : "text-slate-400"
+                      }`}
+                  >
+                    {step.title}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* CONTENT BOX */}
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+
+              <h3 className="text-md font-bold text-slate-900 mb-2">
+                {steps[activeStep - 1].title}
+              </h3>
+
+              {/* <p className="mt-2 text-slate-600">
+                {steps[activeStep - 1].desc}
+              </p> */}
+
+              {/* IMAGE */}
+              {steps[activeStep - 1].image && (
+                <div className="mb-5 flex flex-col items-center">
+                  <img
+                    src={steps[activeStep - 1].image}
+                    alt={steps[activeStep - 1].title}
+                    className="w-lg rounded-xl border border-slate-200 shadow-sm mx-auto"
+                  />
+                  {steps[activeStep - 1].seleksi && (
+                    <div>
+                      <h3 className="text-md font-bold text-slate-900 mt-4 mb-2">
+                        Ikuti Proses Seleksi (Sesuai Jalur yang Dipilih)
+                      </h3>
+                      <img
+                        src="/panduan/4_proses_seleksi_cbt.png"
+                        alt="proses seleksi"
+                        className="w-lg rounded-xl border border-slate-200 shadow-sm mx-auto"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* CTA KHUSUS STEP HASIL SELEKSI */}
+              {steps[activeStep - 1].cta && (
+                <div className="mt-4 flex justify-center">
+                  <a
+                    href={steps[activeStep - 1].ctaLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-full bg-[#6B5B51] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5a4c43] transition"
+                  >
+                    🔐 {steps[activeStep - 1].ctaLabel}
+                  </a>
+                </div>
+              )}
+
+              <div className="mt-4 mb-4 flex justify-center">
+                {/* LINK PANDUAN PDF */}
+                <a
+                  href="https://drive.google.com/file/d/1Z_pY63t6DE0O2Rg-5PsKSgZ9_J7JRMLu/view"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-md font-semibold text-red-600 hover:text-red-700 transition"
+                >
+                  {/* ICON PDF */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5L14 3.5zM8 13h2.5a2.5 2.5 0 1 0 0-5H8v5zm2.3-3a.7.7 0 1 1 0 1.4H9.4V10h.9zm3.7 3h1.3l1.7 4h-1.3l-.3-.8h-1.5l-.3.8h-1.3l1.7-4zm.8 2.3h.9l-.4-1.2-.5 1.2zm4.2-2.3h-2v4h2a2 2 0 0 0 0-4zm-.2 3h-.6v-2h.6a1 1 0 1 1 0 2z" />
+                  </svg>
+
+                  Lihat Panduan Lengkap
+                </a>
+              </div>
+
+              {/* ACTION */}
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  disabled={activeStep === 1}
+                  onClick={() => setActiveStep((prev) => prev - 1)}
+                  className="rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-600 disabled:opacity-40 cursor-pointer"
+                >
+                  Sebelumnya
+                </button>
+
+                <button
+                  disabled={activeStep === steps.length}
+                  onClick={() => setActiveStep((prev) => prev + 1)}
+                  className="rounded-full bg-[#6B5B51] px-6 py-2 text-sm font-semibold text-white hover:bg-[#5a4c43] disabled:opacity-40 cursor-pointer"
+                >
+                  Selanjutnya
+                </button>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+
         {/* SECTION: Program Studi */}
         <motion.section id="program-studi" className="mt-16" variants={sectionItem} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
           <ProdiExplorer />
@@ -994,154 +1147,7 @@ const PMBLanding = () => {
           </div>
         </motion.section>
 
-        {/* SECTION: PANDUAN PENDAFTARAN */}
-        <motion.section className="mt-16" id="timeline-alur" variants={sectionItem} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
-          {/* Header */}
-          <motion.div variants={sectionItem} className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-              Tata Cara Pendaftaran Mahasiswa Baru
-            </h2>
-          </motion.div>
-
-          {/* List Alur */}
-          {/* ===== WIZARD STEPPER ===== */}
-          <div className="mt-10">
-
-            {/* STEP INDICATOR */}
-            <div className="hidden md:flex items-center justify-between relative">
-              {/* LINE */}
-              <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-slate-200 -z-10" />
-
-              {steps.map((step) => (
-                <button
-                  key={step.id}
-                  onClick={() => setActiveStep(step.id)}
-                  className="flex flex-col items-center group cursor-pointer"
-                >
-                  <div
-                    className={`h-10 w-10 flex items-center justify-center rounded-full font-bold transition
-                      ${activeStep >= step.id
-                        ? "bg-[#6B5B51] text-white"
-                        : "bg-white border-2 border-slate-300 text-slate-400"
-                      }`}
-                  >
-                    {step.id}
-                  </div>
-                  <span
-                    className={`mt-2 text-xs font-semibold text-center
-                    ${activeStep === step.id ? "text-[#6B5B51]" : "text-slate-400"}
-                    `}
-                  >
-                    {step.title}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            {/* CONTENT BOX */}
-            <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="text-lg font-bold text-slate-900">
-                {steps[activeStep - 1].title}
-              </h3>
-              <p className="mt-2 text-slate-600">
-                {steps[activeStep - 1].desc}
-              </p>
-
-              {/* CTA KHUSUS STEP HASIL SELEKSI */}
-              {steps[activeStep - 1].cta && (
-                <div className="mt-4">
-                  <a
-                    href={steps[activeStep - 1].ctaLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-full bg-[#6B5B51] px-6 py-3 text-sm font-semibold text-white hover:bg-[#5a4c43] transition"
-                  >
-                    🔐 {steps[activeStep - 1].ctaLabel}
-                  </a>
-
-                  {/* <p className="mt-2 text-xs text-slate-500">
-                    *) Gunakan akun yang dibuat saat pendaftaran untuk melihat hasil seleksi.
-                  </p> */}
-                </div>
-              )}
-
-              {/* ACTION */}
-              <div className="mt-6 flex justify-end gap-3">
-                <button
-                  disabled={activeStep === 1}
-                  onClick={() => setActiveStep(prev => prev - 1)}
-                  className="rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-600 disabled:opacity-40 cursor-pointer"
-                >
-                  Back
-                </button>
-
-                <button
-                  disabled={activeStep === steps.length}
-                  onClick={() => setActiveStep(prev => prev + 1)}
-                  className="rounded-full bg-[#6B5B51] px-6 py-2 text-sm font-semibold text-white hover:bg-[#5a4c43] disabled:opacity-40 cursor-pointer"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* ===== MOBILE WIZARD ===== */}
-          <div className="mt-10 md:hidden space-y-4">
-
-            {steps.map((step) => (
-              <div
-                key={step.id}
-                className={`rounded-2xl border p-4 transition
-                  ${activeStep === step.id
-                    ? "border-[#6B5B51] bg-[#f3efec]"
-                    : "border-slate-200 bg-white"
-                  }`}
-              >
-                <button
-                  onClick={() => setActiveStep(step.id)}
-                  className="flex items-center gap-4 w-full text-left"
-                >
-                  <div
-                    className={`h-9 w-9 flex items-center justify-center rounded-full font-bold
-                      ${activeStep >= step.id
-                        ? "bg-[#6B5B51] text-white"
-                        : "bg-slate-200 text-slate-500"
-                      }`}
-                  >
-                    {step.id}
-                  </div>
-
-                  <div>
-                    <div className="font-semibold text-slate-900">
-                      {step.title}
-                    </div>
-                  </div>
-                </button>
-
-                {activeStep === step.id && (
-                  <>
-                    <p className="mt-3 text-sm text-slate-600">
-                      {step.desc}
-                    </p>
-
-                    {step.cta && (
-                      <a
-                        href={step.ctaLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[#6B5B51] px-4 py-3 text-sm font-semibold text-white hover:bg-[#5a4c43] transition"
-                      >
-                        🔐 {step.ctaLabel}
-                      </a>
-                    )}
-                  </>
-                )}
-              </div>
-            ))}
-
-          </div>
-
+        <motion.section>
           {/* Panduan PDF (Modern Horizontal Slider + Arrow) */}
           <div className="relative mt-16">
             <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
