@@ -953,7 +953,7 @@ const PMBLanding = () => {
                         Ikuti Proses Seleksi (Sesuai Jalur yang Dipilih)
                       </h3>
                       <img
-                        src="/panduan/4_proses_seleksi_cbt.png"
+                        src="/panduan/4_proses_seleksi_cbt.webp"
                         alt="proses seleksi"
                         className="w-lg rounded-xl border border-slate-200 shadow-sm mx-auto"
                       />
