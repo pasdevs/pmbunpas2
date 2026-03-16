@@ -21,6 +21,256 @@ import FaqSection from "../sections/FaqSection";
 import ContactSection from "../sections/ContactSection";
 
 
+/* ─── JalurCard ─────────────────────────────────────────────────── */
+function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
+  const isOpen = openId === j.id;
+  const dl = getDeadlineLabel(j.deadline);
+  const Icon = j.icon;
+
+  const toggle = () => setOpenId(isOpen ? null : j.id);
+
+  return (
+    <div className="flex flex-col">
+      {/* Card */}
+      <div
+        className={`bg-white border-2 rounded-2xl p-5 transition-all duration-300 relative overflow-hidden
+          ${isOpen ? "border-[#6B5B51] rounded-b-none border-b-0" : "border-slate-200 hover:border-[#a08c83] hover:shadow-lg hover:-translate-y-0.5"}`}
+      >
+        {j.popular && (
+          <div className="self-start inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-900 text-[11px] font-extrabold px-2.5 py-1 rounded-full mb-3 uppercase tracking-wide">
+            ⭐ Paling Banyak Dipilih
+          </div>
+        )}
+        <div className="flex items-start gap-3 mb-3">
+          <div className={`w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center ${j.iconBg}`}>
+            <Icon className="w-6 h-6" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className={`inline-block text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded mb-1 ${j.badgeColor}`}>{j.badge}</span>
+            <h3 className="text-[18px] font-extrabold text-slate-900 leading-tight">{j.name}</h3>
+          </div>
+        </div>
+        <p className="text-sm text-slate-600 font-medium mb-3 leading-relaxed">{j.value}</p>
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {j.tags.map((t, i) => (
+            <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{t}</span>
+          ))}
+        </div>
+        <div className="flex items-center justify-between gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
+          <div className="flex items-center gap-2">
+            {j.status === "closing" ? (
+              <>
+                <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]" />
+                <span className="text-[13px] font-semibold text-amber-600">{j.statusText}</span>
+              </>
+            ) : (
+              <>
+                <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]" />
+                <span className="text-[13px] font-semibold text-green-600">{j.statusText}</span>
+              </>
+            )}
+          </div>
+          <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{j.gel}</span>
+        </div>
+        <div className="flex items-center flex-wrap gap-2 mb-3">
+          <span className="text-[12.5px] text-slate-500 font-medium">{j.period}</span>
+          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${dl.cls}`}>{dl.text}</span>
+        </div>
+        <button
+          onClick={toggle}
+          className="w-full py-2.5 rounded-xl text-[14px] font-bold text-center transition-all duration-200 bg-[#6B5B51] text-white hover:bg-[#5a4c43] cursor-pointer"
+        >
+          {isOpen ? "Tutup Detail ▲" : "Lihat Detail & Daftar →"}
+        </button>
+      </div>
+
+      {/* Detail panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="bg-white border-2 border-t-0 border-[#6B5B51] rounded-b-2xl px-5 pb-5">
+              <div className="h-4" />
+
+              {/* 1. Persyaratan */}
+              <div className="mb-5">
+                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                  <div className="w-6 h-6 rounded-full bg-teal-600 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">1</div>
+                  <span className="text-[14px] font-bold text-slate-900">Apakah kamu memenuhi syarat?</span>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  {j.elig.map((e, i) => (
+                    <div key={i} className="flex items-start gap-2 bg-slate-50 rounded-lg px-3 py-2">
+                      <div className="w-5 h-5 rounded-md bg-green-50 border border-green-100 flex items-center justify-center text-[11px] font-extrabold text-green-600 flex-shrink-0 mt-0.5">✓</div>
+                      <span className="text-[12.5px] font-medium text-slate-700 leading-snug">{e}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 2. Proses */}
+              <div className="mb-5">
+                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">2</div>
+                  <span className="text-[14px] font-bold text-slate-900">Bagaimana prosesnya?</span>
+                </div>
+                <div className="grid grid-cols-4 gap-1 relative">
+                  <div className="absolute top-4 left-[12%] right-[12%] h-0.5 bg-slate-200 z-0" />
+                  {j.steps.map((s, i) => {
+                    const stepBg = ["bg-yellow-100","bg-blue-100","bg-teal-100","bg-green-100"][i] ?? "bg-slate-100";
+                    return (
+                      <div key={i} className="flex flex-col items-center text-center px-1 relative z-10">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm mb-1.5 ${stepBg}`}>{s.ic}</div>
+                        <span className="text-[11px] font-semibold text-slate-600 leading-tight">{s.lb}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 3. Biaya */}
+              <div className="mb-5">
+                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                  <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">3</div>
+                  <span className="text-[14px] font-bold text-slate-900">Berapa biayanya?</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-3 text-center">
+                    <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-1">Biaya Pendaftaran</div>
+                    <div className="text-2xl font-black text-slate-800">{j.costForm}</div>
+                    <div className="text-[10.5px] text-slate-400 font-medium mt-1">{j.costFormNote}</div>
+                  </div>
+                  <div className="bg-green-50 border-2 border-green-100 rounded-xl p-3 text-center">
+                    <div className="text-[11px] font-bold uppercase tracking-wide text-green-600 mb-1">Potensi Hemat</div>
+                    <div className="text-2xl font-black text-green-600">{j.costSave}</div>
+                    <div className="text-[10.5px] text-green-500 font-medium mt-1">{j.costSaveNote}</div>
+                  </div>
+                </div>
+                {/* Metode Pembayaran */}
+                <div className="text-[12px] font-semibold text-slate-500 mb-1.5">Metode Pembayaran:</div>
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {["🏧 VA Mandiri","🛒 Tokopedia","🛍️ Shopee (+Rp 4rb)","🏦 BJB (+Rp 3rb)"].map((p, i) => (
+                    <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{p}</span>
+                  ))}
+                </div>
+                {j.benefits.length > 0 && (
+                  <div className="bg-gradient-to-br from-green-800 to-teal-700 rounded-xl p-3 text-white">
+                    <div className="text-[11px] font-bold uppercase tracking-wide opacity-60 mb-2">Benefit daftar di Gelombang Pra-SNBP</div>
+                    {j.benefits.map((b, i) => (
+                      <div key={i} className="flex items-center justify-between text-[12.5px] font-semibold py-0.5">
+                        <span className="opacity-85">{b.label}</span>
+                        <span className="font-extrabold">{b.val}</span>
+                      </div>
+                    ))}
+                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-white/15 text-xs font-extrabold">
+                      <span>Total Potensi Hemat</span>
+                      <span>{j.benefitTotal}</span>
+                    </div>
+                  </div>
+                )}
+                {j.benefitNote && (
+                  <p className="text-[11.5px] text-slate-500 italic mt-2 leading-relaxed">{j.benefitNote}</p>
+                )}
+              </div>
+
+              {/* 4. Timeline */}
+              <div className="mb-5">
+                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                  <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">4</div>
+                  <span className="text-[14px] font-bold text-slate-900">Kapan deadline-nya?</span>
+                </div>
+                <div className="flex flex-col">
+                  {j.timeline.map((t, i) => (
+                    <div key={i} className="flex gap-3">
+                      {/* Kolom kiri: dot + garis penghubung */}
+                      <div className="flex flex-col items-center flex-shrink-0 w-[10px]">
+                        <div className={`w-2.5 h-2.5 rounded-full border-2 flex-shrink-0 mt-[3px]
+                          ${t.state === "active" ? "border-green-500 bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]"
+                            : t.state === "done" ? "border-slate-400 bg-slate-400" : "border-slate-300 bg-white"}`} />
+                        {i < j.timeline.length - 1 && (
+                          <div className="w-0.5 flex-1 bg-slate-200 mt-1 min-h-[28px]" />
+                        )}
+                      </div>
+                      {/* Kolom kanan: teks */}
+                      <div className="flex-1 pb-7 last:pb-0">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <span className={`text-[11px] font-bold ${t.state === "active" ? "text-green-500" : "text-slate-400"}`}>{t.date}</span>
+                          {t.now && (
+                            <span className="text-[9px] font-extrabold text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded whitespace-nowrap leading-none">
+                              KAMU DI SINI
+                            </span>
+                          )}
+                        </div>
+                        <div className={`text-[13px] font-semibold ${t.state === "active" ? "text-green-600" : "text-slate-600"}`}>{t.label}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 5. CTA */}
+              <div className="mb-3">
+                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                  <div className="w-6 h-6 rounded-full bg-[#6B5B51] flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">5</div>
+                  <span className="text-[14px] font-bold text-slate-900">Siap daftar?</span>
+                </div>
+                <a
+                  href={j.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#6B5B51] to-[#8a7060] hover:from-[#5a4c43] hover:to-[#6B5B51] text-white rounded-xl py-3.5 text-sm font-extrabold transition-all duration-200 hover:-translate-y-0.5 shadow-md mb-2"
+                >
+                  Daftar {j.nameButton} Sekarang →
+                </a>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <a
+                    href="https://wa.me/62811960193"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-[12.5px] font-semibold border-2 border-slate-200 text-slate-600 hover:border-[#6B5B51] hover:text-[#6B5B51] hover:bg-[#f3efec] transition-all"
+                  >
+                    💬 Tanya CS via WA
+                  </a>
+                  <a
+                    href="https://pmb.unpas.ac.id/quiz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center text-center gap-1.5 py-2.5 px-3 rounded-xl text-[12.5px] font-semibold border-2 border-slate-200 text-slate-600 hover:border-[#6B5B51] hover:text-[#6B5B51] hover:bg-[#f3efec] transition-all"
+                  >
+                    🎯 Cek Kecocokan Prodi
+                  </a>
+                  {j.group !== "transfer" && (
+                    <a
+                      href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-[12.5px] font-semibold border-2 border-slate-200 text-slate-600 hover:border-[#6B5B51] hover:text-[#6B5B51] hover:bg-[#f3efec] transition-all"
+                    >
+                      💰 Lihat Biaya per Prodi
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              <button
+                onClick={toggle}
+                className="w-full py-2 text-[12px] font-semibold text-slate-400 border border-dashed border-slate-200 rounded-lg hover:text-slate-600 hover:bg-slate-50 transition-all mt-1 cursor-pointer"
+              >
+                ▲ Tutup Detail
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 const PMBLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -93,6 +343,248 @@ const PMBLanding = () => {
   ];
 
   const [activeStep, setActiveStep] = useState(1);
+  const [jalurProfile, setJalurProfile] = useState("maba");
+  const [openJalurId, setOpenJalurId] = useState(null);
+
+  const MONTHS_ID = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  const _today = new Date();
+  const todayLabel = `Hari ini — ${_today.getDate()} ${MONTHS_ID[_today.getMonth()]} ${_today.getFullYear()}`;
+
+  const JALUR_DATA = [
+    {
+      id: "pmdk", group: "maba", subgroup: "utama",
+      icon: Award, iconBg: "bg-yellow-100 text-yellow-700",
+      badge: "PMDK", badgeColor: "bg-green-50 text-green-700",
+      name: "Penelusuran Minat & Kemampuan",
+      nameButton: "PMDK",
+      popular: true,
+      value: "Tanpa ujian — seleksi berbasis nilai rapor semester 1–5. Cocok jika nilai akademik bagus.",
+      tags: ["📋 Nilai Rapor", "✅ Tanpa Tes"],
+      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
+      period: "5 Jan 2026 – 4 Jun 2026", deadline: "2026-06-04",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/286",
+      elig: [
+        "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
+        "Memiliki rapor semester 1 sampai 5 yang lengkap",
+        "Tidak sedang terdaftar aktif di perguruan tinggi lain",
+        "Bersedia mengikuti ketentuan akademik UNPAS",
+      ],
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+        { ic: "📊", lb: "Input Nilai Rapor Sem 1–5" },
+        { ic: "📤", lb: "Upload Berkas & Verifikasi" },
+        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+      ],
+      costForm: "Rp 300.000", costFormNote: "Satu kali bayar, berlaku semua prodi",
+      costSave: "s.d. Rp 3 jt", costSaveNote: "Daftar sekarang di Gelombang Pra-SNBP",
+      benefits: [
+        { label: "⚡ Potongan DP Momentum", val: "−Rp 2.000.000" },
+        { label: "💎 Insentif Pelunasan DPP", val: "−Rp 1.000.000" },
+      ],
+      benefitTotal: "Rp 3.000.000",
+      benefitNote: "",
+      timeline: [
+        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
+        { date: todayLabel, label: "Gelombang Pra-SNBP masih berlaku (kuota 200)", state: "active", now: true },
+        { date: "25 Maret 2026", label: "Deadline Pra-SNBP – potongan turun jadi Rp 1,5jt", state: "upcoming" },
+        { date: "4 Juni 2026", label: "Pendaftaran PMDK ditutup", state: "upcoming" },
+      ],
+    },
+    {
+      id: "usm", group: "maba", subgroup: "utama",
+      icon: Laptop, iconBg: "bg-blue-100 text-blue-700",
+      badge: "USM Sarjana", badgeColor: "bg-blue-50 text-blue-700",
+      name: "Ujian Saringan Masuk",
+      nameButton: "USM",
+      popular: false,
+      value: "Ujian seleksi — terbuka untuk semua lulusan SMA/SMK/MA sederajat. Cocok jika ingin ikut tes masuk.",
+      tags: ["📝 Tes Tertulis", "📋 Seleksi Berkas"],
+      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
+      period: "5 Jan 2026 – 10 Apr 2026", deadline: "2026-04-10",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/283",
+      elig: [
+        "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
+        "Siap mengikuti ujian tertulis seleksi masuk",
+        "Tidak sedang terdaftar aktif di perguruan tinggi lain",
+        "Bersedia mengikuti ketentuan akademik UNPAS",
+      ],
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+        { ic: "✏️", lb: "Ikut Ujian Tertulis" },
+        { ic: "📤", lb: "Upload Berkas & Verifikasi" },
+        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+      ],
+      costForm: "Rp 300.000", costFormNote: "Satu kali bayar, termasuk biaya tes",
+      costSave: "s.d. Rp 3 jt", costSaveNote: "Jika daftar di momentum aktif",
+      benefits: [
+        { label: "⚡ Potongan DP Momentum", val: "−Rp 2.000.000" },
+        { label: "💎 Insentif Pelunasan DPP", val: "−Rp 1.000.000" },
+      ],
+      benefitTotal: "Rp 3.000.000",
+      benefitNote: "",
+      timeline: [
+        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
+        { date: todayLabel, label: "Gelombang Pra-SNBP masih berlaku", state: "active", now: true },
+        { date: "25 Maret 2026", label: "Deadline Pra-SNBP – potongan turun jadi Rp 1,5jt", state: "upcoming" },
+        { date: "10 April 2026", label: "Pendaftaran USM Gelombang 1 ditutup", state: "upcoming" },
+      ],
+    },
+    {
+      id: "fk_usm", group: "maba", subgroup: "kedokteran",
+      icon: Stethoscope, iconBg: "bg-red-100 text-red-700",
+      badge: "Kedokteran", badgeColor: "bg-red-50 text-red-600",
+      name: "USM Kedokteran",
+      nameButton: "USM FK",
+      popular: false,
+      value: "Seleksi masuk Fakultas Kedokteran via ujian. 4 gelombang penerimaan, kuota terbatas per gelombang.",
+      tags: ["📝 Tes Tertulis", "🔬 Tes Kesehatan"],
+      status: "closing", statusText: "Segera Ditutup", gel: "Gelombang 1",
+      period: "5 Jan – 24 Mar 2026", deadline: "2026-03-24",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/285",
+      elig: [
+        "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
+        "Siap mengikuti ujian tertulis dan tes kesehatan",
+        "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
+        "Bersedia membayar biaya sesuai gelombang yang dipilih",
+      ],
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+        { ic: "✏️", lb: "Ikut Ujian Tertulis" },
+        { ic: "🔬", lb: "Tes Kesehatan & Verifikasi" },
+        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+      ],
+      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
+      costSave: "—", costSaveNote: "Tidak ada potongan untuk Kedokteran",
+      benefits: [],
+      benefitTotal: "—",
+      benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP momentum maupun Insentif Pelunasan DPP. Biaya Gel.1 mulai Rp 165,15 juta (4 gelombang, semakin tinggi per gelombang).",
+      timeline: [
+        { date: "5 Januari 2026", label: "Pendaftaran Gel.1 dibuka", state: "done" },
+        { date: todayLabel, label: "Gelombang 1 segera ditutup!", state: "active", now: true },
+        { date: "24 Maret 2026", label: "Deadline Gel.1 Kedokteran USM", state: "upcoming" },
+        { date: "Gel.2 – Gel.4", label: "Biaya naik per gelombang (Gel.2: 177jt, Gel.3: 190jt, Gel.4: 202jt)", state: "upcoming" },
+      ],
+    },
+    {
+      id: "fk_pmdk", group: "maba", subgroup: "kedokteran",
+      icon: FileText, iconBg: "bg-purple-100 text-purple-700",
+      badge: "Kedokteran", badgeColor: "bg-red-50 text-red-600",
+      name: "PMDK Kedokteran",
+      nameButton: "PMDK FK",
+      popular: false,
+      value: "Seleksi Fakultas Kedokteran berbasis rapor. Tanpa ujian tulis — cocok jika nilai akademik IPA kuat.",
+      tags: ["📋 Nilai Rapor", "🔬 Tes Kesehatan"],
+      status: "closing", statusText: "Segera Ditutup", gel: "Gelombang 1",
+      period: "5 Jan – 24 Mar 2026", deadline: "2026-03-24",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/294",
+      elig: [
+        "Lulusan SMA / MA jurusan IPA dengan nilai akademik tinggi",
+        "Memiliki rapor semester 1–5 lengkap dengan nilai IPA unggul",
+        "Siap mengikuti tes kesehatan",
+        "Bersedia membayar biaya sesuai gelombang yang dipilih",
+      ],
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+        { ic: "📊", lb: "Verifikasi Nilai Rapor" },
+        { ic: "🔬", lb: "Tes Kesehatan & Seleksi" },
+        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+      ],
+      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
+      costSave: "—", costSaveNote: "Tidak ada potongan untuk Kedokteran",
+      benefits: [],
+      benefitTotal: "—",
+      benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP momentum maupun Insentif Pelunasan DPP.",
+      timeline: [
+        { date: "5 Januari 2026", label: "Pendaftaran Gel.1 dibuka", state: "done" },
+        { date: todayLabel, label: "Gelombang 1 segera ditutup!", state: "active", now: true },
+        { date: "24 Maret 2026", label: "Deadline Gel.1 PMDK Kedokteran", state: "upcoming" },
+      ],
+    },
+    {
+      id: "rpl_p", group: "transfer", subgroup: "rpl",
+      icon: GraduationCap, iconBg: "bg-orange-100 text-orange-700",
+      badge: "RPL", badgeColor: "bg-teal-50 text-teal-700",
+      name: "RPL Perolehan 2026 Ganjil",
+      nameButton: "RPL Perolehan",
+      popular: false,
+      value: "Konversi pengalaman kerja menjadi SKS. Untuk profesional yang ingin gelar S1 tanpa mulai dari nol.",
+      tags: ["💼 Portofolio Kerja", "🤝 Asesmen Kompetensi"],
+      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
+      period: "5 Jan – 30 Sep 2026", deadline: "2026-09-30",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/287",
+      elig: [
+        "Memiliki pengalaman kerja minimal 2–3 tahun di bidang relevan",
+        "Memiliki ijazah SMA/SMK/D3 atau sederajat",
+        "Dapat menunjukkan portofolio dan bukti kompetensi kerja",
+        "Bersedia mengikuti asesmen kompetensi",
+      ],
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+        { ic: "💼", lb: "Submit Portofolio Kerja" },
+        { ic: "👤", lb: "Asesmen Kompetensi" },
+        { ic: "🎉", lb: "Konversi SKS & Daftar Ulang" },
+      ],
+      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
+      costSave: "—", costSaveNote: "Benefit momentum tidak berlaku untuk RPL",
+      benefits: [],
+      benefitTotal: "—",
+      benefitNote: "Skema potongan momentum hanya berlaku untuk jalur PMDK/USM reguler. Konfirmasi ke bagian Registrasi untuk RPL.",
+      timeline: [
+        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
+        { date: todayLabel, label: "Pendaftaran masih dibuka", state: "active", now: true },
+        { date: "30 September 2026", label: "Pendaftaran RPL Perolehan ditutup", state: "upcoming" },
+      ],
+    },
+    {
+      id: "rpl_t", group: "transfer", subgroup: "rpl",
+      icon: Repeat, iconBg: "bg-pink-100 text-pink-700",
+      badge: "Transfer", badgeColor: "bg-teal-50 text-teal-700",
+      name: "RPL Transfer 2026 Ganjil",
+      nameButton: "RPL Transfer",
+      popular: false,
+      value: "Pindah dari kampus lain ke UNPAS. SKS yang relevan bisa diakui — tidak perlu mengulang dari awal.",
+      tags: ["📄 Transkrip Asal", "✅ Konversi SKS"],
+      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
+      period: "5 Jan – 30 Sep 2026", deadline: "2026-09-30",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/211",
+      elig: [
+        "Mahasiswa aktif atau cuti dari perguruan tinggi terakreditasi",
+        "Memiliki transkrip nilai dari kampus asal",
+        "Prodi tujuan di UNPAS relevan dengan prodi asal",
+        "Bersedia mengikuti proses konversi SKS",
+      ],
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+        { ic: "📄", lb: "Submit Transkrip & Berkas Asal" },
+        { ic: "🔍", lb: "Penilaian Konversi SKS" },
+        { ic: "🎉", lb: "Penetapan SKS & Daftar Ulang" },
+      ],
+      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
+      costSave: "—", costSaveNote: "Benefit momentum tidak berlaku untuk Transfer",
+      benefits: [],
+      benefitTotal: "—",
+      benefitNote: "Skema potongan momentum hanya berlaku untuk jalur PMDK/USM reguler. Konfirmasi ke bagian Registrasi untuk RPL.",
+      timeline: [
+        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
+        { date: todayLabel, label: "Pendaftaran masih dibuka", state: "active", now: true },
+        { date: "30 September 2026", label: "Pendaftaran RPL Transfer ditutup", state: "upcoming" },
+      ],
+    },
+  ];
+
+  const getDeadlineLabel = (deadlineStr) => {
+    const now = new Date();
+    const wibOffset = 7 * 60;
+    const localOffset = now.getTimezoneOffset();
+    const wib = new Date(now.getTime() + (localOffset + wibOffset) * 60000);
+    const d = new Date(deadlineStr + "T23:59:59");
+    const diff = d - wib;
+    const days = Math.max(0, Math.ceil(diff / 86400000));
+    if (days <= 0) return { text: "Sudah Ditutup", cls: "text-red-600 bg-red-50" };
+    if (days <= 7) return { text: `⚠ Tutup ${days} hari lagi!`, cls: "text-red-600 bg-red-50" };
+    if (days <= 30) return { text: `Tutup ${days} hari lagi`, cls: "text-amber-600 bg-amber-50" };
+    return { text: `Tutup ${days} hari lagi`, cls: "text-green-600 bg-green-50" };
+  };
 
   const badges = [
     {
@@ -695,183 +1187,106 @@ const PMBLanding = () => {
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <motion.div variants={sectionItem} className="space-y-3 text-center">
+          {/* Header */}
+          <motion.div variants={sectionItem} className="space-y-3 text-center mb-8">
             <h2 className="text-xl sm:text-2xl font-bold">Jalur Pendaftaran PMB UNPAS</h2>
           </motion.div>
 
-          <motion.div variants={sectionContainer} className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-4">
+          {/* Self-select toggle */}
+          <motion.div variants={sectionItem} className="flex flex-col sm:flex-row gap-3 mb-8">
             {[
-              {
-                title: "Early Bird",
-                date: "3 Des 2025 - 20 Des 2025",
-                icon: Rocket,
-                color: "bg-red-100 text-red-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/281",
-                status: "closed",
-                wave: "Early Bird"
-              },
-              {
-                title: "USM Sarjana",
-                date: "5 Jan 2026 - 10 Apr 2026",
-                icon: Laptop,
-                color: "bg-blue-100 text-blue-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/283",
-                status: "open",
-                wave: "Gelombang 1"
-              },
-              {
-                title: "PMDK",
-                date: "5 Jan 2026 - 4 Jun 2026",
-                icon: Award,
-                color: "bg-yellow-100 text-yellow-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/286",
-                status: "open",
-                wave: "Gelombang 1"
-              },
-              {
-                title: "Kedokteran",
-                date: "5 Jan 2026 - 24 Mar 2026",
-                icon: Stethoscope,
-                color: "bg-red-100 text-red-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/285",
-                status: "open",
-                wave: "Gelombang 1"
-              },
-              {
-                title: "PMDK Kedokteran",
-                date: "5 Jan 2026 - 24 Mar 2026",
-                icon: FileText,
-                color: "bg-purple-100 text-purple-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/294",
-                status: "open",
-                wave: "Gelombang 1"
-              },
-              {
-                title: "RPL Perolehan 2026 Ganjil",
-                date: "5 Jan 2026 - 30 Sep 2026",
-                icon: GraduationCap,
-                color: "bg-orange-100 text-orange-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/287",
-                status: "open",
-                wave: "Gelombang 1"
-              },
-              {
-                title: "RPL Transfer 2026 Ganjil",
-                date: "5 Jan 2026 - 30 Sep 2026",
-                icon: Repeat,
-                color: "bg-pink-100 text-pink-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/211",
-                status: "open",
-                wave: "Gelombang 1"
-              },
-              {
-                title: "RPL Perolehan 2025 Genap",
-                date: "8 Des 2025 - 20 Jan 2026",
-                icon: GraduationCap,
-                color: "bg-[#f3efec] text-[#5a4c43]",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/209",
-                status: "closed",
-                wave: "Gelombang 1"
-              },
-              {
-                title: "RPL Transfer 2025 Genap",
-                date: "8 Des 2025 - 20 Jan 2026",
-                icon: Repeat,
-                color: "bg-cyan-100 text-cyan-700",
-                link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/210",
-                status: "closed",
-                wave: "Gelombang 1"
-              },
-              {
-                title: "KIP Kuliah",
-                date: "",
-                icon: IdCard,
-                color: "bg-[#f3efec] text-[#5a4c43]",
-                link: "#",
-                status: "soon",
-                wave: "Gelombang 1"
-              },
-            ].filter(item => item.status === "open")
-              .map((item, idx) => {
-                const Icon = item.icon;
-                const isClosed = item.status === "closed";
-                const isSoon = item.status === "soon";
-                const isOpen = item.status === "open";
-
-                return (
-                  <motion.div
-                    variants={sectionItem}
-                    key={idx}
-                    className={`relative flex flex-col justify-between rounded-2xl bg-white p-5 text-center shadow-sm transition-all duration-300
-            ${isOpen ? "hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]" : "opacity-70"}`}
-                  >
-                    {/* BADGE GELombang */}
-                    {item.wave && (
-                      <div className="absolute left-3 top-3 rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-700">
-                        {item.wave}
-                      </div>
-                    )}
-
-                    {/* BADGE STATUS */}
-                    <div
-                      className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold
-                      ${isOpen
-                          ? "bg-[#f3efec] text-[#5a4c43]"
-                          : isClosed
-                            ? "bg-red-700 text-white"
-                            : "bg-slate-200 text-slate-700"
-                        }`}
-                    >
-                      {isOpen && "DIBUKA"}
-                      {isClosed && "DITUTUP"}
-                      {isSoon && "BELUM DIBUKA"}
-                    </div>
-
-                    {/* CONTENT */}
-                    <div className="flex flex-col items-center">
-                      <div className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${item.color}`}>
-                        <Icon className="h-7 w-7" />
-                      </div>
-
-                      <h3 className="text-sm font-semibold text-slate-900">
-                        {item.title}
-                      </h3>
-                      <p className="mt-2 text-xs text-slate-600">
-                        {item.date}
-                      </p>
-                    </div>
-
-                    {/* BUTTON */}
-                    {isOpen && (
-                      <a
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-5 inline-flex items-center justify-center rounded-full bg-[#6B5B51] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#5a4c43]"
-                      >
-                        Lihat Detail
-                      </a>
-                    )}
-
-                    {isClosed && (
-                      <div
-                        className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-300 px-4 py-2 text-sm font-medium text-slate-500 cursor-not-allowed"
-                      >
-                        Pendaftaran Ditutup
-                      </div>
-                    )}
-
-                    {isSoon && (
-                      <div
-                        className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-600 cursor-not-allowed"
-                      >
-                        Belum Dibuka
-                      </div>
-                    )}
-                  </motion.div>
-                );
-              })}
+              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "4 jalur" },
+              { key: "transfer", ic: "🔄", title: "Mahasiswa Pindahan / RPL", sub: "Pindah dari kampus lain atau konversi pengalaman kerja", count: "2 jalur" },
+            ].map((opt) => (
+              <button
+                key={opt.key}
+                onClick={() => { setJalurProfile(opt.key); setOpenJalurId(null); }}
+                className={`flex-1 flex items-center gap-3 p-4 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
+                  ${jalurProfile === opt.key
+                    ? "border-[#6B5B51] bg-[#f3efec] shadow-sm"
+                    : "border-slate-200 bg-white hover:border-slate-300"}`}
+              >
+                {/* radio dot */}
+                <div className={`w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center border-2 transition-all
+                  ${jalurProfile === opt.key ? "border-[#6B5B51] bg-[#6B5B51]" : "border-slate-300 bg-white"}`}>
+                  {jalurProfile === opt.key && <div className="w-2 h-2 rounded-full bg-white" />}
+                </div>
+                <span className="text-xl flex-shrink-0">{opt.ic}</span>
+                <div className="flex-1 min-w-0">
+                  <span className="block text-sm font-700 font-bold text-slate-800">{opt.title}</span>
+                  <span className="block text-[11px] text-slate-500 font-medium mt-0.5">{opt.sub}</span>
+                </div>
+                <span className={`text-[9px] font-bold px-2 py-1 rounded-full flex-shrink-0
+                  ${jalurProfile === opt.key ? "bg-[#6B5B51] text-white" : "bg-slate-100 text-slate-500"}`}>
+                  {opt.count}
+                </span>
+              </button>
+            ))}
           </motion.div>
+
+          {/* Cards per group */}
+          {jalurProfile === "maba" && (
+            <div className="space-y-6">
+              {/* Jalur Utama */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-slate-700">Jalur Utama</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                  <span className="text-[9px] font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full uppercase tracking-wide">Paling Banyak Dipilih</span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 items-start">
+                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama").map(j => (
+                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                  ))}
+                </div>
+              </div>
+              {/* Jalur Kedokteran */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-slate-700">Jalur Kedokteran</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                  <span className="text-[9px] font-bold bg-blue-50 text-blue-700 px-2 py-1 rounded-full uppercase tracking-wide">Program Khusus</span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 items-start">
+                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kedokteran").map(j => (
+                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {jalurProfile === "transfer" && (
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-slate-700">Jalur Pindahan & RPL</span>
+                <div className="flex-1 h-px bg-slate-200" />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4 items-start">
+                {JALUR_DATA.filter(j => j.group === "transfer").map(j => (
+                  <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Guided CTA */}
+          {/* <motion.div variants={sectionItem} className="mt-8 rounded-2xl bg-slate-900 p-5 flex flex-col sm:flex-row items-center gap-4">
+            <span className="text-4xl flex-shrink-0">🎯</span>
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-sm font-bold text-white mb-1">Belum tau mau pilih jurusan apa?</p>
+              <p className="text-[11px] text-slate-400 font-medium leading-relaxed">Hubungi tim kami via WhatsApp untuk mendapat rekomendasi prodi yang sesuai minat & kemampuanmu.</p>
+            </div>
+            <a
+              href="https://wa.me/6282240218900"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0 inline-flex items-center gap-2 bg-[#6B5B51] hover:bg-[#5a4c43] text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap"
+            >
+              Tanya via WA →
+            </a>
+          </motion.div> */}
+
         </motion.section>
 
 
