@@ -758,7 +758,7 @@ const PMBLanding = () => {
 
   // Urgency bar countdown — Pra-SNBP deadline
   const URGENCY_DEADLINE = "2026-03-25T23:59:59+07:00";
-  const URGENCY_KUOTA_TERISI = 142;
+  const URGENCY_KUOTA_TERISI = 155;
   const URGENCY_KUOTA_TOTAL = 200;
 
   const calculateUrgencyTimeLeft = () => {
