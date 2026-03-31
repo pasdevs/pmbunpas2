@@ -429,6 +429,79 @@ const PMBLanding = () => {
         { date: "10 April 2026", label: "Pendaftaran USM Gelombang 1 ditutup", state: "upcoming" },
       ],
     },
+    // {
+    //   id: "fk_usm", group: "maba", subgroup: "kedokteran",
+    //   icon: Stethoscope, iconBg: "bg-red-100 text-red-700",
+    //   badge: "Kedokteran", badgeColor: "bg-red-50 text-red-600",
+    //   name: "USM Kedokteran",
+    //   nameButton: "USM FK",
+    //   popular: false,
+    //   value: "Seleksi masuk Fakultas Kedokteran via ujian. 4 gelombang penerimaan, kuota terbatas per gelombang.",
+    //   tags: ["📝 Tes Tertulis", "🔬 Tes Kesehatan"],
+    //   status: "closing", statusText: "Segera Ditutup", gel: "Gelombang 1",
+    //   period: "5 Jan – 24 Mar 2026", deadline: "2026-03-24",
+    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/285",
+    //   elig: [
+    //     "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
+    //     "Siap mengikuti ujian tertulis dan tes kesehatan",
+    //     "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
+    //     "Bersedia membayar biaya sesuai gelombang yang dipilih",
+    //   ],
+    //   steps: [
+    //     { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+    //     { ic: "✏️", lb: "Ikut Ujian Tertulis" },
+    //     { ic: "🔬", lb: "Tes Kesehatan & Verifikasi" },
+    //     { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+    //   ],
+    //   costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
+    //   costSave: "—", costSaveNote: "Tidak ada potongan untuk Kedokteran",
+    //   benefits: [],
+    //   benefitTotal: "—",
+    //   benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP momentum maupun Insentif Pelunasan DPP. Biaya Gel.1 mulai Rp 165,15 juta (4 gelombang, semakin tinggi per gelombang).",
+    //   timeline: [
+    //     { date: "5 Januari 2026", label: "Pendaftaran Gel.1 dibuka", state: "done" },
+    //     { date: todayLabel, label: "Gelombang 1 segera ditutup!", state: "active", now: true },
+    //     { date: "24 Maret 2026", label: "Deadline Gel.1 Kedokteran USM", state: "upcoming" },
+    //     { date: "Gel.2 – Gel.4", label: "Biaya naik per gelombang (Gel.2: 177jt, Gel.3: 190jt, Gel.4: 202jt)", state: "upcoming" },
+    //   ],
+    // },
+    // {
+    //   id: "fk_pmdk", group: "maba", subgroup: "kedokteran",
+    //   icon: FileText, iconBg: "bg-purple-100 text-purple-700",
+    //   badge: "Kedokteran", badgeColor: "bg-red-50 text-red-600",
+    //   name: "PMDK Kedokteran",
+    //   nameButton: "PMDK FK",
+    //   popular: false,
+    //   value: "Seleksi Fakultas Kedokteran berbasis rapor. Tanpa ujian tulis — cocok jika nilai akademik IPA kuat.",
+    //   tags: ["📋 Nilai Rapor", "🔬 Tes Kesehatan"],
+    //   status: "closing", statusText: "Segera Ditutup", gel: "Gelombang 1",
+    //   period: "5 Jan – 24 Mar 2026", deadline: "2026-03-24",
+    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/294",
+    //   elig: [
+    //     "Lulusan SMA / MA jurusan IPA dengan nilai akademik tinggi",
+    //     "Memiliki rapor semester 1–5 lengkap dengan nilai IPA unggul",
+    //     "Siap mengikuti tes kesehatan",
+    //     "Bersedia membayar biaya sesuai gelombang yang dipilih",
+    //   ],
+    //   steps: [
+    //     { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+    //     { ic: "📊", lb: "Verifikasi Nilai Rapor" },
+    //     { ic: "🔬", lb: "Tes Kesehatan & Seleksi" },
+    //     { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+    //   ],
+    //   costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
+    //   costSave: "—", costSaveNote: "Tidak ada potongan untuk Kedokteran",
+    //   benefits: [],
+    //   benefitTotal: "—",
+    //   benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP momentum maupun Insentif Pelunasan DPP.",
+    //   timeline: [
+    //     { date: "5 Januari 2026", label: "Pendaftaran Gel.1 dibuka", state: "done" },
+    //     { date: todayLabel, label: "Gelombang 1 segera ditutup!", state: "active", now: true },
+    //     { date: "24 Maret 2026", label: "Deadline Gel.1 PMDK Kedokteran", state: "upcoming" },
+    //   ],
+    // },
+
+    //FK GELOMBANG 2
     {
       id: "fk_usm", group: "maba", subgroup: "kedokteran",
       icon: Stethoscope, iconBg: "bg-red-100 text-red-700",
@@ -465,41 +538,7 @@ const PMBLanding = () => {
         { date: "Gel.2 – Gel.4", label: "Biaya naik per gelombang (Gel.2: 177jt, Gel.3: 190jt, Gel.4: 202jt)", state: "upcoming" },
       ],
     },
-    {
-      id: "fk_pmdk", group: "maba", subgroup: "kedokteran",
-      icon: FileText, iconBg: "bg-purple-100 text-purple-700",
-      badge: "Kedokteran", badgeColor: "bg-red-50 text-red-600",
-      name: "PMDK Kedokteran",
-      nameButton: "PMDK FK",
-      popular: false,
-      value: "Seleksi Fakultas Kedokteran berbasis rapor. Tanpa ujian tulis — cocok jika nilai akademik IPA kuat.",
-      tags: ["📋 Nilai Rapor", "🔬 Tes Kesehatan"],
-      status: "closing", statusText: "Segera Ditutup", gel: "Gelombang 1",
-      period: "5 Jan – 24 Mar 2026", deadline: "2026-03-24",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/294",
-      elig: [
-        "Lulusan SMA / MA jurusan IPA dengan nilai akademik tinggi",
-        "Memiliki rapor semester 1–5 lengkap dengan nilai IPA unggul",
-        "Siap mengikuti tes kesehatan",
-        "Bersedia membayar biaya sesuai gelombang yang dipilih",
-      ],
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "📊", lb: "Verifikasi Nilai Rapor" },
-        { ic: "🔬", lb: "Tes Kesehatan & Seleksi" },
-        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-      ],
-      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
-      costSave: "—", costSaveNote: "Tidak ada potongan untuk Kedokteran",
-      benefits: [],
-      benefitTotal: "—",
-      benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP momentum maupun Insentif Pelunasan DPP.",
-      timeline: [
-        { date: "5 Januari 2026", label: "Pendaftaran Gel.1 dibuka", state: "done" },
-        { date: todayLabel, label: "Gelombang 1 segera ditutup!", state: "active", now: true },
-        { date: "24 Maret 2026", label: "Deadline Gel.1 PMDK Kedokteran", state: "upcoming" },
-      ],
-    },
+
     {
       id: "rpl_p", group: "transfer", subgroup: "rpl",
       icon: GraduationCap, iconBg: "bg-orange-100 text-orange-700",
@@ -542,7 +581,7 @@ const PMBLanding = () => {
       name: "RPL Transfer 2026 Ganjil",
       nameButton: "RPL Transfer",
       popular: false,
-      value: "Pindah dari kampus lain ke UNPAS. SKS yang relevan bisa diakui — tidak perlu mengulang dari awal.",
+      value: "Calon mahasiswa lulusan dari Diploma (D1, D2 dan D3).",
       tags: ["📄 Transkrip Asal", "✅ Konversi SKS"],
       status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
       period: "5 Jan – 30 Sep 2026", deadline: "2026-09-30",
@@ -757,9 +796,14 @@ const PMBLanding = () => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   // Urgency bar countdown — Pra-SNBP deadline
-  const URGENCY_DEADLINE = "2026-03-25T23:59:59+07:00";
-  const URGENCY_KUOTA_TERISI = 196;
-  const URGENCY_KUOTA_TOTAL = 200;
+  // const URGENCY_DEADLINE = "2026-03-25T23:59:59+07:00";
+  // const URGENCY_KUOTA_TERISI = 196;
+  // const URGENCY_KUOTA_TOTAL = 200;
+
+  // Urgency bar countdown — Pasca-SNBP deadline
+  const URGENCY_DEADLINE = "2026-04-30T23:59:59+07:00";
+  const URGENCY_KUOTA_TERISI = 0;
+  const URGENCY_KUOTA_TOTAL = 100;
 
   const calculateUrgencyTimeLeft = () => {
     const target = new Date(URGENCY_DEADLINE).getTime();
@@ -981,9 +1025,9 @@ const PMBLanding = () => {
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-yellow-400" />
               </span>
               <span className="text-[11px] font-bold text-slate-300 truncate">
-                <span className="text-yellow-300">Pra-SNBP</span>
+                <span className="text-yellow-300">Pasca-SNBP</span>
                 {" — "}Potongan DP{" "}
-                <span className="text-emerald-300 font-extrabold">Rp 2 Juta</span>
+                <span className="text-emerald-300 font-extrabold">Rp 1,5 Juta</span>
                 <span className="text-slate-400 hidden sm:inline"> · Berakhir dalam:</span>
               </span>
             </div>
@@ -1459,17 +1503,17 @@ const PMBLanding = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-60" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-yellow-400" />
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-300">Gelombang Pra-SNBP Sedang Berlaku</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-300">Gelombang Pasca-SNBP Sedang Berlaku</span>
               </div>
 
               {/* Heading */}
               <h2 className="mb-2 text-2xl font-extrabold leading-tight text-white md:text-3xl">
                 Jangan Sampai Kehilangan<br />
-                Potongan <span className="text-yellow-300">Rp 2 Juta</span>
+                Potongan <span className="text-yellow-300">Rp 1,5 Juta</span>
               </h2>
-              <p className="mb-7 text-sm font-medium text-slate-400">
+              {/* <p className="mb-7 text-sm font-medium text-slate-400">
                 Setelah 25 Maret, potongan turun jadi Rp 1,5 juta — dan kuota semakin sedikit.
-              </p>
+              </p> */}
 
               {/* Countdown */}
               <div className="mb-6 flex justify-center gap-3">
@@ -1507,17 +1551,17 @@ const PMBLanding = () => {
 
               {/* Comparison gelombang */}
               <div className="mb-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                <div className="rounded-xl border border-teal-400/30 px-3 py-3 text-center"
-                  style={{ background: "rgba(20,184,166,0.07)" }}>
-                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-teal-400">Pra-SNBP</div>
-                  <div className="text-2xl font-black text-teal-300 md:text-2xl">−Rp 2jt</div>
-                  <div className="mt-2 inline-block rounded-sm bg-teal-400/15 px-2 py-0.5 text-[9px] font-bold text-teal-400">SEKARANG</div>
-                </div>
                 <div className="rounded-xl border border-white/10 px-3 py-3 text-center"
                   style={{ background: "rgba(255,255,255,0.07)" }}>
-                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-300">Pasca-SNBP</div>
-                  <div className="text-2xl font-black text-white md:text-2xl">−Rp 1,5jt</div>
-                  <div className="mt-2 text-[10px] font-semibold text-slate-400">Apr 2026</div>
+                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-300">Pra-SNBP</div>
+                  <div className="text-2xl font-black text-white md:text-2xl">−Rp 2jt</div>
+                  <div className="mt-2 text-[10px] font-semibold text-slate-400">5 Januari – 25 Maret 2026</div>
+                </div>
+                <div className="rounded-xl border border-teal-400/30 px-3 py-3 text-center"
+                  style={{ background: "rgba(20,184,166,0.07)" }}>
+                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-teal-400">Pasca-SNBP</div>
+                  <div className="text-2xl font-black text-teal-300 md:text-2xl">−Rp 1,5jt</div>
+                  <div className="mt-2 inline-block rounded-sm bg-teal-400/15 px-2 py-0.5 text-[9px] font-bold text-teal-400">SEKARANG (31 Maret – 30 April 2026)</div>
                 </div>
                 <div className="rounded-xl border border-white/10 px-3 py-3 text-center"
                   style={{ background: "rgba(255,255,255,0.07)" }}>
