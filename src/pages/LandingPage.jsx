@@ -19,6 +19,7 @@ import { FloatingWhatsApp } from '@digicroz/react-floating-whatsapp'
 import TestimoniSection from "../sections/TestimoniSection";
 import FaqSection from "../sections/FaqSection";
 import ContactSection from "../sections/ContactSection";
+import { link } from "framer-motion/client";
 
 
 /* ─── JalurCard ─────────────────────────────────────────────────── */
@@ -122,7 +123,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
                 <div className="grid grid-cols-4 gap-1 relative">
                   <div className="absolute top-4 left-[12%] right-[12%] h-0.5 bg-slate-200 z-0" />
                   {j.steps.map((s, i) => {
-                    const stepBg = ["bg-yellow-100","bg-blue-100","bg-teal-100","bg-green-100"][i] ?? "bg-slate-100";
+                    const stepBg = ["bg-yellow-100", "bg-blue-100", "bg-teal-100", "bg-green-100"][i] ?? "bg-slate-100";
                     return (
                       <div key={i} className="flex flex-col items-center text-center px-1 relative z-10">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm mb-1.5 ${stepBg}`}>{s.ic}</div>
@@ -154,13 +155,13 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
                 {/* Metode Pembayaran */}
                 <div className="text-[12px] font-semibold text-slate-500 mb-1.5">Metode Pembayaran:</div>
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {["🏧 VA Mandiri","🛒 Tokopedia","🛍️ Shopee (+Rp 4rb)","🏦 BJB (+Rp 3rb)"].map((p, i) => (
+                  {["🏧 VA Mandiri", "🛒 Tokopedia", "🛍️ Shopee (+Rp 4rb)", "🏦 BJB (+Rp 3rb)"].map((p, i) => (
                     <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{p}</span>
                   ))}
                 </div>
                 {j.benefits.length > 0 && (
                   <div className="bg-gradient-to-br from-green-800 to-teal-700 rounded-xl p-3 text-white">
-                    <div className="text-[11px] font-bold uppercase tracking-wide opacity-60 mb-2">Benefit daftar di Gelombang Pra-SNBP</div>
+                    <div className="text-[11px] font-bold uppercase tracking-wide opacity-60 mb-2">Benefit daftar di Momentum {j.momentumLabel || "Aktif"}</div>
                     {j.benefits.map((b, i) => (
                       <div key={i} className="flex items-center justify-between text-[12.5px] font-semibold py-0.5">
                         <span className="opacity-85">{b.label}</span>
@@ -346,89 +347,543 @@ const PMBLanding = () => {
   const [jalurProfile, setJalurProfile] = useState("maba");
   const [openJalurId, setOpenJalurId] = useState(null);
 
-  const MONTHS_ID = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  const MONTHS_ID = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
   const _today = new Date();
   const todayLabel = `Hari ini — ${_today.getDate()} ${MONTHS_ID[_today.getMonth()]} ${_today.getFullYear()}`;
 
-  const JALUR_DATA = [
+  //CONFIG GELOMBANG PMDK
+  const GELOMBANG_PMDK = [
     {
-      id: "pmdk", group: "maba", subgroup: "utama",
-      icon: Award, iconBg: "bg-yellow-100 text-yellow-700",
-      badge: "PMDK", badgeColor: "bg-green-50 text-green-700",
+      gel: 1,
+      start: "2026-01-05",
+      end: "2026-06-04",
+      period: "5 Jan 2026 – 4 Jun 2026",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/286",
+
+      momentums: [
+        {
+          label: "Pra-SNBP",
+          start: "2026-01-05",
+          end: "2026-03-25",
+          dp: 2000000,
+          dpp: 1000000,
+          kuota: "200 kuota",
+        },
+        {
+          label: "Pasca-SNBP",
+          start: "2026-03-31",
+          end: "2026-04-30",
+          dp: 1500000,
+          dpp: 1000000,
+          kuota: "100 kuota",
+        },
+        {
+          label: "Pasca-SNBT",
+          start: "2026-05-25",
+          end: "2026-06-04",
+          dp: 1000000,
+          dpp: 1000000,
+          kuota: "100 kuota",
+        },
+      ],
+    },
+  ];
+
+  //CONFIG GELOMBANG FK
+  const GELOMBANG_FK = [
+    {
+      gel: 1,
+      start: "2026-01-05",
+      end: "2026-03-24",
+      period: "5 Jan – 24 Mar 2026",
+      biaya: "Rp 165,15 juta",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/285",
+    },
+    {
+      gel: 2,
+      start: "2026-02-25",
+      end: "2026-05-19",
+      period: "25 Feb – 19 Mei 2026",
+      biaya: "Rp 177 juta",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/301",
+    },
+    {
+      gel: 3,
+      start: "2026-05-20",
+      end: "2026-06-17",
+      period: "20 Mei – 17 Jun 2026",
+      biaya: "Rp 190 juta",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/302"
+    },
+    // {
+    //   gel: 4,
+    //   start: "2026-06-01",
+    //   end: "2026-06-30",
+    //   period: "1 Jun – 30 Jun 2026",
+    //   biaya: "Rp 202 juta",
+    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/302"
+    // },
+  ];
+
+  //CONFIG GELOMBANG USM
+  const GELOMBANG_USM = [
+    {
+      gel: 1,
+      start: "2026-01-05",
+      end: "2026-04-10",
+      period: "5 Jan 2026 – 10 April 2026",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/283",
+
+      momentums: [
+        {
+          label: "Pra-SNBP",
+          start: "2026-01-05",
+          end: "2026-03-25",
+          dp: 2000000,
+          dpp: 1000000,
+          kuota: "200 kuota",
+        },
+        {
+          label: "Pasca-SNBP",
+          start: "2026-03-31",
+          end: "2026-04-30",
+          dp: 1500000,
+          dpp: 1000000,
+          kuota: "100 kuota",
+        },
+        {
+          label: "Pasca-SNBT",
+          start: "2026-05-25",
+          end: "2026-06-04",
+          dp: 1000000,
+          dpp: 1000000,
+          kuota: "100 kuota",
+        },
+      ],
+    },
+  ];
+
+  //FUNCTION AMBIL GELOMBANG AKTIF PMDK
+  const getActivePMDK = () => {
+    const today = new Date();
+
+    return GELOMBANG_PMDK.find(g => {
+      const start = new Date(g.start);
+      const end = new Date(g.end);
+      return today >= start && today <= end;
+    }) || GELOMBANG_PMDK[0];
+  };
+
+  const formatRupiah = (val) => {
+    if (!val) return "—";
+    return `−Rp ${val.toLocaleString("id-ID")}`;
+  };
+
+  //FUNCTION AMBIL GELOMBANG AKTIF USM
+  const getActiveUSM = () => {
+    const today = new Date();
+
+    return GELOMBANG_USM.find(g => {
+      const start = new Date(g.start);
+      const end = new Date(g.end);
+      return today >= start && today <= end;
+    }) || GELOMBANG_USM[0];
+  };
+
+  // GET MOMENTUM AKTIF
+  const getActiveMomentum = (momentums) => {
+    const today = new Date();
+
+    return momentums.find(m => {
+      const start = new Date(m.start);
+      const end = new Date(m.end);
+      return today >= start && today <= end;
+    }) || momentums[0];
+  };
+
+  //FUNCTION AMBIL GELOMBANG AKTIF
+  const getActiveGelombang = () => {
+    const today = new Date();
+
+    return GELOMBANG_FK.find(g => {
+      const start = new Date(g.start);
+      const end = new Date(g.end);
+      return today >= start && today <= end;
+    }) || GELOMBANG_FK[GELOMBANG_FK.length - 1]; // fallback terakhir
+  };
+
+  //FUNCTION STATUS (biar “Segera Ditutup” otomatis)
+  const getStatusInfo = (endDate) => {
+    const today = new Date();
+    const end = new Date(endDate);
+
+    const diff = (end - today) / (1000 * 60 * 60 * 24);
+
+    if (diff <= 3) {
+      return { status: "closing", text: "Segera Ditutup" };
+    }
+
+    return { status: "open", text: "Sedang Dibuka" };
+  };
+
+  // GENERATE DATA SESUAI FORMAT PMDK
+  const createPMDKActive = () => {
+    const g = getActivePMDK();
+    const m = getActiveMomentum(g.momentums);
+
+    const { status, text } = getStatusInfo(g.end);
+
+    const total = (m.dp || 0) + (m.dpp || 0);
+
+    return {
+      id: "pmdk",
+      group: "maba",
+      subgroup: "utama",
+
+      icon: Award,
+      iconBg: "bg-yellow-100 text-yellow-700",
+
+      badge: "PMDK",
+      badgeColor: "bg-green-50 text-green-700",
+
       name: "Penelusuran Minat & Kemampuan",
       nameButton: "PMDK",
+
       popular: true,
+
       value: "Tanpa ujian — seleksi berbasis nilai rapor semester 1–5. Cocok jika nilai akademik bagus.",
+
       tags: ["📋 Nilai Rapor", "✅ Tanpa Tes"],
-      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
-      period: "5 Jan 2026 – 4 Jun 2026", deadline: "2026-06-04",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/286",
+
+      status,
+      statusText: text,
+
+      gel: `Gelombang ${g.gel}`,
+
+      period: g.period,
+      deadline: g.end,
+
+      link: g.link,
+
+      // 🔥 penting untuk label dinamis di UI
+      momentumLabel: m.label,
+
       elig: [
         "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
         "Memiliki rapor semester 1 sampai 5 yang lengkap",
         "Tidak sedang terdaftar aktif di perguruan tinggi lain",
         "Bersedia mengikuti ketentuan akademik UNPAS",
       ],
+
       steps: [
         { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
         { ic: "📊", lb: "Input Nilai Rapor Sem 1–5" },
         { ic: "📤", lb: "Upload Berkas & Verifikasi" },
         { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
       ],
-      costForm: "Rp 300.000", costFormNote: "Satu kali bayar, berlaku semua prodi",
-      costSave: "s.d. Rp 3 jt", costSaveNote: "Daftar sekarang di Gelombang Pra-SNBP",
+
+      costForm: "Rp 300.000",
+      costFormNote: "Satu kali bayar, berlaku semua prodi",
+
+      costSave: total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
+      costSaveNote: `${m.label} • ${m.kuota}`,
+
       benefits: [
-        { label: "⚡ Potongan DP Momentum", val: "−Rp 2.000.000" },
-        { label: "💎 Insentif Pelunasan DPP", val: "−Rp 1.000.000" },
+        { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
+        { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
       ],
-      benefitTotal: "Rp 3.000.000",
+
+      benefitTotal: total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
       benefitNote: "",
+
       timeline: [
-        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
-        { date: todayLabel, label: "Gelombang Pra-SNBP masih berlaku (kuota 200)", state: "active", now: true },
-        { date: "25 Maret 2026", label: "Deadline Pra-SNBP – potongan turun jadi Rp 1,5jt", state: "upcoming" },
-        { date: "4 Juni 2026", label: "Pendaftaran PMDK ditutup", state: "upcoming" },
+        {
+          date: "5 Januari 2026",
+          label: "Pendaftaran dibuka",
+          state: "done",
+        },
+        {
+          date: todayLabel,
+          label: `${m.label} masih berlaku (${m.kuota})`,
+          state: "active",
+          now: true,
+        },
+        {
+          date: m.end,
+          label: `Deadline ${m.label}`,
+          state: "upcoming",
+        },
+        {
+          date: g.end,
+          label: "Pendaftaran PMDK ditutup",
+          state: "upcoming",
+        },
       ],
-    },
-    {
-      id: "usm", group: "maba", subgroup: "utama",
-      icon: Laptop, iconBg: "bg-blue-100 text-blue-700",
-      badge: "USM Sarjana", badgeColor: "bg-blue-50 text-blue-700",
+    };
+  };
+
+  // GENERATE DATA SESUAI FORMAT KEDOKTERAN
+  const createFKUSMActive = () => {
+    const g = getActiveGelombang();
+    const { status, text } = getStatusInfo(g.end);
+
+    return {
+      id: "fk_usm",
+      group: "maba",
+      subgroup: "kedokteran",
+
+      icon: Stethoscope,
+      iconBg: "bg-red-100 text-red-700",
+
+      badge: "Kedokteran",
+      badgeColor: "bg-red-50 text-red-600",
+
+      name: "USM Kedokteran",
+      nameButton: "USM FK",
+
+      popular: false,
+
+      value: "Seleksi masuk Fakultas Kedokteran via ujian. 4 gelombang penerimaan, kuota terbatas per gelombang.",
+
+      tags: ["📝 Tes Tertulis", "🔬 Tes Kesehatan"],
+
+      status,
+      statusText: text,
+
+      gel: `Gelombang ${g.gel}`,
+
+      period: g.period,
+      deadline: g.end,
+
+      link: g.link,
+
+      elig: [
+        "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
+        "Siap mengikuti ujian tertulis dan tes kesehatan",
+        "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
+        "Bersedia membayar biaya sesuai gelombang yang dipilih",
+      ],
+
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+        { ic: "✏️", lb: "Ikut Ujian Tertulis" },
+        { ic: "🔬", lb: "Tes Kesehatan & Verifikasi" },
+        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+      ],
+
+      costForm: "Rp 300.000",
+      costFormNote: "Formulir pendaftaran",
+
+      costSave: "—",
+      costSaveNote: "Tidak ada potongan untuk Kedokteran",
+
+      benefits: [],
+      benefitTotal: "—",
+
+      benefitNote: `Prodi Kedokteran tidak mendapatkan potongan DP maupun insentif. Biaya Gel.${g.gel} mulai ${g.biaya}.`,
+
+      timeline: [
+        {
+          date: g.period.split(" – ")[0],
+          label: `Pendaftaran Gel.${g.gel} dibuka`,
+          state: "done",
+        },
+        {
+          date: todayLabel,
+          label: `Gelombang ${g.gel} sedang berlangsung`,
+          state: "active",
+          now: true,
+        },
+        {
+          date: g.period.split(" – ")[1],
+          label: `Deadline Gel.${g.gel} Kedokteran USM`,
+          state: "upcoming",
+        },
+        {
+          date: "Gel. berikutnya",
+          label: "Biaya naik di gelombang selanjutnya",
+          state: "upcoming",
+        },
+      ],
+    };
+  };
+
+  //GENERATE DATA SESUAI FORMAT USM
+  const createUSMActive = () => {
+    const g = getActiveUSM();
+    const m = getActiveMomentum(g.momentums);
+
+    const { status, text } = getStatusInfo(g.end);
+
+    const total = (m.dp || 0) + (m.dpp || 0);
+
+    return {
+      id: "usm",
+      group: "maba",
+      subgroup: "utama",
+
+      icon: Laptop,
+      iconBg: "bg-blue-100 text-blue-700",
+
+      badge: "USM Sarjana",
+      badgeColor: "bg-blue-50 text-blue-700",
+
       name: "Ujian Saringan Masuk",
       nameButton: "USM",
-      popular: false,
+
+      popular: true,
+
       value: "Ujian seleksi — terbuka untuk semua lulusan SMA/SMK/MA sederajat. Cocok jika ingin ikut tes masuk.",
+
       tags: ["📝 Tes Tertulis", "📋 Seleksi Berkas"],
-      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
-      period: "5 Jan 2026 – 10 Apr 2026", deadline: "2026-04-10",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/283",
+
+      status,
+      statusText: text,
+
+      gel: `Gelombang ${g.gel}`,
+
+      period: g.period,
+      deadline: g.end,
+
+      link: g.link,
+
       elig: [
         "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
         "Siap mengikuti ujian tertulis seleksi masuk",
         "Tidak sedang terdaftar aktif di perguruan tinggi lain",
         "Bersedia mengikuti ketentuan akademik UNPAS",
       ],
+
       steps: [
         { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
         { ic: "✏️", lb: "Ikut Ujian Tertulis" },
         { ic: "📤", lb: "Upload Berkas & Verifikasi" },
         { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
       ],
-      costForm: "Rp 300.000", costFormNote: "Satu kali bayar, termasuk biaya tes",
-      costSave: "s.d. Rp 3 jt", costSaveNote: "Jika daftar di momentum aktif",
+
+      costForm: "Rp 300.000",
+      costFormNote: "Satu kali bayar, termasuk biaya tes",
+
+      costSave: total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
+      costSaveNote: `${m.label} • ${m.kuota}`,
+
+      momentumLabel: m.label,
+
+      // ✅ INI YANG KAMU MAU (FIX STRUCTURE)
       benefits: [
-        { label: "⚡ Potongan DP Momentum", val: "−Rp 2.000.000" },
-        { label: "💎 Insentif Pelunasan DPP", val: "−Rp 1.000.000" },
+        { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
+        { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
       ],
-      benefitTotal: "Rp 3.000.000",
+
+      benefitTotal: total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
       benefitNote: "",
+
       timeline: [
-        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
-        { date: todayLabel, label: "Gelombang Pra-SNBP masih berlaku", state: "active", now: true },
-        { date: "25 Maret 2026", label: "Deadline Pra-SNBP – potongan turun jadi Rp 1,5jt", state: "upcoming" },
-        { date: "10 April 2026", label: "Pendaftaran USM Gelombang 1 ditutup", state: "upcoming" },
+        {
+          date: "5 Januari 2026",
+          label: "Pendaftaran dibuka",
+          state: "done",
+        },
+        {
+          date: todayLabel,
+          label: `${m.label} sedang berlangsung`,
+          state: "active",
+          now: true,
+        },
+        {
+          date: m.end,
+          label: `Deadline ${m.label}`,
+          state: "upcoming",
+        },
+        {
+          date: g.end,
+          label: `Pendaftaran USM Gelombang ${g.gel} ditutup`,
+          state: "upcoming",
+        },
       ],
-    },
+    };
+  };
+
+
+  const JALUR_DATA = [
+    // {
+    //   id: "pmdk", group: "maba", subgroup: "utama",
+    //   icon: Award, iconBg: "bg-yellow-100 text-yellow-700",
+    //   badge: "PMDK", badgeColor: "bg-green-50 text-green-700",
+    //   name: "Penelusuran Minat & Kemampuan",
+    //   nameButton: "PMDK",
+    //   popular: true,
+    //   value: "Tanpa ujian — seleksi berbasis nilai rapor semester 1–5. Cocok jika nilai akademik bagus.",
+    //   tags: ["📋 Nilai Rapor", "✅ Tanpa Tes"],
+    //   status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
+    //   period: "5 Jan 2026 – 4 Jun 2026", deadline: "2026-06-04",
+    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/286",
+    //   elig: [
+    //     "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
+    //     "Memiliki rapor semester 1 sampai 5 yang lengkap",
+    //     "Tidak sedang terdaftar aktif di perguruan tinggi lain",
+    //     "Bersedia mengikuti ketentuan akademik UNPAS",
+    //   ],
+    //   steps: [
+    //     { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+    //     { ic: "📊", lb: "Input Nilai Rapor Sem 1–5" },
+    //     { ic: "📤", lb: "Upload Berkas & Verifikasi" },
+    //     { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+    //   ],
+    //   costForm: "Rp 300.000", costFormNote: "Satu kali bayar, berlaku semua prodi",
+    //   costSave: "s.d. Rp 3 jt", costSaveNote: "Daftar sekarang di Gelombang Pra-SNBP",
+    //   benefits: [
+    //     { label: "⚡ Potongan DP Momentum", val: "−Rp 2.000.000" },
+    //     { label: "💎 Insentif Pelunasan DPP", val: "−Rp 1.000.000" },
+    //   ],
+    //   benefitTotal: "Rp 3.000.000",
+    //   benefitNote: "",
+    //   timeline: [
+    //     { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
+    //     { date: todayLabel, label: "Gelombang Pra-SNBP masih berlaku (kuota 200)", state: "active", now: true },
+    //     { date: "25 Maret 2026", label: "Deadline Pra-SNBP – potongan turun jadi Rp 1,5jt", state: "upcoming" },
+    //     { date: "4 Juni 2026", label: "Pendaftaran PMDK ditutup", state: "upcoming" },
+    //   ],
+    // },
+    // {
+    //   id: "usm", group: "maba", subgroup: "utama",
+    //   icon: Laptop, iconBg: "bg-blue-100 text-blue-700",
+    //   badge: "USM Sarjana", badgeColor: "bg-blue-50 text-blue-700",
+    //   name: "Ujian Saringan Masuk",
+    //   nameButton: "USM",
+    //   popular: false,
+    //   value: "Ujian seleksi — terbuka untuk semua lulusan SMA/SMK/MA sederajat. Cocok jika ingin ikut tes masuk.",
+    //   tags: ["📝 Tes Tertulis", "📋 Seleksi Berkas"],
+    //   status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
+    //   period: "5 Jan 2026 – 10 Apr 2026", deadline: "2026-04-10",
+    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/283",
+    //   elig: [
+    //     "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
+    //     "Siap mengikuti ujian tertulis seleksi masuk",
+    //     "Tidak sedang terdaftar aktif di perguruan tinggi lain",
+    //     "Bersedia mengikuti ketentuan akademik UNPAS",
+    //   ],
+    //   steps: [
+    //     { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+    //     { ic: "✏️", lb: "Ikut Ujian Tertulis" },
+    //     { ic: "📤", lb: "Upload Berkas & Verifikasi" },
+    //     { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+    //   ],
+    //   costForm: "Rp 300.000", costFormNote: "Satu kali bayar, termasuk biaya tes",
+    //   costSave: "s.d. Rp 3 jt", costSaveNote: "Jika daftar di momentum aktif",
+    //   benefits: [
+    //     { label: "⚡ Potongan DP Momentum", val: "−Rp 2.000.000" },
+    //     { label: "💎 Insentif Pelunasan DPP", val: "−Rp 1.000.000" },
+    //   ],
+    //   benefitTotal: "Rp 3.000.000",
+    //   benefitNote: "",
+    //   timeline: [
+    //     { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
+    //     { date: todayLabel, label: "Gelombang Pra-SNBP masih berlaku", state: "active", now: true },
+    //     { date: "25 Maret 2026", label: "Deadline Pra-SNBP – potongan turun jadi Rp 1,5jt", state: "upcoming" },
+    //     { date: "10 April 2026", label: "Pendaftaran USM Gelombang 1 ditutup", state: "upcoming" },
+    //   ],
+    // },
     // {
     //   id: "fk_usm", group: "maba", subgroup: "kedokteran",
     //   icon: Stethoscope, iconBg: "bg-red-100 text-red-700",
@@ -502,42 +957,10 @@ const PMBLanding = () => {
     // },
 
     //FK GELOMBANG 2
-    {
-      id: "fk_usm", group: "maba", subgroup: "kedokteran",
-      icon: Stethoscope, iconBg: "bg-red-100 text-red-700",
-      badge: "Kedokteran", badgeColor: "bg-red-50 text-red-600",
-      name: "USM Kedokteran",
-      nameButton: "USM FK",
-      popular: false,
-      value: "Seleksi masuk Fakultas Kedokteran via ujian. 4 gelombang penerimaan, kuota terbatas per gelombang.",
-      tags: ["📝 Tes Tertulis", "🔬 Tes Kesehatan"],
-      status: "closing", statusText: "Segera Ditutup", gel: "Gelombang 1",
-      period: "5 Jan – 24 Mar 2026", deadline: "2026-03-24",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/285",
-      elig: [
-        "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
-        "Siap mengikuti ujian tertulis dan tes kesehatan",
-        "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
-        "Bersedia membayar biaya sesuai gelombang yang dipilih",
-      ],
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "✏️", lb: "Ikut Ujian Tertulis" },
-        { ic: "🔬", lb: "Tes Kesehatan & Verifikasi" },
-        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-      ],
-      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
-      costSave: "—", costSaveNote: "Tidak ada potongan untuk Kedokteran",
-      benefits: [],
-      benefitTotal: "—",
-      benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP momentum maupun Insentif Pelunasan DPP. Biaya Gel.1 mulai Rp 165,15 juta (4 gelombang, semakin tinggi per gelombang).",
-      timeline: [
-        { date: "5 Januari 2026", label: "Pendaftaran Gel.1 dibuka", state: "done" },
-        { date: todayLabel, label: "Gelombang 1 segera ditutup!", state: "active", now: true },
-        { date: "24 Maret 2026", label: "Deadline Gel.1 Kedokteran USM", state: "upcoming" },
-        { date: "Gel.2 – Gel.4", label: "Biaya naik per gelombang (Gel.2: 177jt, Gel.3: 190jt, Gel.4: 202jt)", state: "upcoming" },
-      ],
-    },
+    createPMDKActive(),
+    createUSMActive(),
+    createFKUSMActive(),
+
 
     {
       id: "rpl_p", group: "transfer", subgroup: "rpl",
