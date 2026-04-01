@@ -1279,6 +1279,7 @@ const PMBLanding = () => {
 
     const hash = window.location.hash.replace("#", "");
     if (hash) {
+      setActiveSection(hash);
       // Delay agar DOM dan sticky-header sudah ter-render
       const t = setTimeout(() => scrollToSection(hash), 300);
       return () => clearTimeout(t);
@@ -1359,7 +1360,7 @@ const PMBLanding = () => {
               </button> */}
               <a
                 href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
-                target="_blank"
+                // target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-600 hover:text-[#5a4c43]"
               >
@@ -1425,7 +1426,7 @@ const PMBLanding = () => {
               <button
                 key={id}
                 onClick={() => { scrollToSection(id); setActiveSection(id); setIsMenuOpen(false); }}
-                className={`text-left transition-colors duration-200
+                className={`text-center transition-colors duration-200
                   ${activeSection === id
                     ? "text-[#6B5B51] font-semibold"
                     : "text-slate-700"
@@ -1437,7 +1438,7 @@ const PMBLanding = () => {
             {/* <button onClick={() => { scrollToSection("informasi-pengumuman"); setIsMenuOpen(false); }}>Informasi &amp; Pengumuman</button> */}
             <a
               href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
-              target="_blank"
+              // target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsMenuOpen(false)}
               className="w-full text-center py-2 rounded-lg hover:bg-[#f3efec] transition"
