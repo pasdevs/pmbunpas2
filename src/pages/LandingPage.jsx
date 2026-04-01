@@ -225,6 +225,23 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#6B5B51] to-[#8a7060] hover:from-[#5a4c43] hover:to-[#6B5B51] text-white rounded-xl py-3.5 text-sm font-extrabold transition-all duration-200 hover:-translate-y-0.5 shadow-md mb-2"
+                  onClick={() => {
+                    const eventName = `daftar_${j.nameButton.toLowerCase().replace(/\s+/g, "_")}_web_pmb_unpas`;
+                    // GTM
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                      event: eventName,
+                      jalur: j.nameButton,
+                      page: "pmb.unpas.ac.id",
+                    });
+                    // Meta Pixel
+                    if (window.fbq) {
+                      window.fbq("trackCustom", eventName, {
+                        jalur: j.nameButton,
+                        page: "pmb.unpas.ac.id",
+                      });
+                    }
+                  }}
                 >
                   Daftar {j.nameButton} Sekarang →
                 </a>
