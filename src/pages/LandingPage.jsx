@@ -1275,7 +1275,15 @@ const PMBLanding = () => {
 
   useEffect(() => {
     window.history.scrollRestoration = "manual";
-    window.scrollTo(0, 0);
+
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      // Delay agar DOM dan sticky-header sudah ter-render
+      const t = setTimeout(() => scrollToSection(hash), 300);
+      return () => clearTimeout(t);
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   return (
