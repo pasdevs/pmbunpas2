@@ -279,6 +279,7 @@ const PMBLanding = () => {
   const langRef = useRef(null);
 
   const [showWA, setShowWA] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   const handleClickWhatsApp = () => {
     if (window.dataLayer) {
@@ -1286,6 +1287,7 @@ const PMBLanding = () => {
     }
   }, []);
 
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       {showWA && <FloatingWhatsApp
@@ -1335,15 +1337,23 @@ const PMBLanding = () => {
 
             {/* CENTER: MENU */}
             <div className="hidden md:flex items-center gap-6 text-sm">
-              <button onClick={() => scrollToSection("jalur-pendaftaran")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
-                Jalur Pendaftaran
-              </button>
-              <button onClick={() => scrollToSection("timeline-alur")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
-                Panduan Pendaftaran
-              </button>
-              <button onClick={() => scrollToSection("program-studi")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
-                Program Studi
-              </button>
+              {[
+                { id: "jalur-pendaftaran", label: "Jalur Pendaftaran" },
+                { id: "timeline-alur", label: "Panduan Pendaftaran" },
+                { id: "program-studi", label: "Program Studi" },
+              ].map(({ id, label }) => (
+                <button
+                  key={id}
+                  onClick={() => { scrollToSection(id); setActiveSection(id); }}
+                  className={`relative cursor-pointer transition-colors duration-200
+                    ${activeSection === id
+                      ? "text-[#6B5B51] font-semibold after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-[2px] after:bg-[#6B5B51] after:rounded-full"
+                      : "text-slate-600 hover:text-[#5a4c43]"
+                    }`}
+                >
+                  {label}
+                </button>
+              ))}
               {/* <button onClick={() => scrollToSection("informasi-pengumuman")} className="text-slate-600 hover:text-[#5a4c43] cursor-pointer">
                 Informasi &amp; Pengumuman
               </button> */}
@@ -1407,9 +1417,23 @@ const PMBLanding = () => {
         {/* MOBILE MENU DROPDOWN */}
         {isMenuOpen && (
           <div className="md:hidden bg-white shadow-lg py-3 px-4 flex flex-col gap-3 text-sm">
-            <button onClick={() => { scrollToSection("jalur-pendaftaran"); setIsMenuOpen(false); }}>Jalur Pendaftaran</button>
-            <button onClick={() => { scrollToSection("timeline-alur"); setIsMenuOpen(false); }}>Panduan Pendaftaran</button>
-            <button onClick={() => { scrollToSection("program-studi"); setIsMenuOpen(false); }}>Program Studi</button>
+            {[
+              { id: "jalur-pendaftaran", label: "Jalur Pendaftaran" },
+              { id: "timeline-alur", label: "Panduan Pendaftaran" },
+              { id: "program-studi", label: "Program Studi" },
+            ].map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => { scrollToSection(id); setActiveSection(id); setIsMenuOpen(false); }}
+                className={`text-left transition-colors duration-200
+                  ${activeSection === id
+                    ? "text-[#6B5B51] font-semibold"
+                    : "text-slate-700"
+                  }`}
+              >
+                {label}
+              </button>
+            ))}
             {/* <button onClick={() => { scrollToSection("informasi-pengumuman"); setIsMenuOpen(false); }}>Informasi &amp; Pengumuman</button> */}
             <a
               href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
