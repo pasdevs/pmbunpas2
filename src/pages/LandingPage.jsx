@@ -1968,7 +1968,7 @@ const PMBLanding = () => {
                 style={{ background: "rgba(239,68,68,0.07)" }}>
                 <span className="flex-shrink-0 text-base">⚠️</span>
                 <p className="text-xs font-semibold leading-snug text-red-300">
-                  Yang daftar kemarin udah hemat Rp 2 juta. Kamu kapan?
+                  Yang daftar kemarin udah hemat Rp 1,5 juta. Kamu kapan?
                 </p>
               </div>
 
