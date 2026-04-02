@@ -67,7 +67,7 @@ export default function FaqSection() {
               Besaran dan mekanisme refund mengacu pada SK PMB.
               <br />
               <br />
-              <a href="https://s.id/unpas_pmb_refund" target="_blank" className="text-emerald-500 font-semibold underline mt-8">Dokumen Persetujuan Ketentuan Refund</a>
+              <a href="https://s.id/unpas_pmb_refund_update" target="_blank" className="text-emerald-500 font-semibold underline mt-8">Dokumen Persetujuan Ketentuan Refund</a>
               <br />
               <br />
               <a href="https://s.id/unpas_pmbfk_refund" target="_blank" className="text-emerald-500 font-semibold underline mt-8">Dokumen Persetujuan Ketentuan Refund Kedokteran</a>

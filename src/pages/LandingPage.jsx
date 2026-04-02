@@ -1646,7 +1646,7 @@ const PMBLanding = () => {
 
               <a
                 href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2/"
-                target="_blank"
+                // target="_blank"
                 rel="noopener noreferrer"
                 // className="inline-flex items-center justify-center rounded-full border-2 border-white px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
                 className="relative inline-flex items-center justify-center gap-2 bg-[#f5a623] text-black font-bold rounded-[100px] px-6 py-3 hover:brightness-95 transition"
@@ -2198,7 +2198,7 @@ const PMBLanding = () => {
             {/* CTA Button – Full Width */}
             <div className="w-full mt-4">
               <a
-                href="https://s.id/unpas_pmb_refund"
+                href="https://s.id/unpas_pmb_refund_update"
                 target="_blank"
                 className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
               >
