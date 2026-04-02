@@ -1932,21 +1932,23 @@ const PMBLanding = () => {
 
               {/* ACTION */}
               <div className="mt-6 flex justify-end gap-3">
-                <button
-                  disabled={activeStep === 1}
-                  onClick={() => setActiveStep((prev) => prev - 1)}
-                  className="rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-600 disabled:opacity-40 cursor-pointer"
-                >
-                  Sebelumnya
-                </button>
+                {activeStep > 1 && (
+                  <button
+                    onClick={() => setActiveStep((prev) => prev - 1)}
+                    className="rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-600 cursor-pointer"
+                  >
+                    Sebelumnya
+                  </button>
+                )}
 
-                <button
-                  disabled={activeStep === steps.length}
-                  onClick={() => setActiveStep((prev) => prev + 1)}
-                  className="rounded-full bg-[#6B5B51] px-6 py-2 text-sm font-semibold text-white hover:bg-[#5a4c43] disabled:opacity-40 cursor-pointer"
-                >
-                  Selanjutnya
-                </button>
+                {activeStep < steps.length && (
+                  <button
+                    onClick={() => setActiveStep((prev) => prev + 1)}
+                    className="rounded-full bg-[#6B5B51] px-6 py-2 text-sm font-semibold text-white hover:bg-[#5a4c43] cursor-pointer"
+                  >
+                    Selanjutnya
+                  </button>
+                )}
               </div>
             </div>
           </div>
