@@ -1712,8 +1712,8 @@ const PMBLanding = () => {
           {/* Self-select toggle */}
           <motion.div variants={sectionItem} className="flex flex-col sm:flex-row gap-3 mb-8">
             {[
-              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "4 jalur" },
-              { key: "transfer", ic: "🔄", title: "Mahasiswa Pindahan / RPL", sub: "Pindah dari kampus lain atau konversi pengalaman kerja", count: "2 jalur" },
+              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "3 jalur" },
+              { key: "transfer", ic: "🔄", title: "RPL (Rekognisi Pembelajaran Lampau)", sub: "Lulusan Diploma (D1–D3), SMA/SMK yang memiliki pengalaman kerja.", count: "2 jalur" },
             ].map((opt) => (
               <button
                 key={opt.key}
