@@ -2200,7 +2200,7 @@ const PMBLanding = () => {
             {/* CTA Button – Full Width */}
             <div className="w-full mt-4">
               <a
-                href="https://s.id/unpas_pmb_refund_update"
+                href="https://pmb.unpas.ac.id/form_refund"
                 target="_blank"
                 className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
               >
@@ -2210,7 +2210,7 @@ const PMBLanding = () => {
 
             <div className="w-full mt-4">
               <a
-                href="https://s.id/unpas_pmbfk_refund"
+                href="https://pmb.unpas.ac.id/form_refund_fk"
                 target="_blank"
                 className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
               >
