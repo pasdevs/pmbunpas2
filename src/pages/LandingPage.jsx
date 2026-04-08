@@ -1243,7 +1243,7 @@ const PMBLanding = () => {
 
   // Urgency bar countdown — Pasca-SNBP deadline
   const URGENCY_DEADLINE = "2026-04-30T23:59:59+07:00";
-  const URGENCY_KUOTA_TERISI = 0;
+  const URGENCY_KUOTA_TERISI = 30;
   const URGENCY_KUOTA_TOTAL = 100;
 
   const calculateUrgencyTimeLeft = () => {
