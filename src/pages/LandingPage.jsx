@@ -479,6 +479,74 @@ const PMBLanding = () => {
         },
       ],
     },
+    {
+      gel: 2,
+      start: "2026-04-14",
+      end: "2026-07-03",
+      period: "14 Apr 2026 – 3 Juli 2026",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/288",
+
+      momentums: [
+        {
+          label: "Pra-SNBP",
+          start: "2026-01-05",
+          end: "2026-03-25",
+          dp: 2000000,
+          dpp: 1000000,
+          kuota: "200 kuota",
+        },
+        {
+          label: "Pasca-SNBP",
+          start: "2026-03-31",
+          end: "2026-04-30",
+          dp: 1500000,
+          dpp: 1000000,
+          kuota: "100 kuota",
+        },
+        {
+          label: "Pasca-SNBT",
+          start: "2026-05-25",
+          end: "2026-06-04",
+          dp: 1000000,
+          dpp: 1000000,
+          kuota: "100 kuota",
+        },
+      ],
+    },
+    {
+      gel: 3,
+      start: "2026-07-07",
+      end: "2026-08-07",
+      period: "7 Jul 2026 – 10 Agustus 2026",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/289",
+
+      momentums: [
+        {
+          label: "Pra-SNBP",
+          start: "2026-01-05",
+          end: "2026-03-25",
+          dp: 2000000,
+          dpp: 1000000,
+          kuota: "200 kuota",
+        },
+        {
+          label: "Pasca-SNBP",
+          start: "2026-03-31",
+          end: "2026-04-30",
+          dp: 1500000,
+          dpp: 1000000,
+          kuota: "100 kuota",
+        },
+        {
+          label: "Pasca-SNBT",
+          start: "2026-05-25",
+          end: "2026-06-04",
+          dp: 1000000,
+          dpp: 1000000,
+          kuota: "100 kuota",
+        },
+      ],
+    },
   ];
 
   //FUNCTION AMBIL GELOMBANG AKTIF PMDK
@@ -516,7 +584,7 @@ const PMBLanding = () => {
       const start = new Date(m.start);
       const end = new Date(m.end);
       return today >= start && today <= end;
-    }) || momentums[0];
+    }) || { label: "Periode Reguler", dp: 0, dpp: 0, kuota: "—", end: "—" };
   };
 
   //FUNCTION AMBIL GELOMBANG AKTIF
