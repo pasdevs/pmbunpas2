@@ -745,6 +745,7 @@ const PMBLanding = () => {
 
       elig: [
         "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
+        "Pendaftar maksimal 3 tahun setelah lulus SMA (2024-2026)",
         "Siap mengikuti ujian tertulis dan tes kesehatan",
         "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
         "Bersedia membayar biaya sesuai gelombang yang dipilih",
