@@ -584,7 +584,7 @@ const PMBLanding = () => {
       const start = new Date(m.start);
       const end = new Date(m.end);
       return today >= start && today <= end;
-    }) || { label: "Periode Reguler", dp: 0, dpp: 0, kuota: "—", end: "—" };
+    }) || null;
   };
 
   //FUNCTION AMBIL GELOMBANG AKTIF
@@ -619,7 +619,7 @@ const PMBLanding = () => {
 
     const { status, text } = getStatusInfo(g.end);
 
-    const total = (m.dp || 0) + (m.dpp || 0);
+    const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
 
     return {
       id: "pmdk",
@@ -651,8 +651,7 @@ const PMBLanding = () => {
 
       link: g.link,
 
-      // 🔥 penting untuk label dinamis di UI
-      momentumLabel: m.label,
+      momentumLabel: m?.label || null,
 
       elig: [
         "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
@@ -671,15 +670,15 @@ const PMBLanding = () => {
       costForm: "Rp 300.000",
       costFormNote: "Satu kali bayar, berlaku semua prodi",
 
-      costSave: total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
-      costSaveNote: `${m.label} • ${m.kuota}`,
+      costSave: m && total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
+      costSaveNote: m ? `${m.label} • ${m.kuota}` : "Tidak ada momentum aktif saat ini",
 
-      benefits: [
+      benefits: m ? [
         { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
         { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
-      ],
+      ] : [],
 
-      benefitTotal: total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
+      benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
       benefitNote: "",
 
       timeline: [
@@ -688,17 +687,19 @@ const PMBLanding = () => {
           label: "Pendaftaran dibuka",
           state: "done",
         },
-        {
-          date: todayLabel,
-          label: `${m.label} masih berlaku (${m.kuota})`,
-          state: "active",
-          now: true,
-        },
-        {
-          date: m.end,
-          label: `Deadline ${m.label}`,
-          state: "upcoming",
-        },
+        ...(m ? [
+          {
+            date: todayLabel,
+            label: `${m.label} masih berlaku (${m.kuota})`,
+            state: "active",
+            now: true,
+          },
+          {
+            date: m.end,
+            label: `Deadline ${m.label}`,
+            state: "upcoming",
+          },
+        ] : []),
         {
           date: g.end,
           label: "Pendaftaran PMDK ditutup",
@@ -802,7 +803,7 @@ const PMBLanding = () => {
 
     const { status, text } = getStatusInfo(g.end);
 
-    const total = (m.dp || 0) + (m.dpp || 0);
+    const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
 
     return {
       id: "usm",
@@ -851,18 +852,17 @@ const PMBLanding = () => {
       costForm: "Rp 300.000",
       costFormNote: "Satu kali bayar, termasuk biaya tes",
 
-      costSave: total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
-      costSaveNote: `${m.label} • ${m.kuota}`,
+      costSave: m && total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
+      costSaveNote: m ? `${m.label} • ${m.kuota}` : "Tidak ada momentum aktif saat ini",
 
-      momentumLabel: m.label,
+      momentumLabel: m?.label || null,
 
-      // ✅ INI YANG KAMU MAU (FIX STRUCTURE)
-      benefits: [
+      benefits: m ? [
         { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
         { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
-      ],
+      ] : [],
 
-      benefitTotal: total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
+      benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
       benefitNote: "",
 
       timeline: [
@@ -871,17 +871,19 @@ const PMBLanding = () => {
           label: "Pendaftaran dibuka",
           state: "done",
         },
-        {
-          date: todayLabel,
-          label: `${m.label} sedang berlangsung`,
-          state: "active",
-          now: true,
-        },
-        {
-          date: m.end,
-          label: `Deadline ${m.label}`,
-          state: "upcoming",
-        },
+        ...(m ? [
+          {
+            date: todayLabel,
+            label: `${m.label} sedang berlangsung`,
+            state: "active",
+            now: true,
+          },
+          {
+            date: m.end,
+            label: `Deadline ${m.label}`,
+            state: "upcoming",
+          },
+        ] : []),
         {
           date: g.end,
           label: `Pendaftaran USM Gelombang ${g.gel} ditutup`,
@@ -1310,10 +1312,59 @@ const PMBLanding = () => {
   // const URGENCY_KUOTA_TERISI = 196;
   // const URGENCY_KUOTA_TOTAL = 200;
 
-  // Urgency bar countdown — Pasca-SNBP deadline
-  const URGENCY_DEADLINE = "2026-04-30T23:59:59+07:00";
-  const URGENCY_KUOTA_TERISI = 97;
-  const URGENCY_KUOTA_TOTAL = 100;
+  // Update manual saat momentum aktif: berapa slot yang sudah terisi
+  const URGENCY_KUOTA_TERISI = 0;
+
+  const getMomentumState = () => {
+    const today = new Date();
+    const momentums = GELOMBANG_PMDK[0].momentums;
+    const active = momentums.find(m => {
+      const s = new Date(m.start + "T00:00:00+07:00");
+      const e = new Date(m.end + "T23:59:59+07:00");
+      return today >= s && today <= e;
+    });
+    if (active) return { mode: "active", momentum: active };
+    const upcoming = [...momentums]
+      .filter(m => new Date(m.start + "T00:00:00+07:00") > today)
+      .sort((a, b) => new Date(a.start) - new Date(b.start))[0];
+    if (upcoming) return { mode: "upcoming", momentum: upcoming };
+    return { mode: "ended", momentum: momentums[momentums.length - 1] };
+  };
+
+  const momentumState = getMomentumState();
+  const activeMomentum = momentumState.momentum;
+
+  const URGENCY_DEADLINE = momentumState.mode === "active"
+    ? `${activeMomentum.end}T23:59:59+07:00`
+    : momentumState.mode === "upcoming"
+    ? `${activeMomentum.start}T00:00:00+07:00`
+    : null;
+
+  const URGENCY_KUOTA_TOTAL = activeMomentum ? parseInt(activeMomentum.kuota) || 100 : 100;
+
+  const formatDPLabel = (dp) => {
+    if (!dp) return "—";
+    const juta = dp / 1000000;
+    return `Rp ${juta % 1 === 0 ? juta : juta.toFixed(1).replace(".", ",")} Juta`;
+  };
+
+  const formatDPShort = (dp) => {
+    if (!dp) return "—";
+    const juta = dp / 1000000;
+    return `−Rp ${juta % 1 === 0 ? juta : juta.toFixed(1).replace(".", ",")}jt`;
+  };
+
+  const formatDateShort = (dateStr) => {
+    const months = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+    const d = new Date(dateStr + "T00:00:00+07:00");
+    return `${d.getDate()} ${months[d.getMonth()]}`;
+  };
+
+  const formatDateLong = (dateStr) => {
+    const months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    const d = new Date(dateStr + "T00:00:00+07:00");
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  };
 
   const calculateUrgencyTimeLeft = () => {
     const target = new Date(URGENCY_DEADLINE).getTime();
@@ -1556,57 +1607,98 @@ const PMBLanding = () => {
           </div>
         )}
 
-        {/* URGENCY BAR — Pra-SNBP */}
-        <div className="bg-[#3F3631] overflow-hidden">
-          {/* Row 1: label + countdown */}
-          <div className="mx-auto max-w-6xl px-4 py-1.5 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              {/* Pulse dot */}
-              <span className="relative flex-shrink-0 flex items-center justify-center w-3 h-3">
-                <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-yellow-400 opacity-60" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-yellow-400" />
-              </span>
-              <span className="text-[11px] font-bold text-slate-300 truncate">
-                <span className="text-yellow-300">Pasca-SNBP</span>
-                {" — "}Potongan DP{" "}
-                <span className="text-emerald-300 font-extrabold">Rp 1,5 Juta</span>
-                <span className="text-slate-400 hidden sm:inline"> · Berakhir dalam:</span>
-              </span>
-            </div>
-            {/* Countdown */}
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
-                <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.days).padStart(2, "0")}</div>
-                <div className="text-white text-[7px] font-bold uppercase tracking-wide">Hari</div>
+        {/* URGENCY BAR — auto-switch berdasarkan momentumState */}
+        {momentumState.mode !== "ended" && (
+          <div className="bg-[#3F3631] overflow-hidden">
+            {momentumState.mode === "active" ? (
+              /* Mode AKTIF: layout horizontal (label + countdown 1 baris, kuota bar di bawah) */
+              <>
+                <div className="mx-auto max-w-6xl px-4 py-1.5 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="relative flex-shrink-0 flex items-center justify-center w-3 h-3">
+                      <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-yellow-400 opacity-60" />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-yellow-400" />
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-300 truncate">
+                      <span className="text-yellow-300">{activeMomentum.label}</span>
+                      {" — "}Potongan DP{" "}
+                      <span className="text-emerald-300 font-extrabold">{formatDPLabel(activeMomentum.dp)}</span>
+                      <span className="text-slate-400 hidden sm:inline"> · Berakhir dalam:</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                      <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.days).padStart(2, "0")}</div>
+                      <div className="text-white text-[7px] font-bold uppercase tracking-wide">Hari</div>
+                    </div>
+                    <span className="text-white text-xs font-bold">:</span>
+                    <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                      <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.hours).padStart(2, "0")}</div>
+                      <div className="text-white text-[7px] font-bold uppercase tracking-wide">Jam</div>
+                    </div>
+                    <span className="text-white text-xs font-bold">:</span>
+                    <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                      <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.minutes).padStart(2, "0")}</div>
+                      <div className="text-white text-[7px] font-bold uppercase tracking-wide">Min</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mx-auto max-w-6xl px-4 pb-1.5 flex items-center gap-2">
+                  <span className="text-[9.5px] text-slate-400 font-semibold whitespace-nowrap">
+                    Kuota: <span className="text-yellow-400">{URGENCY_KUOTA_TERISI} / {URGENCY_KUOTA_TOTAL}</span>
+                  </span>
+                  <div className="flex-1 h-[3px] bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-teal-400 to-yellow-400 transition-all duration-700"
+                      style={{ width: `${Math.round(URGENCY_KUOTA_TERISI / URGENCY_KUOTA_TOTAL * 100)}%` }}
+                    />
+                  </div>
+                  <span className="text-[9.5px] font-extrabold text-yellow-400">
+                    {Math.round(URGENCY_KUOTA_TERISI / URGENCY_KUOTA_TOTAL * 100)}%
+                  </span>
+                </div>
+              </>
+            ) : (
+              /* Mode UPCOMING: layout stacked (info kiri, countdown kanan) */
+              <div className="mx-auto max-w-6xl px-4 pt-1.5 pb-1.5 flex items-center justify-between gap-2">
+                <div className="flex items-start gap-2 min-w-0">
+                  <span className="relative flex-shrink-0 flex items-center justify-center w-3 h-3 mt-[2px]">
+                    <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-yellow-400 opacity-60" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-yellow-400" />
+                  </span>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[11px] font-bold text-yellow-300">{activeMomentum.label}</span>
+                    <span className="text-[10px] text-slate-300">
+                      Potongan DP <span className="text-emerald-300 font-extrabold">{formatDPLabel(activeMomentum.dp)}</span>
+                    </span>
+                    <span className="text-[9.5px] text-slate-400 font-semibold">
+                      Kuota Tersedia: <span className="text-yellow-400">{URGENCY_KUOTA_TOTAL}</span>
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+                  <span className="text-[9px] text-slate-400 font-semibold">Dibuka dalam:</span>
+                  <div className="flex items-center gap-1">
+                    <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                      <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.days).padStart(2, "0")}</div>
+                      <div className="text-white text-[7px] font-bold uppercase tracking-wide">Hari</div>
+                    </div>
+                    <span className="text-white text-xs font-bold">:</span>
+                    <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                      <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.hours).padStart(2, "0")}</div>
+                      <div className="text-white text-[7px] font-bold uppercase tracking-wide">Jam</div>
+                    </div>
+                    <span className="text-white text-xs font-bold">:</span>
+                    <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
+                      <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.minutes).padStart(2, "0")}</div>
+                      <div className="text-white text-[7px] font-bold uppercase tracking-wide">Min</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span className="text-white text-xs font-bold">:</span>
-              <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
-                <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.hours).padStart(2, "0")}</div>
-                <div className="text-white text-[7px] font-bold uppercase tracking-wide">Jam</div>
-              </div>
-              <span className="text-white text-xs font-bold">:</span>
-              <div className="bg-[#5a4c43] border border-yellow-400/20 rounded px-1.5 py-0.5 text-center min-w-[30px]">
-                <div className="text-yellow-300 font-extrabold text-[11px] leading-tight">{String(urgencyTimeLeft.minutes).padStart(2, "0")}</div>
-                <div className="text-white text-[7px] font-bold uppercase tracking-wide">Min</div>
-              </div>
-            </div>
+            )}
           </div>
-          {/* Row 2: quota bar */}
-          <div className="mx-auto max-w-6xl px-4 pb-1.5 flex items-center gap-2">
-            <span className="text-[9.5px] text-slate-400 font-semibold whitespace-nowrap">
-              Kuota: <span className="text-yellow-400">{URGENCY_KUOTA_TERISI} / {URGENCY_KUOTA_TOTAL}</span>
-            </span>
-            <div className="flex-1 h-[3px] bg-white/10 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-teal-400 to-yellow-400 transition-all duration-700"
-                style={{ width: `${Math.round(URGENCY_KUOTA_TERISI / URGENCY_KUOTA_TOTAL * 100)}%` }}
-              />
-            </div>
-            <span className="text-[9.5px] font-extrabold text-yellow-400">
-              {Math.round(URGENCY_KUOTA_TERISI / URGENCY_KUOTA_TOTAL * 100)}%
-            </span>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* HERO SECTION — CENTERED + BROWN GRADIENT */}
@@ -1845,7 +1937,7 @@ const PMBLanding = () => {
           {jalurProfile === "transfer" && (
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-slate-700">Jalur Pindahan & RPL</span>
+                <span className="text-xs font-bold text-slate-700">Jalur RPL (Rekognisi Pembelajaran Lampau)</span>
                 <div className="flex-1 h-px bg-slate-200" />
               </div>
               <div className="grid sm:grid-cols-2 gap-4 items-start">
@@ -2047,13 +2139,24 @@ const PMBLanding = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-60" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-yellow-400" />
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-300">Gelombang Pasca-SNBP Sedang Berlaku</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-300">
+                  {momentumState.mode === "active"
+                    ? `Gelombang ${activeMomentum.label} Sedang Berlaku`
+                    : momentumState.mode === "upcoming"
+                    ? `${activeMomentum.label} Segera Dibuka – ${formatDateLong(activeMomentum.start)}`
+                    : "Pendaftaran Akan Segera Dibuka"}
+                </span>
               </div>
 
               {/* Heading */}
               <h2 className="mb-2 text-2xl font-extrabold leading-tight text-white md:text-3xl">
-                Jangan Sampai Kehilangan<br />
-                Potongan <span className="text-yellow-300">Rp 1,5 Juta</span>
+                {momentumState.mode === "active" ? (
+                  <>Jangan Sampai Kehilangan<br />Potongan <span className="text-yellow-300">{formatDPLabel(activeMomentum.dp)}</span></>
+                ) : momentumState.mode === "upcoming" ? (
+                  <>Amankan Kesempatanmu Sebelum<br /><span className="text-yellow-300">{activeMomentum.label}</span> Dibuka</>
+                ) : (
+                  <>Pantau Terus Info<br /><span className="text-yellow-300">Pendaftaran UNPAS</span></>
+                )}
               </h2>
               {/* <p className="mb-7 text-sm font-medium text-slate-400">
                 Setelah 25 Maret, potongan turun jadi Rp 1,5 juta — dan kuota semakin sedikit.
@@ -2089,30 +2192,46 @@ const PMBLanding = () => {
                 style={{ background: "rgba(239,68,68,0.07)" }}>
                 <span className="flex-shrink-0 text-base">⚠️</span>
                 <p className="text-xs font-semibold leading-snug text-red-300">
-                  Yang daftar kemarin udah hemat Rp 1,5 juta. Kamu kapan?
+                  {momentumState.mode === "active"
+                    ? `Yang daftar kemarin udah hemat ${formatDPLabel(activeMomentum.dp)}. Kamu kapan?`
+                    : momentumState.mode === "upcoming"
+                    ? `${activeMomentum.label} dibuka ${formatDateLong(activeMomentum.start)}. Daftar awal, kuota lebih aman — potongan ${formatDPLabel(activeMomentum.dp)} untuk yang bergerak duluan.`
+                    : "Ikuti media sosial UNPAS untuk informasi pendaftaran gelombang selanjutnya."}
                 </p>
               </div>
 
-              {/* Comparison gelombang */}
+              {/* Comparison gelombang — auto dari momentums array */}
               <div className="mb-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                <div className="rounded-xl border border-white/10 px-3 py-3 text-center"
-                  style={{ background: "rgba(255,255,255,0.07)" }}>
-                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-300">Pra-SNBP</div>
-                  <div className="text-2xl font-black text-white md:text-2xl">−Rp 2jt</div>
-                  <div className="mt-2 text-[10px] font-semibold text-slate-400">5 Januari – 25 Maret 2026</div>
-                </div>
-                <div className="rounded-xl border border-teal-400/30 px-3 py-3 text-center"
-                  style={{ background: "rgba(20,184,166,0.07)" }}>
-                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-teal-400">Pasca-SNBP</div>
-                  <div className="text-2xl font-black text-teal-300 md:text-2xl">−Rp 1,5jt</div>
-                  <div className="mt-2 inline-block rounded-sm bg-teal-400/15 px-2 py-0.5 text-[9px] font-bold text-teal-400">SEKARANG (31 Maret – 30 April 2026)</div>
-                </div>
-                <div className="rounded-xl border border-white/10 px-3 py-3 text-center"
-                  style={{ background: "rgba(255,255,255,0.07)" }}>
-                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-300">Pasca-SNBT</div>
-                  <div className="text-2xl font-black text-white md:text-2xl">−Rp 1jt</div>
-                  <div className="mt-2 text-[10px] font-semibold text-slate-400">Mei 2026</div>
-                </div>
+                {GELOMBANG_PMDK[0].momentums.map((m, idx) => {
+                  const today = new Date();
+                  const mStart = new Date(m.start + "T00:00:00+07:00");
+                  const mEnd = new Date(m.end + "T23:59:59+07:00");
+                  const isPast = today > mEnd;
+                  const isActive = today >= mStart && today <= mEnd;
+                  const isNextUpcoming = momentumState.mode === "upcoming" && activeMomentum === m;
+                  const isHighlighted = isActive || isNextUpcoming;
+                  const rangeText = `${formatDateShort(m.start)} – ${formatDateShort(m.end)} ${new Date(m.end + "T00:00:00+07:00").getFullYear()}`;
+                  const badgeLabel = isPast ? "SELESAI" : isActive ? "SEKARANG" : "SEGERA";
+                  return (
+                    <div key={idx}
+                      className={`rounded-xl border px-3 py-3 text-center ${isPast ? "border-white/10 opacity-50" : isHighlighted ? (isActive ? "border-teal-400/30" : "border-yellow-400/30") : "border-white/10"}`}
+                      style={{ background: isPast ? "rgba(255,255,255,0.04)" : isHighlighted ? (isActive ? "rgba(20,184,166,0.07)" : "rgba(234,179,8,0.07)") : "rgba(255,255,255,0.07)" }}>
+                      <div className={`mb-1.5 text-[11px] font-bold uppercase tracking-wider ${isPast ? "text-slate-400" : isHighlighted ? (isActive ? "text-teal-400" : "text-yellow-400") : "text-slate-300"}`}>
+                        {m.label}
+                      </div>
+                      <div className={`text-2xl font-black md:text-2xl ${isPast ? "text-slate-400" : isHighlighted ? (isActive ? "text-teal-300" : "text-yellow-300") : "text-white"}`}>
+                        {formatDPShort(m.dp)}
+                      </div>
+                      {(isPast || isHighlighted) ? (
+                        <div className={`mt-2 inline-block rounded-sm px-2 py-0.5 text-[9px] font-bold ${isPast ? "bg-white/10 text-slate-500" : isActive ? "bg-teal-400/15 text-teal-400" : "bg-yellow-400/15 text-yellow-400"}`}>
+                          {badgeLabel} ({rangeText})
+                        </div>
+                      ) : (
+                        <div className="mt-2 text-[10px] font-semibold text-slate-400">{rangeText}</div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               {/* CTA Buttons */}
