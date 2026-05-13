@@ -239,6 +239,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
                       window.fbq("trackCustom", eventName, {
                         jalur: j.nameButton,
                         page: "pmb.unpas.ac.id",
+                        currency: "IDR",
                       });
                     }
                   }}
@@ -320,6 +321,7 @@ const PMBLanding = () => {
       fbq("trackCustom", "ScanSpanduk", {
         lokasi: urlParams.get("utm_content"),
         campaign: urlParams.get("utm_campaign"),
+        currency: "IDR",
       });
     }
   }, []);
@@ -1831,7 +1833,8 @@ const PMBLanding = () => {
                   if (window.fbq) {
                     window.fbq('trackCustom', 'ClickRisetKampus', {
                       button_name: "Riset Kampus Bandung",
-                      location: "hero_section"
+                      location: "hero_section",
+                      currency: "IDR",
                     });
                   }
                 }}
