@@ -59,7 +59,17 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
         </div>
         <div className="flex items-center justify-between gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
           <div className="flex items-center gap-2">
-            {j.status === "closing" ? (
+            {j.status === 'closed' ? (
+              <>
+                <div className="w-2 h-2 rounded-full bg-red-500" />
+                <span className="text-[13px] font-semibold text-red-500">{j.statusText}</span>
+              </>
+            ) : j.status === 'soon' ? (
+              <>
+                <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_0_3px_rgba(59,130,246,0.15)]" />
+                <span className="text-[13px] font-semibold text-blue-600">{j.statusText}</span>
+              </>
+            ) : j.status === 'closing' ? (
               <>
                 <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]" />
                 <span className="text-[13px] font-semibold text-amber-600">{j.statusText}</span>
@@ -75,7 +85,10 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
         </div>
         <div className="flex items-center flex-wrap gap-2 mb-3">
           <span className="text-[12.5px] text-slate-500 font-medium">{j.period}</span>
-          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${dl.cls}`}>{dl.text}</span>
+          {j.status === 'soon'
+            ? <span className="text-[11px] font-bold px-2 py-0.5 rounded-md text-blue-600 bg-blue-50">Buka {new Date(j.startDate + 'T00:00:00+07:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+            : <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${dl.cls}`}>{dl.text}</span>
+          }
         </div>
         <button
           onClick={toggle}
@@ -218,34 +231,34 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
               <div className="mb-3">
                 <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
                   <div className="w-6 h-6 rounded-full bg-[#6B5B51] flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">5</div>
-                  <span className="text-[14px] font-bold text-slate-900">Siap daftar?</span>
+                  <span className="text-[14px] font-bold text-slate-900">
+                    {j.status === 'closed' ? 'Pendaftaran sudah ditutup' : j.status === 'soon' ? 'Pendaftaran belum dibuka' : 'Siap daftar?'}
+                  </span>
                 </div>
-                <a
-                  href={j.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#6B5B51] to-[#8a7060] hover:from-[#5a4c43] hover:to-[#6B5B51] text-white rounded-xl py-3.5 text-sm font-extrabold transition-all duration-200 hover:-translate-y-0.5 shadow-md mb-2"
-                  onClick={() => {
-                    const eventName = `daftar_${j.nameButton.toLowerCase().replace(/\s+/g, "_")}_web_pmb_unpas`;
-                    // GTM
-                    window.dataLayer = window.dataLayer || [];
-                    window.dataLayer.push({
-                      event: eventName,
-                      jalur: j.nameButton,
-                      page: "pmb.unpas.ac.id",
-                    });
-                    // Meta Pixel
-                    if (window.fbq) {
-                      window.fbq("trackCustom", eventName, {
-                        jalur: j.nameButton,
-                        page: "pmb.unpas.ac.id",
-                        currency: "IDR",
-                      });
-                    }
-                  }}
-                >
-                  Daftar {j.nameButton} Sekarang →
-                </a>
+                {j.status === 'closed' ? (
+                  <div className="flex items-center justify-center gap-2 w-full bg-slate-200 text-slate-400 rounded-xl py-3.5 text-sm font-extrabold mb-2 cursor-not-allowed">
+                    Pendaftaran Ditutup
+                  </div>
+                ) : j.status === 'soon' ? (
+                  <div className="flex items-center justify-center gap-2 w-full bg-blue-50 border-2 border-blue-200 text-blue-500 rounded-xl py-3.5 text-sm font-extrabold mb-2">
+                    Dibuka {new Date(j.startDate + 'T00:00:00+07:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  </div>
+                ) : (
+                  <a
+                    href={j.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#6B5B51] to-[#8a7060] hover:from-[#5a4c43] hover:to-[#6B5B51] text-white rounded-xl py-3.5 text-sm font-extrabold transition-all duration-200 hover:-translate-y-0.5 shadow-md mb-2"
+                    onClick={() => {
+                      const eventName = `daftar_${j.nameButton.toLowerCase().replace(/\s+/g, "_")}_web_pmb_unpas`;
+                      window.dataLayer = window.dataLayer || [];
+                      window.dataLayer.push({ event: eventName, jalur: j.nameButton, page: "pmb.unpas.ac.id" });
+                      if (window.fbq) window.fbq("trackCustom", eventName, { jalur: j.nameButton, page: "pmb.unpas.ac.id", currency: "IDR" });
+                    }}
+                  >
+                    Daftar {j.nameButton} Sekarang →
+                  </a>
+                )}
                 <div className="flex flex-col sm:flex-row gap-2">
                   <a
                     href="https://wa.me/62811960193"
@@ -407,6 +420,14 @@ const PMBLanding = () => {
         },
       ],
     },
+    {
+      gel: 2,
+      start: "2026-06-07",
+      end: "2026-08-14",
+      period: "7 Jun 2026 – 14 Agt 2026",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/303",
+      momentums: [],
+    },
   ];
 
   //CONFIG GELOMBANG FK
@@ -551,67 +572,47 @@ const PMBLanding = () => {
     },
   ];
 
-  //FUNCTION AMBIL GELOMBANG AKTIF PMDK
-  const getActivePMDK = () => {
-    const today = new Date();
-
-    return GELOMBANG_PMDK.find(g => {
-      const start = new Date(g.start);
-      const end = new Date(g.end);
-      return today >= start && today <= end;
-    }) || GELOMBANG_PMDK[0];
+  const wibDate = (dateStr, endOfDay) => {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return endOfDay
+      ? new Date(Date.UTC(y, m - 1, d, 16, 59, 59))    // 23:59:59 WIB = 16:59:59 UTC
+      : new Date(Date.UTC(y, m - 1, d - 1, 17, 0, 0)); // 00:00:00 WIB = 17:00:00 UTC hari sebelumnya
   };
+
+  // Ambil gelombang aktif, atau berikutnya jika di gap, atau terakhir jika semua tutup
+  const getSmartActive = (list) => {
+    const today = new Date();
+    const active = list.find(g => today >= wibDate(g.start, false) && today <= wibDate(g.end, true));
+    if (active) return active;
+    const next = list.find(g => today < wibDate(g.start, false));
+    return next || list[list.length - 1];
+  };
+
+  const getActivePMDK = () => getSmartActive(GELOMBANG_PMDK);
+  const getActiveUSM = () => getSmartActive(GELOMBANG_USM);
+  const getActiveGelombang = () => getSmartActive(GELOMBANG_FK);
 
   const formatRupiah = (val) => {
     if (!val) return "—";
     return `−Rp ${val.toLocaleString("id-ID")}`;
   };
 
-  //FUNCTION AMBIL GELOMBANG AKTIF USM
-  const getActiveUSM = () => {
-    const today = new Date();
-
-    return GELOMBANG_USM.find(g => {
-      const start = new Date(g.start);
-      const end = new Date(g.end);
-      return today >= start && today <= end;
-    }) || GELOMBANG_USM[0];
-  };
-
   // GET MOMENTUM AKTIF
   const getActiveMomentum = (momentums) => {
     const today = new Date();
-
-    return momentums.find(m => {
-      const start = new Date(m.start);
-      const end = new Date(m.end);
-      return today >= start && today <= end;
-    }) || null;
+    return momentums.find(m => today >= wibDate(m.start, false) && today <= wibDate(m.end, true)) || null;
   };
 
-  //FUNCTION AMBIL GELOMBANG AKTIF
-  const getActiveGelombang = () => {
+  // 4 state: closed | soon | closing | open
+  const getStatusInfo = (startDate, endDate) => {
     const today = new Date();
+    const diffStart = (wibDate(startDate, false) - today) / (1000 * 60 * 60 * 24);
+    const diffEnd   = (wibDate(endDate, true)   - today) / (1000 * 60 * 60 * 24);
 
-    return GELOMBANG_FK.find(g => {
-      const start = new Date(g.start);
-      const end = new Date(g.end);
-      return today >= start && today <= end;
-    }) || GELOMBANG_FK[GELOMBANG_FK.length - 1]; // fallback terakhir
-  };
-
-  //FUNCTION STATUS (biar “Segera Ditutup” otomatis)
-  const getStatusInfo = (endDate) => {
-    const today = new Date();
-    const end = new Date(endDate);
-
-    const diff = (end - today) / (1000 * 60 * 60 * 24);
-
-    if (diff <= 3) {
-      return { status: "closing", text: "Segera Ditutup" };
-    }
-
-    return { status: "open", text: "Sedang Dibuka" };
+    if (diffEnd < 0)   return { status: 'closed',  text: 'Sudah Ditutup' };
+    if (diffStart > 0) return { status: 'soon',    text: `Dibuka ${Math.ceil(diffStart)} hari lagi` };
+    if (diffEnd <= 3)  return { status: 'closing', text: 'Segera Ditutup' };
+    return               { status: 'open',    text: 'Sedang Dibuka' };
   };
 
   // GENERATE DATA SESUAI FORMAT PMDK
@@ -619,7 +620,7 @@ const PMBLanding = () => {
     const g = getActivePMDK();
     const m = getActiveMomentum(g.momentums);
 
-    const { status, text } = getStatusInfo(g.end);
+    const { status, text } = getStatusInfo(g.start, g.end);
 
     const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
 
@@ -649,6 +650,7 @@ const PMBLanding = () => {
       gel: `Gelombang ${g.gel}`,
 
       period: g.period,
+      startDate: g.start,
       deadline: g.end,
 
       link: g.link,
@@ -714,7 +716,7 @@ const PMBLanding = () => {
   // GENERATE DATA SESUAI FORMAT KEDOKTERAN
   const createFKUSMActive = () => {
     const g = getActiveGelombang();
-    const { status, text } = getStatusInfo(g.end);
+    const { status, text } = getStatusInfo(g.start, g.end);
 
     return {
       id: "fk_usm",
@@ -742,6 +744,7 @@ const PMBLanding = () => {
       gel: `Gelombang ${g.gel}`,
 
       period: g.period,
+      startDate: g.start,
       deadline: g.end,
 
       link: g.link,
@@ -803,7 +806,7 @@ const PMBLanding = () => {
     const g = getActiveUSM();
     const m = getActiveMomentum(g.momentums);
 
-    const { status, text } = getStatusInfo(g.end);
+    const { status, text } = getStatusInfo(g.start, g.end);
 
     const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
 
@@ -833,6 +836,7 @@ const PMBLanding = () => {
       gel: `Gelombang ${g.gel}`,
 
       period: g.period,
+      startDate: g.start,
       deadline: g.end,
 
       link: g.link,
@@ -1971,6 +1975,162 @@ const PMBLanding = () => {
         </motion.section>
 
 
+        {/* SECTION: TIMELINE PENDAFTARAN */}
+        {/* {(() => {
+          const TL_START = new Date('2026-01-01').getTime();
+          const TL_TOTAL = 273 * 86400000;
+          const pct = (d) => Math.max(0, Math.min(100, (new Date(d).getTime() - TL_START) / TL_TOTAL * 100));
+          const now = new Date();
+          const todayISO = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+          const todayPct = pct(todayISO);
+          const todayInRange = todayPct > 0 && todayPct < 100;
+
+          const MONTHS = [
+            { label: 'Jan', p: pct('2026-01-01') }, { label: 'Feb', p: pct('2026-02-01') },
+            { label: 'Mar', p: pct('2026-03-01') }, { label: 'Apr', p: pct('2026-04-01') },
+            { label: 'Mei', p: pct('2026-05-01') }, { label: 'Jun', p: pct('2026-06-01') },
+            { label: 'Jul', p: pct('2026-07-01') }, { label: 'Agt', p: pct('2026-08-01') },
+            { label: 'Sep', p: pct('2026-09-01') },
+          ];
+
+          const ROWS = [
+            {
+              id: 'pmdk', label: 'PMDK', sub: 'Nilai Rapor', dot: '#FBBF24',
+              subRows: [[
+                { gel: 'Gel. 1', s: '2026-01-05', e: '2026-06-04', hex: '#FBBF24', period: '5 Jan – 4 Jun' },
+                { gel: 'Gel. 2', s: '2026-06-07', e: '2026-08-14', hex: '#F59E0B', period: '7 Jun – 14 Agt' },
+              ]],
+            },
+            {
+              id: 'usm', label: 'USM Sarjana', sub: 'Tes Masuk', dot: '#3B82F6',
+              subRows: [[
+                { gel: 'Gel. 1', s: '2026-01-05', e: '2026-04-10', hex: '#60A5FA', period: '5 Jan – 10 Apr' },
+                { gel: 'Gel. 2', s: '2026-04-14', e: '2026-07-03', hex: '#3B82F6', period: '14 Apr – 3 Jul' },
+                { gel: 'Gel. 3', s: '2026-07-07', e: '2026-08-07', hex: '#2563EB', period: '7 Jul – 7 Agt' },
+              ]],
+            },
+            {
+              id: 'fk', label: 'Kedokteran', sub: 'FK UNPAS', dot: '#005005',
+              subRows: [
+                [{ gel: 'Gel. 1', s: '2026-01-05', e: '2026-03-24', hex: '#005005', period: '5 Jan – 24 Mar' }],
+                [{ gel: 'Gel. 2', s: '2026-02-25', e: '2026-05-19', hex: '#005005', period: '25 Feb – 19 Mei' }],
+                [{ gel: 'Gel. 3', s: '2026-05-20', e: '2026-06-17', hex: '#005005', period: '20 Mei – 17 Jun' }],
+              ],
+            },
+            {
+              id: 'rpl', label: 'RPL', sub: 'Perolehan & Transfer', dot: '#14B8A6',
+              subRows: [[
+                { gel: 'Perolehan & Transfer', s: '2026-01-05', e: '2026-09-30', hex: '#14B8A6', period: '5 Jan – 30 Sep' },
+              ]],
+            },
+          ];
+
+          return (
+            <motion.section
+              className="mt-16"
+              id="timeline-pendaftaran"
+              variants={sectionContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: '-100px' }}
+            >
+              <motion.div variants={sectionItem} className="space-y-2 text-center mb-8">
+                <h2 className="text-xl sm:text-2xl font-bold">Timeline Pendaftaran PMB UNPAS</h2>
+              </motion.div>
+
+              <motion.div variants={sectionItem} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6">
+                <div className="overflow-x-auto">
+                  <div style={{ minWidth: '600px' }}>
+
+                    <div className="flex mb-3">
+                      <div className="w-32 flex-shrink-0" />
+                      <div className="flex-1 relative h-8">
+                        {MONTHS.map((m) => (
+                          <span
+                            key={m.label}
+                            className="absolute bottom-0 text-[11px] font-semibold text-slate-400 -translate-x-1/2 select-none"
+                            style={{ left: m.p + '%' }}
+                          >{m.label}</span>
+                        ))}
+                        {todayInRange && (
+                          <div className="absolute top-0 -translate-x-1/2 z-10" style={{ left: todayPct + '%' }}>
+                            <span className="inline-block bg-red-500 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
+                              Hari ini
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      {ROWS.map((row) => (
+                        <div key={row.id} className="flex items-start">
+                          <div className="w-32 flex-shrink-0 pr-3 text-right pt-1">
+                            <div className="text-[12px] font-bold text-slate-800 leading-tight">{row.label}</div>
+                            <div className="text-[10px] text-slate-400 leading-tight">{row.sub}</div>
+                          </div>
+                          <div className="flex-1 flex flex-col gap-1">
+                            {row.subRows.map((bars, si) => (
+                              <div key={si} className="relative h-10 rounded bg-slate-50">
+                                {MONTHS.map((m) => (
+                                  <div key={m.label} className="absolute top-0 bottom-0 border-l border-slate-200" style={{ left: m.p + '%' }} />
+                                ))}
+                                {todayInRange && (
+                                  <div className="absolute top-0 bottom-0 z-10" style={{ left: todayPct + '%', borderLeft: '2px dashed #F87171' }} />
+                                )}
+                                {bars.map((bar, bi) => {
+                                  const l = pct(bar.s);
+                                  const w = pct(bar.e) - pct(bar.s);
+                                  const isNarrow = w < 14;
+                                  const [pStart, pEnd] = bar.period.split(' – ');
+                                  return (
+                                    <div
+                                      key={bi}
+                                      className="absolute top-0.5 bottom-0.5 rounded flex flex-col justify-center overflow-hidden z-20 px-1.5"
+                                      style={{ left: l + '%', width: w + '%', backgroundColor: bar.hex }}
+                                      title={bar.gel + ': ' + bar.period}
+                                    >
+                                      <span className="text-[9px] font-bold text-white leading-none truncate select-none whitespace-nowrap">{bar.gel}</span>
+                                      <span className="hidden sm:block text-[8px] text-white/90 leading-none truncate select-none whitespace-nowrap mt-0.5">{bar.period}</span>
+                                      {isNarrow ? (
+                                        <>
+                                          <span className="sm:hidden text-[7.5px] text-white/90 leading-none truncate select-none whitespace-nowrap mt-0.5">{pStart} {'–'}</span>
+                                          <span className="sm:hidden text-[7.5px] text-white/90 leading-none truncate select-none whitespace-nowrap">{pEnd}</span>
+                                        </>
+                                      ) : (
+                                        <span className="sm:hidden text-[8px] text-white/90 leading-none truncate select-none whitespace-nowrap mt-0.5">{bar.period}</span>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-5 pt-4 border-t border-slate-100">
+                  {ROWS.map((row) => (
+                    <div key={row.id} className="flex items-center gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: row.dot }} />
+                      <span className="text-[11px] font-semibold text-slate-600">{row.label}</span>
+                    </div>
+                  ))}
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2.5 h-0.5 flex-shrink-0 border-t-2 border-dashed border-red-400" />
+                    <span className="text-[11px] font-semibold text-slate-600">Hari ini</span>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.section>
+          );
+        })()} */}
+
+
         {/* SECTION: PANDUAN PENDAFTARAN version 2 */}
         <motion.section
           className="mt-16"
@@ -2124,7 +2284,8 @@ const PMBLanding = () => {
           <ProdiExplorer />
         </motion.section>
 
-        {/* SECTION: CTA GELOMBANG PRA-SNBP */}
+        {/* SECTION: CTA GELOMBANG — disembunyikan saat semua momentum selesai */}
+        {momentumState.mode !== "ended" && (
         <motion.section className="mt-16 px-4" variants={sectionItem} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
           <div className="relative overflow-hidden rounded-2xl"
             style={{ background: "linear-gradient(150deg, #2e2320 0%, #3F3631 45%, #4a3c37 100%)" }}>
@@ -2165,30 +2326,32 @@ const PMBLanding = () => {
                 Setelah 25 Maret, potongan turun jadi Rp 1,5 juta — dan kuota semakin sedikit.
               </p> */}
 
-              {/* Countdown */}
-              <div className="mb-6 flex justify-center gap-3">
-                {[
-                  { val: urgencyTimeLeft.days, lbl: "Hari" },
-                  { val: urgencyTimeLeft.hours, lbl: "Jam" },
-                  { val: urgencyTimeLeft.minutes, lbl: "Menit" },
-                  { val: urgencyTimeLeft.seconds, lbl: "Detik" },
-                ].map(({ val, lbl }, i, arr) => (
-                  <React.Fragment key={lbl}>
-                    <div className="text-center">
-                      <div className="flex min-w-[52px] items-center justify-center rounded-xl border border-white/10 bg-white/6 py-2"
-                        style={{ background: "rgba(255,255,255,0.06)" }}>
-                        <span className="text-2xl font-black leading-none text-white md:text-3xl">
-                          {String(val).padStart(2, "0")}
-                        </span>
+              {/* Countdown — hanya tampil saat ada target */}
+              {momentumState.mode !== "ended" && (
+                <div className="mb-6 flex justify-center gap-3">
+                  {[
+                    { val: urgencyTimeLeft.days, lbl: "Hari" },
+                    { val: urgencyTimeLeft.hours, lbl: "Jam" },
+                    { val: urgencyTimeLeft.minutes, lbl: "Menit" },
+                    { val: urgencyTimeLeft.seconds, lbl: "Detik" },
+                  ].map(({ val, lbl }, i, arr) => (
+                    <React.Fragment key={lbl}>
+                      <div className="text-center">
+                        <div className="flex min-w-[52px] items-center justify-center rounded-xl border border-white/10 bg-white/6 py-2"
+                          style={{ background: "rgba(255,255,255,0.06)" }}>
+                          <span className="text-2xl font-black leading-none text-white md:text-3xl">
+                            {String(val).padStart(2, "0")}
+                          </span>
+                        </div>
+                        <div className="mt-1.5 text-[9px] font-bold uppercase tracking-wider text-slate-500">{lbl}</div>
                       </div>
-                      <div className="mt-1.5 text-[9px] font-bold uppercase tracking-wider text-slate-500">{lbl}</div>
-                    </div>
-                    {i < arr.length - 1 && (
-                      <div className="flex items-center pb-5 text-xl font-bold text-white/20">:</div>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
+                      {i < arr.length - 1 && (
+                        <div className="flex items-center pb-5 text-xl font-bold text-white/20">:</div>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              )}
 
               {/* Warning */}
               <div className="mb-5 flex items-center gap-3 rounded-lg border border-red-500/20 bg-red-500/8 px-4 py-3"
@@ -2203,39 +2366,41 @@ const PMBLanding = () => {
                 </p>
               </div>
 
-              {/* Comparison gelombang — auto dari momentums array */}
-              <div className="mb-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                {GELOMBANG_PMDK[0].momentums.map((m, idx) => {
-                  const today = new Date();
-                  const mStart = new Date(m.start + "T00:00:00+07:00");
-                  const mEnd = new Date(m.end + "T23:59:59+07:00");
-                  const isPast = today > mEnd;
-                  const isActive = today >= mStart && today <= mEnd;
-                  const isNextUpcoming = momentumState.mode === "upcoming" && activeMomentum === m;
-                  const isHighlighted = isActive || isNextUpcoming;
-                  const rangeText = `${formatDateShort(m.start)} – ${formatDateShort(m.end)} ${new Date(m.end + "T00:00:00+07:00").getFullYear()}`;
-                  const badgeLabel = isPast ? "SELESAI" : isActive ? "SEKARANG" : "SEGERA";
-                  return (
-                    <div key={idx}
-                      className={`rounded-xl border px-3 py-3 text-center ${isPast ? "border-white/10 opacity-50" : isHighlighted ? (isActive ? "border-teal-400/30" : "border-yellow-400/30") : "border-white/10"}`}
-                      style={{ background: isPast ? "rgba(255,255,255,0.04)" : isHighlighted ? (isActive ? "rgba(20,184,166,0.07)" : "rgba(234,179,8,0.07)") : "rgba(255,255,255,0.07)" }}>
-                      <div className={`mb-1.5 text-[11px] font-bold uppercase tracking-wider ${isPast ? "text-slate-400" : isHighlighted ? (isActive ? "text-teal-400" : "text-yellow-400") : "text-slate-300"}`}>
-                        {m.label}
-                      </div>
-                      <div className={`text-2xl font-black md:text-2xl ${isPast ? "text-slate-400" : isHighlighted ? (isActive ? "text-teal-300" : "text-yellow-300") : "text-white"}`}>
-                        {formatDPShort(m.dp)}
-                      </div>
-                      {(isPast || isHighlighted) ? (
-                        <div className={`mt-2 inline-block rounded-sm px-2 py-0.5 text-[9px] font-bold ${isPast ? "bg-white/10 text-slate-500" : isActive ? "bg-teal-400/15 text-teal-400" : "bg-yellow-400/15 text-yellow-400"}`}>
-                          {badgeLabel} ({rangeText})
+              {/* Comparison gelombang — hanya saat masih ada momentum aktif/upcoming */}
+              {momentumState.mode !== "ended" && (
+                <div className="mb-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  {GELOMBANG_PMDK[0].momentums.map((m, idx) => {
+                    const today = new Date();
+                    const mStart = new Date(m.start + "T00:00:00+07:00");
+                    const mEnd = new Date(m.end + "T23:59:59+07:00");
+                    const isPast = today > mEnd;
+                    const isActive = today >= mStart && today <= mEnd;
+                    const isNextUpcoming = momentumState.mode === "upcoming" && activeMomentum === m;
+                    const isHighlighted = isActive || isNextUpcoming;
+                    const rangeText = `${formatDateShort(m.start)} – ${formatDateShort(m.end)} ${new Date(m.end + "T00:00:00+07:00").getFullYear()}`;
+                    const badgeLabel = isPast ? "SELESAI" : isActive ? "SEKARANG" : "SEGERA";
+                    return (
+                      <div key={idx}
+                        className={`rounded-xl border px-3 py-3 text-center ${isPast ? "border-white/10 opacity-50" : isHighlighted ? (isActive ? "border-teal-400/30" : "border-yellow-400/30") : "border-white/10"}`}
+                        style={{ background: isPast ? "rgba(255,255,255,0.04)" : isHighlighted ? (isActive ? "rgba(20,184,166,0.07)" : "rgba(234,179,8,0.07)") : "rgba(255,255,255,0.07)" }}>
+                        <div className={`mb-1.5 text-[11px] font-bold uppercase tracking-wider ${isPast ? "text-slate-400" : isHighlighted ? (isActive ? "text-teal-400" : "text-yellow-400") : "text-slate-300"}`}>
+                          {m.label}
                         </div>
-                      ) : (
-                        <div className="mt-2 text-[10px] font-semibold text-slate-400">{rangeText}</div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                        <div className={`text-2xl font-black md:text-2xl ${isPast ? "text-slate-400" : isHighlighted ? (isActive ? "text-teal-300" : "text-yellow-300") : "text-white"}`}>
+                          {formatDPShort(m.dp)}
+                        </div>
+                        {(isPast || isHighlighted) ? (
+                          <div className={`mt-2 inline-block rounded-sm px-2 py-0.5 text-[9px] font-bold ${isPast ? "bg-white/10 text-slate-500" : isActive ? "bg-teal-400/15 text-teal-400" : "bg-yellow-400/15 text-yellow-400"}`}>
+                            {badgeLabel} ({rangeText})
+                          </div>
+                        ) : (
+                          <div className="mt-2 text-[10px] font-semibold text-slate-400">{rangeText}</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* CTA Buttons */}
               <div className="flex flex-col gap-3">
@@ -2246,7 +2411,7 @@ const PMBLanding = () => {
                   className="flex w-full items-center justify-center gap-2 rounded-xl bg-yellow-400 px-6 py-4 text-sm font-extrabold text-[#2e2320] shadow-lg transition hover:bg-yellow-300"
                   style={{ boxShadow: "0 4px 20px rgba(234,179,8,0.3)" }}
                 >
-                  Daftar Sekarang &amp; Amankan Potongan →
+                  {momentumState.mode === "ended" ? "Lihat Jalur Pendaftaran →" : "Daftar Sekarang & Amankan Potongan →"}
                 </a>
                 <a
                   href="https://pmb.unpas.ac.id/quiz"
@@ -2271,6 +2436,7 @@ const PMBLanding = () => {
             </div>
           </div>
         </motion.section>
+        )}
 
         <motion.section>
           {/* Panduan PDF (Modern Horizontal Slider + Arrow) */}
