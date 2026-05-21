@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
-  ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, UploadCloud, CheckCircle2, Rocket, IdCard, SquarePen, LaptopMinimalCheck
+  ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, FileBadge, Rocket, IdCard, SquarePen, LaptopMinimalCheck
 } from "lucide-react";
 import ScrollToTop from "react-scroll-to-top";
 import { motion, AnimatePresence } from "framer-motion";
@@ -822,7 +822,7 @@ const PMBLanding = () => {
       // visibleUntil: kartu ini disembunyikan mulai tanggal ini (digantikan Sesi 2)
       visibleUntil: "2026-06-15",
 
-      icon: UploadCloud,
+      icon: FileBadge,
       iconBg: "bg-teal-100 text-teal-700",
 
       badge: "USM · Nilai UTBK",
@@ -916,7 +916,7 @@ const PMBLanding = () => {
       // visibleFrom: kartu ini hanya ditampilkan mulai tanggal ini
       visibleFrom: "2026-06-15",
 
-      icon: CheckCircle2,
+      icon: FileBadge,
       iconBg: "bg-indigo-100 text-indigo-700",
 
       badge: "USM · Nilai UTBK",
