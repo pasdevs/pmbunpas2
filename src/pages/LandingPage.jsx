@@ -2918,7 +2918,7 @@ const PMBLanding = () => {
               {/* Kolom kiri — banner (hanya tampil di desktop) */}
               <div className="hidden md:block md:w-[42%] overflow-hidden flex-shrink-0">
                 <img
-                  src={`${import.meta.env.BASE_URL}banner/banner1_resize.png`}
+                  src={`${import.meta.env.BASE_URL}banner/banner1.webp`}
                   alt="USM Nilai UTBK Sesi 1 – Universitas Pasundan"
                   className="w-full h-full object-cover object-top"
                 />
