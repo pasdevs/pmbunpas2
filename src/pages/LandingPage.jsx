@@ -155,9 +155,8 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
                 </div>
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-3 text-center">
-                    <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-1">Biaya Pendaftaran</div>
+                    <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-1">Formulir Pendaftaran</div>
                     <div className="text-2xl font-black text-slate-800">{j.costForm}</div>
-                    <div className="text-[10.5px] text-slate-400 font-medium mt-1">{j.costFormNote}</div>
                   </div>
                   <div className="bg-green-50 border-2 border-green-100 rounded-xl p-3 text-center">
                     <div className="text-[11px] font-bold uppercase tracking-wide text-green-600 mb-1">Potensi Hemat</div>
@@ -327,6 +326,11 @@ const PMBLanding = () => {
     return () => clearTimeout(t);
   }, []);
 
+  useEffect(() => {
+    const t = setTimeout(() => setShowPromoPopup(true), 2500);
+    return () => clearTimeout(t);
+  }, []);
+
   // UTM tracking — deteksi scan QR / spanduk
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -379,6 +383,7 @@ const PMBLanding = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [jalurProfile, setJalurProfile] = useState("maba");
   const [openJalurId, setOpenJalurId] = useState(null);
+  const [showPromoPopup, setShowPromoPopup] = useState(false);
 
   const MONTHS_ID = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
   const _today = new Date();
@@ -801,6 +806,187 @@ const PMBLanding = () => {
     };
   };
 
+  // GENERATE DATA USM NILAI UTBK — SESI 1 (Upload 2–14 Juni 2026)
+  const createUSMUTBKSesi1 = () => {
+    const { status, text } = getStatusInfo("2026-05-25", "2026-06-14");
+    const gelUsm2 = GELOMBANG_USM[1];
+    const m = getActiveMomentum(gelUsm2.momentums);
+    const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
+    const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
+
+    return {
+      id: "usm_utbk_s1",
+      group: "maba",
+      subgroup: "utbk",
+
+      // visibleUntil: kartu ini disembunyikan mulai tanggal ini (digantikan Sesi 2)
+      visibleUntil: "2026-06-15",
+
+      icon: UploadCloud,
+      iconBg: "bg-teal-100 text-teal-700",
+
+      badge: "USM · Nilai UTBK",
+      badgeColor: "bg-teal-50 text-teal-700",
+
+      name: "USM Nilai UTBK – Sesi 1",
+      nameButton: "UTBK Sesi 1",
+
+      popular: false,
+
+      value: "Punya sertifikat UTBK? Upload dan seleksi selesai dalam 1 hari kerja — tanpa tes tulis.",
+
+      tags: ["📤 Upload Sertifikat UTBK", "⚡ Hasil 1 Hari Kerja"],
+
+      status,
+      statusText: text,
+
+      gel: "USM Gel. 2 · Sesi 1",
+
+      period: "25 Mei 2026 – 14 Juni 2026",
+      startDate: "2026-05-25",
+      deadline: "2026-06-14",
+
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/288",
+
+      momentumLabel: m?.label || null,
+
+      elig: [
+        "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
+        "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 (sertifikat 2026 dapat diunduh mulai 2 Juni)",
+        "Skor minimum: F. Teknik ≥ 400 · FISIP/FEB/Hukum ≥ 375 · FKIP/FISS ≥ 350",
+        "Tidak sedang terdaftar aktif di perguruan tinggi lain",
+        "Program Studi Kedokteran tidak tersedia di jalur ini",
+      ],
+
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 350rb" },
+        { ic: "📤", lb: "Upload Sertifikat UTBK (2–14 Juni)" },
+        { ic: "⏳", lb: "Verifikasi Skor Panitia (1 hari kerja)" },
+        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+      ],
+
+      costForm: "Rp 350.000",
+      costFormNote: "Satu kali bayar, berlaku semua prodi",
+
+      costSave: m && total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
+      costSaveNote: m ? `${m.label} • ${m.kuota}` : "Tidak ada momentum aktif saat ini",
+
+      benefits: m ? [
+        { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
+        { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
+      ] : [],
+
+      benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
+      benefitNote: "⚠️ Prodi dengan uji keterampilan (DKV, Fotografi & Film, Seni Musik) tetap wajib mengikuti audisi/portofolio meski skor UTBK memenuhi minimum. Hubungi admisi untuk jadwal uji keterampilan.",
+
+      timeline: [
+        { date: "25 Mei 2026", label: "Pendaftaran portal dibuka", state: tls("2026-05-25") },
+        { date: "2 Juni 2026", label: "Sertifikat UTBK dapat diunduh — mulai upload", state: tls("2026-06-02") },
+        ...(m ? [
+          {
+            date: todayLabel,
+            label: `Momentum ${m.label} masih berlangsung`,
+            state: "active",
+            now: true,
+          },
+          {
+            date: m.end,
+            label: `Deadline ${m.label} — insentif DP berakhir`,
+            state: "upcoming",
+          },
+        ] : []),
+        { date: "14 Juni 2026", label: "Batas akhir upload Sesi 1", state: "upcoming" },
+      ],
+    };
+  };
+
+  // GENERATE DATA USM NILAI UTBK — SESI 2 (Dibuka 15 Juni, Upload 16–28 Juni 2026)
+  const createUSMUTBKSesi2 = () => {
+    const { status, text } = getStatusInfo("2026-06-15", "2026-06-28");
+    const gelUsm2 = GELOMBANG_USM[1];
+    const m = getActiveMomentum(gelUsm2.momentums);
+    const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
+    const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
+
+    return {
+      id: "usm_utbk_s2",
+      group: "maba",
+      subgroup: "utbk",
+
+      // visibleFrom: kartu ini hanya ditampilkan mulai tanggal ini
+      visibleFrom: "2026-06-15",
+
+      icon: CheckCircle2,
+      iconBg: "bg-indigo-100 text-indigo-700",
+
+      badge: "USM · Nilai UTBK",
+      badgeColor: "bg-indigo-50 text-indigo-700",
+
+      name: "USM Nilai UTBK – Sesi 2",
+      nameButton: "UTBK Sesi 2",
+
+      popular: false,
+
+      value: "Sesi 1 sudah ditutup? Masih ada Sesi 2. Mekanisme sama — upload sertifikat UTBK, hasil 1 hari kerja.",
+
+      tags: ["📤 Upload Sertifikat UTBK", "📅 Upload 16–28 Juni"],
+
+      status,
+      statusText: text,
+
+      gel: "USM Gel. 2 · Sesi 2",
+
+      period: "15 Juni 2026 – 28 Juni 2026",
+      startDate: "2026-06-15",
+      deadline: "2026-06-28",
+
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/288",
+
+      momentumLabel: m?.label || null,
+
+      elig: [
+        "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
+        "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 — upload dilakukan 16–28 Juni 2026",
+        "Skor minimum: F. Teknik ≥ 400 · FISIP/FEB/Hukum ≥ 375 · FKIP/FISS ≥ 350",
+        "Tidak sedang terdaftar aktif di perguruan tinggi lain",
+        "Program Studi Kedokteran tidak tersedia di jalur ini",
+      ],
+
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
+        { ic: "📤", lb: "Upload Sertifikat UTBK (16–28 Juni)" },
+        { ic: "⏳", lb: "Verifikasi Skor Panitia (1 hari kerja)" },
+        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+      ],
+
+      costForm: "Rp 400.000",
+      costFormNote: "Satu kali bayar, berlaku semua prodi",
+
+      costSave: m && total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
+      costSaveNote: m ? `${m.label} • ${m.kuota}` : "Tidak ada momentum aktif saat ini",
+
+      benefits: m ? [
+        { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
+        { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
+      ] : [],
+
+      benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
+      benefitNote: "⚠️ Prodi dengan uji keterampilan (DKV, Fotografi & Film, Seni Musik) tetap wajib mengikuti audisi/portofolio meski skor UTBK memenuhi minimum. Hubungi admisi untuk jadwal uji keterampilan.",
+
+      timeline: [
+        { date: "14 Juni 2026", label: "Sesi 1 ditutup", state: tls("2026-06-14") },
+        { date: "15 Juni 2026", label: "Sesi 2 dibuka — pendaftaran & upload mulai", state: tls("2026-06-15") },
+        {
+          date: todayLabel,
+          label: "Sesi 2 sedang berlangsung",
+          state: "active",
+          now: true,
+        },
+        { date: "28 Juni 2026", label: "Batas akhir upload Sesi 2", state: "upcoming" },
+      ],
+    };
+  };
+
   //GENERATE DATA SESUAI FORMAT USM
   const createUSMActive = () => {
     const g = getActiveUSM();
@@ -1054,6 +1240,8 @@ const PMBLanding = () => {
     //FK GELOMBANG 2
     createPMDKActive(),
     createUSMActive(),
+    createUSMUTBKSesi1(),
+    createUSMUTBKSesi2(),
     createFKUSMActive(),
 
 
@@ -1462,7 +1650,7 @@ const PMBLanding = () => {
             <a href="/" className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-slate-300">
                 <img
-                  src="/logo_unpas.png"
+                  src={`${import.meta.env.BASE_URL}logo_unpas.png`}
                   loading="lazy"
                   decoding="async"
                   alt="Logo Unpas"
@@ -1712,7 +1900,7 @@ const PMBLanding = () => {
       <section className="relative w-full overflow-hidden pt-[148px] md:pt-[160px] min-h-[90vh] md:min-h-screen flex items-start md:items-center justify-center">
         <div className="absolute inset-0">
           <img
-            src="/mahasiswa.webp"
+            src={`${import.meta.env.BASE_URL}mahasiswa.webp`}
             alt="Mahasiswa UNPAS"
             loading="lazy"
             decoding="async"
@@ -1880,7 +2068,7 @@ const PMBLanding = () => {
           {/* Self-select toggle */}
           <motion.div variants={sectionItem} className="flex flex-col sm:flex-row gap-3 mb-8">
             {[
-              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "3 jalur" },
+              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "5 jalur" },
               { key: "transfer", ic: "🔄", title: "RPL (Rekognisi Pembelajaran Lampau)", sub: "Lulusan Diploma (D1–D3), SMA/SMK yang memiliki pengalaman kerja.", count: "2 jalur" },
             ].map((opt) => (
               <button
@@ -1921,6 +2109,27 @@ const PMBLanding = () => {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4 items-start">
                   {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama").map(j => (
+                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                  ))}
+                </div>
+              </div>
+              {/* USM via Nilai UTBK */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-slate-700">USM via Nilai UTBK</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                  <span className="text-[9px] font-bold bg-teal-50 text-teal-700 px-2 py-1 rounded-full uppercase tracking-wide">Bagian dari USM Gel. 2</span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 items-start">
+                  {JALUR_DATA.filter(j => {
+                    if (j.group !== "maba" || j.subgroup !== "utbk") return false;
+                    const today = new Date();
+                    // Sembunyikan sebelum visibleFrom tiba
+                    if (j.visibleFrom && today < wibDate(j.visibleFrom, false)) return false;
+                    // Sembunyikan mulai visibleUntil (digantikan kartu berikutnya)
+                    if (j.visibleUntil && today >= wibDate(j.visibleUntil, false)) return false;
+                    return true;
+                  }).map(j => (
                     <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
                   ))}
                 </div>
@@ -2209,7 +2418,7 @@ const PMBLanding = () => {
                         Ikuti Proses Seleksi (Sesuai Jalur yang Dipilih)
                       </h3>
                       <img
-                        src="/img/4_proses_seleksi_cbt.webp"
+                        src={`${import.meta.env.BASE_URL}img/4_proses_seleksi_cbt.webp`}
                         alt="proses seleksi"
                         className="w-lg rounded-xl border border-slate-200 shadow-sm mx-auto"
                       />
@@ -2674,6 +2883,107 @@ const PMBLanding = () => {
 
         </div>
       </div>
+
+      {/* ── PROMO POPUP: USM Nilai UTBK Sesi 1 ── */}
+      <AnimatePresence>
+        {showPromoPopup && (
+          <motion.div
+            key="promo-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[9998] flex items-center justify-center p-4"
+            style={{ background: "rgba(8,33,61,0.72)", backdropFilter: "blur(4px)" }}
+            onClick={() => setShowPromoPopup(false)}
+          >
+            <motion.div
+              key="promo-modal"
+              initial={{ opacity: 0, scale: 0.93, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.93, y: 24 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto flex flex-col md:flex-row md:overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Tombol tutup */}
+              <button
+                onClick={() => setShowPromoPopup(false)}
+                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/80 hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 transition font-bold text-lg leading-none cursor-pointer shadow-sm"
+                aria-label="Tutup"
+              >
+                ✕
+              </button>
+
+              {/* Kolom kiri — banner (hanya tampil di desktop) */}
+              <div className="hidden md:block md:w-[42%] overflow-hidden flex-shrink-0">
+                <img
+                  src={`${import.meta.env.BASE_URL}banner/banner1_resize.png`}
+                  alt="USM Nilai UTBK Sesi 1 – Universitas Pasundan"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+
+              {/* Kolom kanan — info & CTA */}
+              <div className="flex-1 p-4 md:p-6 flex flex-col justify-center">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-1.5 bg-teal-50 border border-teal-100 text-teal-700 text-[10px] md:text-[11px] font-bold px-3 py-1 rounded-full mb-2 md:mb-3 self-start uppercase tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse inline-block" />
+                  USM Gelombang 2 · Nilai UTBK
+                </div>
+
+                <h2 className="text-lg md:text-xl font-extrabold text-slate-900 leading-tight mb-1">
+                  Punya Sertifikat UTBK?
+                </h2>
+                <p className="text-sm font-semibold text-teal-600 mb-3">
+                  Daftar Sekarang — Tanpa Tes Tulis
+                </p>
+
+                {/* Key points */}
+                <div className="flex flex-col gap-1.5 mb-3">
+                  {[
+                    { ic: "📤", text: "Upload sertifikat UTBK 2024, 2025, atau 2026" },
+                    { ic: "⚡", text: "Hasil seleksi keluar dalam 1 hari kerja" },
+                    { ic: "📅", text: "Upload Sesi 1: 2 – 14 Juni 2026" },
+                  ].map((p, i) => (
+                    <div key={i} className="flex items-center gap-2.5 bg-slate-50 rounded-lg px-3 py-2">
+                      <span className="text-sm flex-shrink-0">{p.ic}</span>
+                      <span className="text-[12px] font-medium text-slate-700 leading-snug">{p.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Biaya + deadline chip */}
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
+                  <span className="text-[11px] md:text-[12px] font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
+                    💳 Formulir Rp 350.000
+                  </span>
+                  <span className="text-[11px] md:text-[12px] font-bold bg-red-50 text-red-600 px-3 py-1 rounded-full">
+                    ⏳ Tutup 14 Juni 2026
+                  </span>
+                </div>
+
+                {/* CTA */}
+                <a
+                  href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/305"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setShowPromoPopup(false)}
+                  className="w-full flex items-center justify-center gap-2 bg-[#6B5B51] hover:bg-[#5a4c43] text-white font-bold text-sm py-3 rounded-xl transition mb-2"
+                >
+                  Lihat Detail & Daftar Sekarang →
+                </a>
+                <button
+                  onClick={() => setShowPromoPopup(false)}
+                  className="w-full text-[11px] text-slate-400 hover:text-slate-600 transition py-1 cursor-pointer"
+                >
+                  Tutup — lihat jalur lainnya
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <ScrollToTop
         smooth

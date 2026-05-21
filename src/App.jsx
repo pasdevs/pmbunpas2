@@ -5,7 +5,7 @@ import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" exact element={<LandingPage />} />
         <Route path="*" element={<Navigate replace to="/" />} />

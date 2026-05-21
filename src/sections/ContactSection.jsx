@@ -13,7 +13,7 @@ export default function ContactSection() {
               {/* Logo UNPAS + DIKTISAINTEK (gambar sudah jadi satu) */}
               <div className="mb-6">
                 <img
-                  src="/icon_web_unpas_footer_berdampak_v1-scaled.webp"
+                  src={`${import.meta.env.BASE_URL}icon_web_unpas_footer_berdampak_v1-scaled.webp`}
                   alt="Logo UNPAS & DIKTISAINTEK BERDAMPAK"
                   className="h-20 w-auto object-contain"
                 />
