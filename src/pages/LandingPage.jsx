@@ -2109,19 +2109,6 @@ const PMBLanding = () => {
           {/* Cards per group */}
           {jalurProfile === "maba" && (
             <div className="space-y-6">
-              {/* Jalur Utama */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">Jalur Utama</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full uppercase tracking-wide">Paling Banyak Dipilih</span>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama").map(j => (
-                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                  ))}
-                </div>
-              </div>
               {/* USM via Nilai UTBK */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
@@ -2139,6 +2126,19 @@ const PMBLanding = () => {
                     if (j.visibleUntil && today >= wibDate(j.visibleUntil, false)) return false;
                     return true;
                   }).map(j => (
+                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                  ))}
+                </div>
+              </div>
+              {/* Jalur Utama */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-slate-700">Jalur Utama</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                  <span className="text-[9px] font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full uppercase tracking-wide">Paling Banyak Dipilih</span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 items-start">
+                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama").map(j => (
                     <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
                   ))}
                 </div>
