@@ -699,19 +699,19 @@ const PMBLanding = () => {
         ...(m ? [
           {
             date: todayLabel,
-            label: `${m.label} masih berlaku (${m.kuota})`,
+            label: `Momentum ${m.label} sedang berlangsung`,
             state: "active",
             now: true,
           },
           {
             date: m.end,
-            label: `Deadline ${m.label}`,
+            label: `Deadline Momentum ${m.label}`,
             state: "upcoming",
           },
         ] : []),
         {
           date: g.end,
-          label: "Pendaftaran PMDK ditutup",
+          label: "Batas akhir pendaftaran jalur PMDK",
           state: "upcoming",
         },
       ],
@@ -825,11 +825,11 @@ const PMBLanding = () => {
       icon: FileBadge,
       iconBg: "bg-teal-100 text-teal-700",
 
-      badge: "USM · Nilai UTBK",
+      badge: "Upload Sertifikat UTBK",
       badgeColor: "bg-teal-50 text-teal-700",
 
-      name: "USM Nilai UTBK – Sesi 1",
-      nameButton: "UTBK Sesi 1",
+      name: "USM via Nilai UTBK – Sesi 1",
+      nameButton: "USM Nilai UTBK Sesi 1",
 
       popular: false,
 
@@ -846,7 +846,7 @@ const PMBLanding = () => {
       startDate: "2026-05-25",
       deadline: "2026-06-14",
 
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/288",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/305",
 
       momentumLabel: m?.label || null,
 
@@ -880,22 +880,22 @@ const PMBLanding = () => {
       benefitNote: "⚠️ Prodi dengan uji keterampilan (DKV, Fotografi & Film, Seni Musik) tetap wajib mengikuti audisi/portofolio meski skor UTBK memenuhi minimum. Hubungi admisi untuk jadwal uji keterampilan.",
 
       timeline: [
-        { date: "25 Mei 2026", label: "Pendaftaran portal dibuka", state: tls("2026-05-25") },
+        { date: "25 Mei 2026", label: "Pendaftaran dibuka", state: tls("2026-05-25") },
         { date: "2 Juni 2026", label: "Sertifikat UTBK dapat diunduh — mulai upload", state: tls("2026-06-02") },
         ...(m ? [
           {
             date: todayLabel,
-            label: `Momentum ${m.label} masih berlangsung`,
+            label: `Momentum ${m.label} sedang berlangsung`,
             state: "active",
             now: true,
           },
           {
             date: m.end,
-            label: `Deadline ${m.label} — insentif DP berakhir`,
+            label: `Deadline Momentum ${m.label}`,
             state: "upcoming",
           },
         ] : []),
-        { date: "14 Juni 2026", label: "Batas akhir upload Sesi 1", state: "upcoming" },
+        { date: "14 Juni 2026", label: "Batas akhir pendaftaran jalur USM via Nilai UTBK Sesi 1", state: "upcoming" },
       ],
     };
   };
@@ -919,17 +919,17 @@ const PMBLanding = () => {
       icon: FileBadge,
       iconBg: "bg-indigo-100 text-indigo-700",
 
-      badge: "USM · Nilai UTBK",
+      badge: "Upload Sertifikat UTBK",
       badgeColor: "bg-indigo-50 text-indigo-700",
 
-      name: "USM Nilai UTBK – Sesi 2",
-      nameButton: "UTBK Sesi 2",
+      name: "USM via Nilai UTBK – Sesi 2",
+      nameButton: "USM Nilai UTBK Sesi 2",
 
       popular: false,
 
       value: "Sesi 1 sudah ditutup? Masih ada Sesi 2. Mekanisme sama — upload sertifikat UTBK, hasil 1 hari kerja.",
 
-      tags: ["📤 Upload Sertifikat UTBK", "📅 Upload 16–28 Juni"],
+      tags: ["📤 Upload Sertifikat UTBK", "📅 Upload 15–28 Juni"],
 
       status,
       statusText: text,
@@ -940,13 +940,13 @@ const PMBLanding = () => {
       startDate: "2026-06-15",
       deadline: "2026-06-28",
 
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/288",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/306",
 
       momentumLabel: m?.label || null,
 
       elig: [
         "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
-        "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 — upload dilakukan 16–28 Juni 2026",
+        "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 — upload dilakukan 15–28 Juni 2026",
         "Skor minimum: F. Teknik ≥ 400 · FISIP/FEB/Hukum ≥ 375 · FKIP/FISS ≥ 350",
         "Tidak sedang terdaftar aktif di perguruan tinggi lain",
         "Program Studi Kedokteran tidak tersedia di jalur ini",
@@ -954,7 +954,7 @@ const PMBLanding = () => {
 
       steps: [
         { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
-        { ic: "📤", lb: "Upload Sertifikat UTBK (16–28 Juni)" },
+        { ic: "📤", lb: "Upload Sertifikat UTBK (15–28 Juni)" },
         { ic: "⏳", lb: "Verifikasi Skor Panitia (1 hari kerja)" },
         { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
       ],
@@ -974,15 +974,15 @@ const PMBLanding = () => {
       benefitNote: "⚠️ Prodi dengan uji keterampilan (DKV, Fotografi & Film, Seni Musik) tetap wajib mengikuti audisi/portofolio meski skor UTBK memenuhi minimum. Hubungi admisi untuk jadwal uji keterampilan.",
 
       timeline: [
-        { date: "14 Juni 2026", label: "Sesi 1 ditutup", state: tls("2026-06-14") },
-        { date: "15 Juni 2026", label: "Sesi 2 dibuka — pendaftaran & upload mulai", state: tls("2026-06-15") },
+        { date: "14 Juni 2026", label: "Batas akhir pendaftaran jalur USM via Nilai UTBK Sesi 1", state: tls("2026-06-14") },
+        { date: "15 Juni 2026", label: "Pendaftaran dibuka", state: tls("2026-06-15") },
         {
           date: todayLabel,
           label: "Sesi 2 sedang berlangsung",
           state: "active",
           now: true,
         },
-        { date: "28 Juni 2026", label: "Batas akhir upload Sesi 2", state: "upcoming" },
+        { date: "28 Juni 2026", label: "Batas akhir pendaftaran jalur USM via Nilai UTBK Sesi 2", state: "upcoming" },
       ],
     };
   };
@@ -1066,19 +1066,19 @@ const PMBLanding = () => {
         ...(m ? [
           {
             date: todayLabel,
-            label: `${m.label} sedang berlangsung`,
+            label: `Momentum ${m.label} sedang berlangsung`,
             state: "active",
             now: true,
           },
           {
             date: m.end,
-            label: `Deadline ${m.label}`,
+            label: `Deadline Momentum ${m.label}`,
             state: "upcoming",
           },
         ] : []),
         {
           date: g.end,
-          label: `Pendaftaran USM Gelombang ${g.gel} ditutup`,
+          label: `Batas akhir pendaftaran jalur USM Gel. ${g.gel}`,
           state: "upcoming",
         },
       ],
@@ -1277,7 +1277,7 @@ const PMBLanding = () => {
       timeline: [
         { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
         { date: todayLabel, label: "Pendaftaran masih dibuka", state: "active", now: true },
-        { date: "30 September 2026", label: "Pendaftaran RPL Perolehan ditutup", state: "upcoming" },
+        { date: "30 September 2026", label: "Batas akhir pendaftaran jalur RPL Perolehan", state: "upcoming" },
       ],
     },
     {
@@ -1312,7 +1312,7 @@ const PMBLanding = () => {
       timeline: [
         { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
         { date: todayLabel, label: "Pendaftaran masih dibuka", state: "active", now: true },
-        { date: "30 September 2026", label: "Pendaftaran RPL Transfer ditutup", state: "upcoming" },
+        { date: "30 September 2026", label: "Batas akhir pendaftaran jalur RPL Transfer", state: "upcoming" },
       ],
     },
   ];
@@ -2600,7 +2600,7 @@ const PMBLanding = () => {
                         </div>
                         {(isPast || isHighlighted) ? (
                           <div className={`mt-2 inline-block rounded-sm px-2 py-0.5 text-[9px] font-bold ${isPast ? "bg-white/10 text-slate-500" : isActive ? "bg-teal-400/15 text-teal-400" : "bg-yellow-400/15 text-yellow-400"}`}>
-                            {badgeLabel} ({rangeText})
+                            {isActive ? rangeText : `${badgeLabel} (${rangeText})`}
                           </div>
                         ) : (
                           <div className="mt-2 text-[10px] font-semibold text-slate-400">{rangeText}</div>
