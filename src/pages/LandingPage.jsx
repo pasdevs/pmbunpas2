@@ -326,7 +326,16 @@ const PMBLanding = () => {
     return () => clearTimeout(t);
   }, []);
 
+  // null = tidak ada sesi aktif → popup tidak muncul
+  const popupVariant = (() => {
+    const now = new Date();
+    if (now <= new Date("2026-06-14T23:59:59+07:00")) return "sesi1";
+    if (now >= new Date("2026-06-15T00:00:00+07:00") && now <= new Date("2026-06-28T23:59:59+07:00")) return "sesi2";
+    return null;
+  })();
+
   useEffect(() => {
+    if (!popupVariant) return;
     const t = setTimeout(() => setShowPromoPopup(true), 2500);
     return () => clearTimeout(t);
   }, []);
@@ -2884,7 +2893,39 @@ const PMBLanding = () => {
         </div>
       </div>
 
-      {/* ── PROMO POPUP: USM Nilai UTBK Sesi 1 ── */}
+      {/* ── PROMO POPUP: USM via Nilai UTBK (otomatis Sesi 1 → Sesi 2 → hilang) ── */}
+      {(() => {
+        const popupContent = popupVariant === "sesi1" ? {
+          badge: "USM Gelombang 2 · via Nilai UTBK · Sesi 1",
+          title: "Punya Sertifikat UTBK?",
+          subtitle: "Daftar Sekarang — Tanpa Tes Tulis",
+          points: [
+            { ic: "📤", text: "Upload sertifikat UTBK 2024, 2025, atau 2026" },
+            { ic: "⚡", text: "Hasil seleksi keluar dalam 1 hari kerja" },
+            { ic: "📅", text: "Upload Sesi 1: 2 – 14 Juni 2026" },
+          ],
+          cost: "💳 Formulir Rp 350.000",
+          deadline: "⏳ Tutup 14 Juni 2026",
+          link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/305",
+          img: "banner/banner1.webp",
+          imgAlt: "USM Nilai UTBK Sesi 1 – Universitas Pasundan",
+        } : popupVariant === "sesi2" ? {
+          badge: "USM Gelombang 2 · via Nilai UTBK · Sesi 2",
+          title: "Masih Punya Sertifikat UTBK?",
+          subtitle: "Sesi 2 Dibuka — Tanpa Tes Tulis",
+          points: [
+            { ic: "📤", text: "Upload sertifikat UTBK 2024, 2025, atau 2026" },
+            { ic: "⚡", text: "Hasil seleksi keluar dalam 1 hari kerja" },
+            { ic: "📅", text: "Upload Sesi 2: 15 – 28 Juni 2026" },
+          ],
+          cost: "💳 Formulir Rp 400.000",
+          deadline: "⏳ Tutup 28 Juni 2026",
+          link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/306",
+          img: "banner/banner2_resize.png",
+          imgAlt: "USM Nilai UTBK Sesi 2 – Universitas Pasundan",
+        } : null;
+        if (!popupContent) return null;
+        return (
       <AnimatePresence>
         {showPromoPopup && (
           <motion.div
@@ -2918,8 +2959,8 @@ const PMBLanding = () => {
               {/* Kolom kiri — banner (hanya tampil di desktop) */}
               <div className="hidden md:block md:w-[42%] overflow-hidden flex-shrink-0">
                 <img
-                  src={`${import.meta.env.BASE_URL}banner/banner1.webp`}
-                  alt="USM Nilai UTBK Sesi 1 – Universitas Pasundan"
+                  src={`${import.meta.env.BASE_URL}${popupContent.img}`}
+                  alt={popupContent.imgAlt}
                   className="w-full h-full object-cover object-top"
                 />
               </div>
@@ -2927,25 +2968,21 @@ const PMBLanding = () => {
               {/* Kolom kanan — info & CTA */}
               <div className="flex-1 p-4 md:p-6 flex flex-col justify-center">
                 {/* Badge */}
-                <div className="inline-flex items-center gap-1.5 bg-teal-50 border border-teal-100 text-teal-700 text-[10px] md:text-[11px] font-bold px-3 py-1 rounded-full mb-2 md:mb-3 self-start uppercase tracking-wide">
+                <div className="inline-flex items-center gap-1.5 bg-teal-50 border border-teal-100 text-teal-700 text-[10px] md:text-[11px] font-bold px-3 py-1 rounded-full mb-2 md:mb-3 self-start tracking-wide">
                   <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse inline-block" />
-                  USM Gelombang 2 · Nilai UTBK
+                  {popupContent.badge}
                 </div>
 
                 <h2 className="text-lg md:text-xl font-extrabold text-slate-900 leading-tight mb-1">
-                  Punya Sertifikat UTBK?
+                  {popupContent.title}
                 </h2>
                 <p className="text-sm font-semibold text-teal-600 mb-3">
-                  Daftar Sekarang — Tanpa Tes Tulis
+                  {popupContent.subtitle}
                 </p>
 
                 {/* Key points */}
                 <div className="flex flex-col gap-1.5 mb-3">
-                  {[
-                    { ic: "📤", text: "Upload sertifikat UTBK 2024, 2025, atau 2026" },
-                    { ic: "⚡", text: "Hasil seleksi keluar dalam 1 hari kerja" },
-                    { ic: "📅", text: "Upload Sesi 1: 2 – 14 Juni 2026" },
-                  ].map((p, i) => (
+                  {popupContent.points.map((p, i) => (
                     <div key={i} className="flex items-center gap-2.5 bg-slate-50 rounded-lg px-3 py-2">
                       <span className="text-sm flex-shrink-0">{p.ic}</span>
                       <span className="text-[12px] font-medium text-slate-700 leading-snug">{p.text}</span>
@@ -2956,16 +2993,16 @@ const PMBLanding = () => {
                 {/* Biaya + deadline chip */}
                 <div className="flex items-center gap-2 mb-4 flex-wrap">
                   <span className="text-[11px] md:text-[12px] font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
-                    💳 Formulir Rp 350.000
+                    {popupContent.cost}
                   </span>
                   <span className="text-[11px] md:text-[12px] font-bold bg-red-50 text-red-600 px-3 py-1 rounded-full">
-                    ⏳ Tutup 14 Juni 2026
+                    {popupContent.deadline}
                   </span>
                 </div>
 
                 {/* CTA */}
                 <a
-                  href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/305"
+                  href={popupContent.link}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setShowPromoPopup(false)}
@@ -2984,6 +3021,8 @@ const PMBLanding = () => {
           </motion.div>
         )}
       </AnimatePresence>
+        );
+      })()}
 
       <ScrollToTop
         smooth
