@@ -2907,7 +2907,7 @@ const PMBLanding = () => {
           cost: "💳 Formulir Rp 350.000",
           deadline: "⏳ Tutup 14 Juni 2026",
           link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/305",
-          img: "banner/banner1.webp",
+          img: "banner/utbk1.webp",
           imgAlt: "USM Nilai UTBK Sesi 1 – Universitas Pasundan",
         } : popupVariant === "sesi2" ? {
           badge: "USM Gelombang 2 · via Nilai UTBK · Sesi 2",
@@ -2921,7 +2921,7 @@ const PMBLanding = () => {
           cost: "💳 Formulir Rp 400.000",
           deadline: "⏳ Tutup 28 Juni 2026",
           link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/306",
-          img: "banner/banner2_resize.png",
+          img: "banner/utbk2.webp",
           imgAlt: "USM Nilai UTBK Sesi 2 – Universitas Pasundan",
         } : null;
         if (!popupContent) return null;
