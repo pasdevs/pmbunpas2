@@ -1516,7 +1516,7 @@ const PMBLanding = () => {
   // const URGENCY_KUOTA_TOTAL = 200;
 
   // Update manual saat momentum aktif: berapa slot yang sudah terisi
-  const URGENCY_KUOTA_TERISI = 27;
+  const URGENCY_KUOTA_TERISI = 68;
 
   const getMomentumState = () => {
     const today = new Date();
