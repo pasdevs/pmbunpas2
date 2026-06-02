@@ -2349,6 +2349,205 @@ const PMBLanding = () => {
         })()} */}
 
 
+        {/* SECTION: LAYANAN TATAP MUKA */}
+        <motion.section
+          className="mt-16"
+          id="section-tatap"
+          variants={sectionItem}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <div className="rounded-2xl overflow-hidden" style={{ background: "#2c1f18" }}>
+            <div className="px-6 py-12 sm:px-10">
+
+              {/* Header */}
+              <div className="text-center mb-9">
+                <span
+                  className="inline-block text-[11px] font-bold uppercase tracking-widest mb-3 px-3 py-1 rounded-full"
+                  style={{ color: "#F59E0B", background: "rgba(245,158,11,0.12)" }}
+                >
+                  Layanan Tatap Muka
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight mb-3">
+                  Lebih Suka Datang Langsung?<br />Kita Siap.
+                </h2>
+                <p className="text-sm text-white/60 max-w-lg mx-auto leading-relaxed">
+                  Tidak perlu bingung urus sendiri. Tim admisi Unpas hadir setiap{" "}
+                  <strong className="text-white font-bold">Sabtu &amp; Minggu</strong> di 3 kampus —{" "}
+                  siap mendampingi kamu dari awal sampai selesai.
+                </p>
+              </div>
+
+              {/* Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+
+                {/* Card Utama — Tamansari */}
+                <div
+                  className="relative flex flex-col rounded-2xl p-6"
+                  style={{
+                    background: "rgba(255,255,255,0.04)",
+                    border: "2px solid #6B5B51",
+                    boxShadow: "0 0 0 1px #6B5B51",
+                  }}
+                >
+                  <span
+                    className="absolute -top-[13px] left-5 text-[10px] font-bold uppercase tracking-wider px-3 py-[3px] rounded-full text-white whitespace-nowrap"
+                    style={{ background: "#6B5B51" }}
+                  >
+                    Pusat Layanan PMB
+                  </span>
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-3.5 flex-shrink-0"
+                    style={{ background: "rgba(107,91,81,0.25)" }}
+                  >
+                    <svg className="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="#a08c83" strokeWidth="2">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                  </div>
+                  <div className="text-[17px] font-extrabold text-white mb-1">Tamansari (Rektorat)</div>
+                  <div className="text-[13px] text-white/40 mb-4 leading-snug">
+                    Jl. Tamansari No. 4–8<br />Bandung 40116
+                  </div>
+                  <div className="flex flex-col mb-[18px] flex-1">
+                    {[
+                      { l: "Sabtu",     v: "08.00 – 15.00 WIB",                    bold: false },
+                      { l: "Minggu",    v: "08.00 – 15.00 WIB",                    bold: false },
+                      { l: "Layanan",   v: "Daftar · Konsultasi · Upload Dokumen", bold: true  },
+                      { l: "Fasilitas", v: "Komputer & Pendamping Tersedia",        bold: true  },
+                    ].map((r, i, arr) => (
+                      <div
+                        key={i}
+                        className="flex justify-between items-start gap-2.5 text-[13px] py-2"
+                        style={{ borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}
+                      >
+                        <span className="text-white/40 flex-shrink-0">{r.l}</span>
+                        <span
+                          className={`text-right font-semibold ${r.bold ? "text-white font-bold" : ""}`}
+                          style={!r.bold ? { color: "#a08c83" } : {}}
+                        >
+                          {r.v}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href="https://share.google/8uT2b15CJfgVZ8Ble"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-[13px] font-bold text-white transition-opacity duration-200 hover:opacity-80 mt-auto"
+                    style={{ background: "#6B5B51" }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    Lihat di Google Maps
+                  </a>
+                </div>
+
+                {/* Card Setiabudi & Lengkong */}
+                {[
+                  {
+                    name: "Kampus Setiabudi",
+                    addr1: "Jl. Dr. Setiabudi No. 193",
+                    addr2: "Bandung",
+                    mapsUrl: "https://share.google/Wflaux3hKPhHpMXCV",
+                  },
+                  {
+                    name: "Kampus Lengkong",
+                    addr1: "Jl. Lengkong Besar No. 68",
+                    addr2: "Bandung 40251",
+                    mapsUrl: "https://share.google/2xtDKmkch4HQuJpzD",
+                  },
+                ].map((c) => (
+                  <div
+                    key={c.name}
+                    className="relative flex flex-col rounded-2xl p-6"
+                    style={{
+                      background: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.10)",
+                    }}
+                  >
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center mb-3.5 flex-shrink-0"
+                      style={{ background: "rgba(107,91,81,0.18)" }}
+                    >
+                      <svg className="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="#7a6a63" strokeWidth="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                      </svg>
+                    </div>
+                    <div className="text-[17px] font-extrabold text-white mb-1">{c.name}</div>
+                    <div className="text-[13px] text-white/40 mb-4 leading-snug">
+                      {c.addr1}<br />{c.addr2}
+                    </div>
+                    <div className="flex flex-col mb-[18px] flex-1">
+                      {[
+                        { l: "Sabtu",     v: "08.00 – 15.00 WIB",                    bold: false },
+                        { l: "Minggu",    v: "08.00 – 15.00 WIB",                    bold: false },
+                        { l: "Layanan",   v: "Daftar · Konsultasi · Upload Dokumen", bold: true  },
+                        { l: "Fasilitas", v: "Komputer & Pendamping Tersedia",        bold: true  },
+                      ].map((r, i, arr) => (
+                        <div
+                          key={i}
+                          className="flex justify-between items-start gap-2.5 text-[13px] py-2"
+                          style={{ borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}
+                        >
+                          <span className="text-white/40 flex-shrink-0">{r.l}</span>
+                          <span
+                            className={`text-right font-semibold ${r.bold ? "text-white font-bold" : ""}`}
+                            style={!r.bold ? { color: "#a08c83" } : {}}
+                          >
+                            {r.v}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <a
+                      href={c.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-[13px] font-bold transition-all duration-200 hover:bg-white/15 mt-auto"
+                      style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.65)" }}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                      Lihat di Google Maps
+                    </a>
+                  </div>
+                ))}
+              </div>
+
+              {/* Note bawah */}
+              <div
+                className="rounded-xl px-6 py-4 text-[13px] text-white/55 text-center leading-relaxed"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.09)",
+                }}
+              >
+                💡 <strong className="text-white">Tidak perlu janji temu.</strong> Datang langsung — staf admisi siap
+                mendampingi dari pengisian portal, upload berkas, hingga konfirmasi jalur &amp; insentif yang kamu dapat.
+                Butuh info sebelum datang?{" "}
+                <a
+                  href="https://wa.me/62811960193?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20PMB%20UNPAS"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold hover:underline cursor-pointer whitespace-nowrap"
+                  style={{ color: "#00B891" }}
+                >
+                  Chat dulu via WA →
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </motion.section>
+
         {/* SECTION: PANDUAN PENDAFTARAN version 2 */}
         <motion.section
           className="mt-16"
