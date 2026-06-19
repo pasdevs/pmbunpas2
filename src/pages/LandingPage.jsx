@@ -2954,24 +2954,20 @@ const PMBLanding = () => {
           </div>
         </motion.section>
 
-        {/* SECTION: Ketentuan Refund */}
+        {/* SECTION: Ketentuan Refund — LAMA (di-comment, uncomment untuk mengembalikan) */}
+        {/*
         <section className="mt-16" id="ketentuan-refund">
           <div className="space-y-3 text-center">
             <h2 className="text-xl sm:text-2xl font-bold">Ketentuan Pengembalian Biaya Registrasi Calon Mahasiswa baru UNPAS</h2>
           </div>
 
-          {/* BANNER: KETENTUAN REFUND */}
           <div className="mt-8 rounded-2xl border border-slate-200 bg-[#F3EFEC] p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]">
-
-            {/* Text Section */}
             <div className="w-full">
               <p className="mt-1 text-md text-black-800/80 font-bold">
                 Jangan khawatir! UNPAS memberi perlindungan pengembalian biaya untuk situasi tertentu.
                 <br />Unduh dan baca dokumen ketentuan resminya agar kamu mendaftar tanpa ragu.
               </p>
             </div>
-
-            {/* CTA Button – Full Width */}
             <div className="w-full mt-4">
               <a
                 href="https://pmb.unpas.ac.id/form_refund"
@@ -2981,7 +2977,6 @@ const PMBLanding = () => {
                 📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Universitas Pasundan 2026-2027
               </a>
             </div>
-
             <div className="w-full mt-4">
               <a
                 href="https://pmb.unpas.ac.id/form_refund_fk"
@@ -2991,7 +2986,111 @@ const PMBLanding = () => {
                 📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Kedokteran Universitas Pasundan 2026-2027
               </a>
             </div>
+          </div>
+        </section>
+        */}
 
+        {/* SECTION: Ketentuan Refund — REDESIGN v2 */}
+        <section className="mt-16" id="ketentuan-refund">
+
+          {/* Hero Banner + Download — ALL IN ONE CARD */}
+          <div className="relative rounded-3xl bg-gradient-to-br from-[#3d2e27] to-[#6B5B51] text-white shadow-xl overflow-hidden">
+            {/* Dekorasi blur */}
+            <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-1/2 w-56 h-56 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+
+            {/* Badge Terlindungi — pojok kanan atas card */}
+            <span className="absolute top-4 right-4 z-20 bg-green-400 text-green-900 text-[10px] font-extrabold px-2 py-1 rounded-lg shadow whitespace-nowrap">
+              🛡️ Terlindungi
+            </span>
+
+            <div className="relative z-10 flex flex-col sm:flex-row">
+
+              {/* Foto Portrait — hanya tampil di sm ke atas */}
+              <div className="hidden sm:block relative flex-shrink-0 sm:w-48 md:w-56">
+                <img
+                  src="banner/refund.webp"
+                  alt="Ketentuan Refund UNPAS"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+
+              {/* Konten — kanan */}
+              <div className="flex-1 flex flex-col justify-between gap-6 pt-12 px-7 pb-7 sm:p-8">
+
+                {/* Teks Header */}
+                <div>
+                  <span className="inline-block bg-white/15 backdrop-blur-sm text-white/90 text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
+                    Jaminan Pengembalian Biaya
+                  </span>
+                  <h2 className="text-xl sm:text-2xl font-extrabold leading-tight mb-3">
+                    Tenang,{" "}
+                    <span className="text-yellow-300">biaya registrasimu ada yang jaga</span>
+                  </h2>
+                  <p className="text-sm text-white/75 leading-relaxed">
+                    UNPAS memberi perlindungan pengembalian biaya registrasi calon mahasiswa baru untuk situasi tertentu.
+                    Download dokumen ketentuan resminya dan <strong className="text-white">daftar tanpa ragu!</strong>
+                  </p>
+                </div>
+
+                {/* Divider Download */}
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex items-center gap-3 w-full">
+                    <span className="hidden sm:block flex-1 border-t border-white/30" />
+                    <span className="text-[11px] font-bold text-yellow-300 bg-white/10 px-3 py-1.5 rounded-full text-center w-full sm:w-auto">
+                      Silakan download Dokumen Ketentuan Refund di bawah ini!
+                    </span>
+                    <span className="hidden sm:block flex-1 border-t border-white/30" />
+                  </div>
+                  {/* Animated arrow */}
+                  <motion.div
+                    animate={{ y: [0, 6, 0], opacity: [1, 0.3, 1] }}
+                    transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-yellow-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19" />
+                      <polyline points="19 12 12 19 5 12" />
+                    </svg>
+                  </motion.div>
+                </div>
+
+                {/* Download Panel */}
+                <div className="grid sm:grid-cols-2 gap-3">
+
+                  {/* Semua Prodi */}
+                  <div className="rounded-xl bg-white/10 border border-white/20 p-4">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-white mb-3 block">
+                      🏛️ Semua Prodi (Kecuali Kedokteran)
+                    </span>
+                    <a
+                      href="https://pmb.unpas.ac.id/form_refund"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 w-full bg-white text-[#6B5B51] text-xs font-bold px-4 py-2.5 rounded-lg hover:bg-[#F3EFEC] hover:underline active:scale-95 transition-all shadow-md"
+                    >
+                      📥 Download Dokumen Persetujuan Ketentuan Refund
+                    </a>
+                  </div>
+
+                  {/* Kedokteran */}
+                  <div className="rounded-xl bg-white/10 border border-white/20 p-4">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-white mb-3 block">
+                      🩺 Khusus Kedokteran
+                    </span>
+                    <a
+                      href="https://pmb.unpas.ac.id/form_refund_fk"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 w-full bg-white text-[#1a5c3f] text-xs font-bold px-4 py-2.5 rounded-lg hover:bg-[#e6f4ee] hover:underline active:scale-95 transition-all shadow-md"
+                    >
+                      📥 Download Dokumen Persetujuan Ketentuan Refund Kedokteran
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
           </div>
 
         </section>
