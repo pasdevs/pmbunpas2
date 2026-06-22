@@ -470,14 +470,14 @@ const PMBLanding = () => {
       biaya: "Rp 190 juta",
       link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/302"
     },
-    // {
-    //   gel: 4,
-    //   start: "2026-06-01",
-    //   end: "2026-06-30",
-    //   period: "1 Jun – 30 Jun 2026",
-    //   biaya: "Rp 202 juta",
-    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/302"
-    // },
+    {
+      gel: 4,
+      start: "2026-06-25",
+      end: "2026-08-08",
+      period: "25 Jun – 8 Agt 2026",
+      biaya: "Rp 202 juta",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/302",
+    },
   ];
 
   //CONFIG GELOMBANG USM
@@ -554,35 +554,9 @@ const PMBLanding = () => {
       gel: 3,
       start: "2026-07-07",
       end: "2026-08-07",
-      period: "7 Jul 2026 – 10 Agustus 2026",
+      period: "7 Jul 2026 – 7 Agustus 2026",
       link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/289",
-
-      momentums: [
-        {
-          label: "Pra-SNBP",
-          start: "2026-01-05",
-          end: "2026-03-25",
-          dp: 2000000,
-          dpp: 1000000,
-          kuota: "200 kuota",
-        },
-        {
-          label: "Pasca-SNBP",
-          start: "2026-03-31",
-          end: "2026-04-30",
-          dp: 1500000,
-          dpp: 1000000,
-          kuota: "100 kuota",
-        },
-        {
-          label: "Pasca-SNBT",
-          start: "2026-05-25",
-          end: "2026-06-04",
-          dp: 1000000,
-          dpp: 1000000,
-          kuota: "100 kuota",
-        },
-      ],
+      momentums: [],
     },
   ];
 
@@ -806,11 +780,11 @@ const PMBLanding = () => {
           label: `Deadline Gel.${g.gel} Kedokteran USM`,
           state: "upcoming",
         },
-        {
+        ...(g.gel < GELOMBANG_FK[GELOMBANG_FK.length - 1].gel ? [{
           date: "Gel. berikutnya",
           label: "Biaya naik di gelombang selanjutnya",
           state: "upcoming",
-        },
+        }] : []),
       ],
     };
   };
