@@ -465,8 +465,8 @@ const PMBLanding = () => {
     {
       gel: 3,
       start: "2026-05-20",
-      end: "2026-06-17",
-      period: "20 Mei – 17 Jun 2026",
+      end: "2026-06-24",
+      period: "20 Mei – 24 Jun 2026",
       biaya: "Rp 190 juta",
       link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/302"
     },
@@ -2232,7 +2232,7 @@ const PMBLanding = () => {
               subRows: [
                 [{ gel: 'Gel. 1', s: '2026-01-05', e: '2026-03-24', hex: '#005005', period: '5 Jan – 24 Mar' }],
                 [{ gel: 'Gel. 2', s: '2026-02-25', e: '2026-05-19', hex: '#005005', period: '25 Feb – 19 Mei' }],
-                [{ gel: 'Gel. 3', s: '2026-05-20', e: '2026-06-17', hex: '#005005', period: '20 Mei – 17 Jun' }],
+                [{ gel: 'Gel. 3', s: '2026-05-20', e: '2026-06-24', hex: '#005005', period: '20 Mei – 24 Jun' }],
               ],
             },
             {
