@@ -898,6 +898,8 @@ const PMBLanding = () => {
 
       // visibleFrom: kartu ini hanya ditampilkan mulai tanggal ini
       visibleFrom: "2026-06-15",
+      // visibleUntil: kartu ini disembunyikan mulai tanggal ini (konsisten dengan pola Sesi 1)
+      visibleUntil: "2026-06-29",
 
       icon: FileBadge,
       iconBg: "bg-indigo-100 text-indigo-700",
@@ -2083,27 +2085,31 @@ const PMBLanding = () => {
           {/* Cards per group */}
           {jalurProfile === "maba" && (
             <div className="space-y-6">
-              {/* USM via Nilai UTBK */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">USM via Nilai UTBK</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-teal-50 text-teal-700 px-2 py-1 rounded-full uppercase tracking-wide">Bagian dari USM Gel. 2</span>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => {
-                    if (j.group !== "maba" || j.subgroup !== "utbk") return false;
-                    const today = new Date();
-                    // Sembunyikan sebelum visibleFrom tiba
-                    if (j.visibleFrom && today < wibDate(j.visibleFrom, false)) return false;
-                    // Sembunyikan mulai visibleUntil (digantikan kartu berikutnya)
-                    if (j.visibleUntil && today >= wibDate(j.visibleUntil, false)) return false;
-                    return true;
-                  }).map(j => (
-                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                  ))}
-                </div>
-              </div>
+              {/* USM via Nilai UTBK — section hanya tampil jika ada kartu yang lolos filter */}
+              {(() => {
+                const today = new Date();
+                const utbkCards = JALUR_DATA.filter(j => {
+                  if (j.group !== "maba" || j.subgroup !== "utbk") return false;
+                  if (j.visibleFrom && today < wibDate(j.visibleFrom, false)) return false;
+                  if (j.visibleUntil && today >= wibDate(j.visibleUntil, false)) return false;
+                  return true;
+                });
+                if (utbkCards.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">USM via Nilai UTBK</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-teal-50 text-teal-700 px-2 py-1 rounded-full uppercase tracking-wide">Bagian dari USM Gel. 2</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {utbkCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
               {/* Jalur Utama */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
