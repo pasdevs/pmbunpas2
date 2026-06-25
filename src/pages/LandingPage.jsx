@@ -476,7 +476,7 @@ const PMBLanding = () => {
       end: "2026-08-08",
       period: "25 Jun – 8 Agt 2026",
       biaya: "Rp 202 juta",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/302",
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/309",
     },
   ];
 
