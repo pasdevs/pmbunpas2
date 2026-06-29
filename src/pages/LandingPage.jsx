@@ -1569,6 +1569,7 @@ const PMBLanding = () => {
   // }, []);
 
   useEffect(() => {
+    if (!URGENCY_DEADLINE) return;
     const timer = setInterval(() => {
       setUrgencyTimeLeft(calculateUrgencyTimeLeft());
     }, 1000);
