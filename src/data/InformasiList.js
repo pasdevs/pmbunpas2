@@ -13,16 +13,22 @@ const INFORMASI_LIST = [
   },
   {
     id: 3,
+    title: "Panduan Ujian Saringan Masuk (USM) CBT",
+    image: "/info/panduan_usm_cbt.webp",
+    link: "https://drive.google.com/file/d/1oIgihNjScPuKDhDmcLzt9B2Z6SsnC3Pt/view?usp=sharing",
+  },
+  {
+    id: 4,
     title: "Panduan Pendaftaran Jalur RPL",
     image: "/info/panduan_rpl.webp",
     link: "https://drive.google.com/file/d/1NGCGoXlo78_3ZCFE6sMUtzDieN9frNG7/view?usp=sharing",
   },
   {
-    id: 4,
+    id: 5,
     title: "Tata Cara Pembayaran Uang Kuliah Mahasiswa Aktif UNPAS",
     image: "/info/panduan_pembayaran_mahasiswa_aktif.webp",
     link: "https://drive.google.com/file/d/1MpfFIM-thZN63tHXeAffuMXkTSphZh0b/view?usp=sharing",
-  }
+  },
 ];
 
 export default INFORMASI_LIST;

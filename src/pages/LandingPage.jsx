@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
-  ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, FileText, Repeat, UserPlus, Shuffle, FileBadge, Rocket, IdCard, SquarePen, LaptopMinimalCheck
+  ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, Repeat, FileBadge
 } from "lucide-react";
 import ScrollToTop from "react-scroll-to-top";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,8 +19,6 @@ import { FloatingWhatsApp } from '@digicroz/react-floating-whatsapp'
 import TestimoniSection from "../sections/TestimoniSection";
 import FaqSection from "../sections/FaqSection";
 import ContactSection from "../sections/ContactSection";
-import { link } from "framer-motion/client";
-
 
 /* ─── JalurCard ─────────────────────────────────────────────────── */
 function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
@@ -552,9 +550,9 @@ const PMBLanding = () => {
     },
     {
       gel: 3,
-      start: "2026-07-07",
+      start: "2026-07-04",
       end: "2026-08-07",
-      period: "7 Jul 2026 – 7 Agustus 2026",
+      period: "4 Jul 2026 – 7 Agustus 2026",
       link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/289",
       momentums: [],
     },
@@ -1072,157 +1070,6 @@ const PMBLanding = () => {
 
 
   const JALUR_DATA = [
-    // {
-    //   id: "pmdk", group: "maba", subgroup: "utama",
-    //   icon: Award, iconBg: "bg-yellow-100 text-yellow-700",
-    //   badge: "PMDK", badgeColor: "bg-green-50 text-green-700",
-    //   name: "Penelusuran Minat & Kemampuan",
-    //   nameButton: "PMDK",
-    //   popular: true,
-    //   value: "Tanpa ujian — seleksi berbasis nilai rapor semester 1–5. Cocok jika nilai akademik bagus.",
-    //   tags: ["📋 Nilai Rapor", "✅ Tanpa Tes"],
-    //   status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
-    //   period: "5 Jan 2026 – 4 Jun 2026", deadline: "2026-06-04",
-    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/286",
-    //   elig: [
-    //     "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
-    //     "Memiliki rapor semester 1 sampai 5 yang lengkap",
-    //     "Tidak sedang terdaftar aktif di perguruan tinggi lain",
-    //     "Bersedia mengikuti ketentuan akademik UNPAS",
-    //   ],
-    //   steps: [
-    //     { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-    //     { ic: "📊", lb: "Input Nilai Rapor Sem 1–5" },
-    //     { ic: "📤", lb: "Upload Berkas & Verifikasi" },
-    //     { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-    //   ],
-    //   costForm: "Rp 300.000", costFormNote: "Satu kali bayar, berlaku semua prodi",
-    //   costSave: "s.d. Rp 3 jt", costSaveNote: "Daftar sekarang di Gelombang Pra-SNBP",
-    //   benefits: [
-    //     { label: "⚡ Potongan DP Momentum", val: "−Rp 2.000.000" },
-    //     { label: "💎 Insentif Pelunasan DPP", val: "−Rp 1.000.000" },
-    //   ],
-    //   benefitTotal: "Rp 3.000.000",
-    //   benefitNote: "",
-    //   timeline: [
-    //     { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
-    //     { date: todayLabel, label: "Gelombang Pra-SNBP masih berlaku (kuota 200)", state: "active", now: true },
-    //     { date: "25 Maret 2026", label: "Deadline Pra-SNBP – potongan turun jadi Rp 1,5jt", state: "upcoming" },
-    //     { date: "4 Juni 2026", label: "Pendaftaran PMDK ditutup", state: "upcoming" },
-    //   ],
-    // },
-    // {
-    //   id: "usm", group: "maba", subgroup: "utama",
-    //   icon: Laptop, iconBg: "bg-blue-100 text-blue-700",
-    //   badge: "USM Sarjana", badgeColor: "bg-blue-50 text-blue-700",
-    //   name: "Ujian Saringan Masuk",
-    //   nameButton: "USM",
-    //   popular: false,
-    //   value: "Ujian seleksi — terbuka untuk semua lulusan SMA/SMK/MA sederajat. Cocok jika ingin ikut tes masuk.",
-    //   tags: ["📝 Tes Tertulis", "📋 Seleksi Berkas"],
-    //   status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
-    //   period: "5 Jan 2026 – 10 Apr 2026", deadline: "2026-04-10",
-    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/283",
-    //   elig: [
-    //     "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
-    //     "Siap mengikuti ujian tertulis seleksi masuk",
-    //     "Tidak sedang terdaftar aktif di perguruan tinggi lain",
-    //     "Bersedia mengikuti ketentuan akademik UNPAS",
-    //   ],
-    //   steps: [
-    //     { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-    //     { ic: "✏️", lb: "Ikut Ujian Tertulis" },
-    //     { ic: "📤", lb: "Upload Berkas & Verifikasi" },
-    //     { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-    //   ],
-    //   costForm: "Rp 300.000", costFormNote: "Satu kali bayar, termasuk biaya tes",
-    //   costSave: "s.d. Rp 3 jt", costSaveNote: "Jika daftar di momentum aktif",
-    //   benefits: [
-    //     { label: "⚡ Potongan DP Momentum", val: "−Rp 2.000.000" },
-    //     { label: "💎 Insentif Pelunasan DPP", val: "−Rp 1.000.000" },
-    //   ],
-    //   benefitTotal: "Rp 3.000.000",
-    //   benefitNote: "",
-    //   timeline: [
-    //     { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
-    //     { date: todayLabel, label: "Gelombang Pra-SNBP masih berlaku", state: "active", now: true },
-    //     { date: "25 Maret 2026", label: "Deadline Pra-SNBP – potongan turun jadi Rp 1,5jt", state: "upcoming" },
-    //     { date: "10 April 2026", label: "Pendaftaran USM Gelombang 1 ditutup", state: "upcoming" },
-    //   ],
-    // },
-    // {
-    //   id: "fk_usm", group: "maba", subgroup: "kedokteran",
-    //   icon: Stethoscope, iconBg: "bg-red-100 text-red-700",
-    //   badge: "Kedokteran", badgeColor: "bg-red-50 text-red-600",
-    //   name: "USM Kedokteran",
-    //   nameButton: "USM FK",
-    //   popular: false,
-    //   value: "Seleksi masuk Fakultas Kedokteran via ujian. 4 gelombang penerimaan, kuota terbatas per gelombang.",
-    //   tags: ["📝 Tes Tertulis", "🔬 Tes Kesehatan"],
-    //   status: "closing", statusText: "Segera Ditutup", gel: "Gelombang 1",
-    //   period: "5 Jan – 24 Mar 2026", deadline: "2026-03-24",
-    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/285",
-    //   elig: [
-    //     "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
-    //     "Siap mengikuti ujian tertulis dan tes kesehatan",
-    //     "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
-    //     "Bersedia membayar biaya sesuai gelombang yang dipilih",
-    //   ],
-    //   steps: [
-    //     { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-    //     { ic: "✏️", lb: "Ikut Ujian Tertulis" },
-    //     { ic: "🔬", lb: "Tes Kesehatan & Verifikasi" },
-    //     { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-    //   ],
-    //   costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
-    //   costSave: "—", costSaveNote: "Tidak ada potongan untuk Kedokteran",
-    //   benefits: [],
-    //   benefitTotal: "—",
-    //   benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP momentum maupun Insentif Pelunasan DPP. Biaya Gel.1 mulai Rp 165,15 juta (4 gelombang, semakin tinggi per gelombang).",
-    //   timeline: [
-    //     { date: "5 Januari 2026", label: "Pendaftaran Gel.1 dibuka", state: "done" },
-    //     { date: todayLabel, label: "Gelombang 1 segera ditutup!", state: "active", now: true },
-    //     { date: "24 Maret 2026", label: "Deadline Gel.1 Kedokteran USM", state: "upcoming" },
-    //     { date: "Gel.2 – Gel.4", label: "Biaya naik per gelombang (Gel.2: 177jt, Gel.3: 190jt, Gel.4: 202jt)", state: "upcoming" },
-    //   ],
-    // },
-    // {
-    //   id: "fk_pmdk", group: "maba", subgroup: "kedokteran",
-    //   icon: FileText, iconBg: "bg-purple-100 text-purple-700",
-    //   badge: "Kedokteran", badgeColor: "bg-red-50 text-red-600",
-    //   name: "PMDK Kedokteran",
-    //   nameButton: "PMDK FK",
-    //   popular: false,
-    //   value: "Seleksi Fakultas Kedokteran berbasis rapor. Tanpa ujian tulis — cocok jika nilai akademik IPA kuat.",
-    //   tags: ["📋 Nilai Rapor", "🔬 Tes Kesehatan"],
-    //   status: "closing", statusText: "Segera Ditutup", gel: "Gelombang 1",
-    //   period: "5 Jan – 24 Mar 2026", deadline: "2026-03-24",
-    //   link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/294",
-    //   elig: [
-    //     "Lulusan SMA / MA jurusan IPA dengan nilai akademik tinggi",
-    //     "Memiliki rapor semester 1–5 lengkap dengan nilai IPA unggul",
-    //     "Siap mengikuti tes kesehatan",
-    //     "Bersedia membayar biaya sesuai gelombang yang dipilih",
-    //   ],
-    //   steps: [
-    //     { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-    //     { ic: "📊", lb: "Verifikasi Nilai Rapor" },
-    //     { ic: "🔬", lb: "Tes Kesehatan & Seleksi" },
-    //     { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-    //   ],
-    //   costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
-    //   costSave: "—", costSaveNote: "Tidak ada potongan untuk Kedokteran",
-    //   benefits: [],
-    //   benefitTotal: "—",
-    //   benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP momentum maupun Insentif Pelunasan DPP.",
-    //   timeline: [
-    //     { date: "5 Januari 2026", label: "Pendaftaran Gel.1 dibuka", state: "done" },
-    //     { date: todayLabel, label: "Gelombang 1 segera ditutup!", state: "active", now: true },
-    //     { date: "24 Maret 2026", label: "Deadline Gel.1 PMDK Kedokteran", state: "upcoming" },
-    //   ],
-    // },
-
-    //FK GELOMBANG 2
     createPMDKActive(),
     createUSMActive(),
     createUSMUTBKSesi1(),
@@ -1467,30 +1314,6 @@ const PMBLanding = () => {
     },
   };
 
-  // const calculateTimeLeft = () => {
-  //   const target = new Date("2025-12-20T23:59:59+07:00").getTime();
-  //   const now = Date.now();
-  //   const diff = target - now;
-
-  //   if (diff <= 0) {
-  //     return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-  //   }
-
-  //   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  //   const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  //   const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  //   const seconds = Math.floor((diff / 1000) % 60);
-
-  //   return { days, hours, minutes, seconds };
-  // };
-
-  // const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  // Urgency bar countdown — Pra-SNBP deadline
-  // const URGENCY_DEADLINE = "2026-03-25T23:59:59+07:00";
-  // const URGENCY_KUOTA_TERISI = 196;
-  // const URGENCY_KUOTA_TOTAL = 200;
-
   // Update manual saat momentum aktif: berapa slot yang sudah terisi
   const URGENCY_KUOTA_TERISI = 93;
 
@@ -1559,14 +1382,6 @@ const PMBLanding = () => {
   };
 
   const [urgencyTimeLeft, setUrgencyTimeLeft] = useState(calculateUrgencyTimeLeft());
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setTimeLeft(calculateTimeLeft());
-  //   }, 1000);
-
-  //   return () => clearInterval(timer);
-  // }, []);
 
   useEffect(() => {
     if (!URGENCY_DEADLINE) return;
@@ -2174,162 +1989,6 @@ const PMBLanding = () => {
         </motion.section>
 
 
-        {/* SECTION: TIMELINE PENDAFTARAN */}
-        {/* {(() => {
-          const TL_START = new Date('2026-01-01').getTime();
-          const TL_TOTAL = 273 * 86400000;
-          const pct = (d) => Math.max(0, Math.min(100, (new Date(d).getTime() - TL_START) / TL_TOTAL * 100));
-          const now = new Date();
-          const todayISO = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
-          const todayPct = pct(todayISO);
-          const todayInRange = todayPct > 0 && todayPct < 100;
-
-          const MONTHS = [
-            { label: 'Jan', p: pct('2026-01-01') }, { label: 'Feb', p: pct('2026-02-01') },
-            { label: 'Mar', p: pct('2026-03-01') }, { label: 'Apr', p: pct('2026-04-01') },
-            { label: 'Mei', p: pct('2026-05-01') }, { label: 'Jun', p: pct('2026-06-01') },
-            { label: 'Jul', p: pct('2026-07-01') }, { label: 'Agt', p: pct('2026-08-01') },
-            { label: 'Sep', p: pct('2026-09-01') },
-          ];
-
-          const ROWS = [
-            {
-              id: 'pmdk', label: 'PMDK', sub: 'Nilai Rapor', dot: '#FBBF24',
-              subRows: [[
-                { gel: 'Gel. 1', s: '2026-01-05', e: '2026-06-04', hex: '#FBBF24', period: '5 Jan – 4 Jun' },
-                { gel: 'Gel. 2', s: '2026-06-07', e: '2026-08-14', hex: '#F59E0B', period: '7 Jun – 14 Agt' },
-              ]],
-            },
-            {
-              id: 'usm', label: 'USM Sarjana', sub: 'Tes Masuk', dot: '#3B82F6',
-              subRows: [[
-                { gel: 'Gel. 1', s: '2026-01-05', e: '2026-04-10', hex: '#60A5FA', period: '5 Jan – 10 Apr' },
-                { gel: 'Gel. 2', s: '2026-04-14', e: '2026-07-03', hex: '#3B82F6', period: '14 Apr – 3 Jul' },
-                { gel: 'Gel. 3', s: '2026-07-07', e: '2026-08-07', hex: '#2563EB', period: '7 Jul – 7 Agt' },
-              ]],
-            },
-            {
-              id: 'fk', label: 'Kedokteran', sub: 'FK UNPAS', dot: '#005005',
-              subRows: [
-                [{ gel: 'Gel. 1', s: '2026-01-05', e: '2026-03-24', hex: '#005005', period: '5 Jan – 24 Mar' }],
-                [{ gel: 'Gel. 2', s: '2026-02-25', e: '2026-05-19', hex: '#005005', period: '25 Feb – 19 Mei' }],
-                [{ gel: 'Gel. 3', s: '2026-05-20', e: '2026-06-24', hex: '#005005', period: '20 Mei – 24 Jun' }],
-              ],
-            },
-            {
-              id: 'rpl', label: 'RPL', sub: 'Perolehan & Transfer', dot: '#14B8A6',
-              subRows: [[
-                { gel: 'Perolehan & Transfer', s: '2026-01-05', e: '2026-09-30', hex: '#14B8A6', period: '5 Jan – 30 Sep' },
-              ]],
-            },
-          ];
-
-          return (
-            <motion.section
-              className="mt-16"
-              id="timeline-pendaftaran"
-              variants={sectionContainer}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: '-100px' }}
-            >
-              <motion.div variants={sectionItem} className="space-y-2 text-center mb-8">
-                <h2 className="text-xl sm:text-2xl font-bold">Timeline Pendaftaran PMB UNPAS</h2>
-              </motion.div>
-
-              <motion.div variants={sectionItem} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6">
-                <div className="overflow-x-auto">
-                  <div style={{ minWidth: '600px' }}>
-
-                    <div className="flex mb-3">
-                      <div className="w-32 flex-shrink-0" />
-                      <div className="flex-1 relative h-8">
-                        {MONTHS.map((m) => (
-                          <span
-                            key={m.label}
-                            className="absolute bottom-0 text-[11px] font-semibold text-slate-400 -translate-x-1/2 select-none"
-                            style={{ left: m.p + '%' }}
-                          >{m.label}</span>
-                        ))}
-                        {todayInRange && (
-                          <div className="absolute top-0 -translate-x-1/2 z-10" style={{ left: todayPct + '%' }}>
-                            <span className="inline-block bg-red-500 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
-                              Hari ini
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-3">
-                      {ROWS.map((row) => (
-                        <div key={row.id} className="flex items-start">
-                          <div className="w-32 flex-shrink-0 pr-3 text-right pt-1">
-                            <div className="text-[12px] font-bold text-slate-800 leading-tight">{row.label}</div>
-                            <div className="text-[10px] text-slate-400 leading-tight">{row.sub}</div>
-                          </div>
-                          <div className="flex-1 flex flex-col gap-1">
-                            {row.subRows.map((bars, si) => (
-                              <div key={si} className="relative h-10 rounded bg-slate-50">
-                                {MONTHS.map((m) => (
-                                  <div key={m.label} className="absolute top-0 bottom-0 border-l border-slate-200" style={{ left: m.p + '%' }} />
-                                ))}
-                                {todayInRange && (
-                                  <div className="absolute top-0 bottom-0 z-10" style={{ left: todayPct + '%', borderLeft: '2px dashed #F87171' }} />
-                                )}
-                                {bars.map((bar, bi) => {
-                                  const l = pct(bar.s);
-                                  const w = pct(bar.e) - pct(bar.s);
-                                  const isNarrow = w < 14;
-                                  const [pStart, pEnd] = bar.period.split(' – ');
-                                  return (
-                                    <div
-                                      key={bi}
-                                      className="absolute top-0.5 bottom-0.5 rounded flex flex-col justify-center overflow-hidden z-20 px-1.5"
-                                      style={{ left: l + '%', width: w + '%', backgroundColor: bar.hex }}
-                                      title={bar.gel + ': ' + bar.period}
-                                    >
-                                      <span className="text-[9px] font-bold text-white leading-none truncate select-none whitespace-nowrap">{bar.gel}</span>
-                                      <span className="hidden sm:block text-[8px] text-white/90 leading-none truncate select-none whitespace-nowrap mt-0.5">{bar.period}</span>
-                                      {isNarrow ? (
-                                        <>
-                                          <span className="sm:hidden text-[7.5px] text-white/90 leading-none truncate select-none whitespace-nowrap mt-0.5">{pStart} {'–'}</span>
-                                          <span className="sm:hidden text-[7.5px] text-white/90 leading-none truncate select-none whitespace-nowrap">{pEnd}</span>
-                                        </>
-                                      ) : (
-                                        <span className="sm:hidden text-[8px] text-white/90 leading-none truncate select-none whitespace-nowrap mt-0.5">{bar.period}</span>
-                                      )}
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-5 pt-4 border-t border-slate-100">
-                  {ROWS.map((row) => (
-                    <div key={row.id} className="flex items-center gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: row.dot }} />
-                      <span className="text-[11px] font-semibold text-slate-600">{row.label}</span>
-                    </div>
-                  ))}
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-0.5 flex-shrink-0 border-t-2 border-dashed border-red-400" />
-                    <span className="text-[11px] font-semibold text-slate-600">Hari ini</span>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.section>
-          );
-        })()} */}
-
-
         {/* SECTION: LAYANAN TATAP MUKA */}
         <motion.section
           className="mt-16"
@@ -2677,6 +2336,108 @@ const PMBLanding = () => {
         </motion.section>
 
 
+        {/* Panduan PDF (Modern Horizontal Slider + Arrow) */}
+        <motion.section>
+          <div className="text-center mb-6 mt-16">
+            <h2 className="text-xl sm:text-2xl font-bold">Dokumen & Panduan</h2>
+          </div>
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10" />
+
+            <button
+              className="swiper-panduan-prev absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+                strokeWidth="2.5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <button
+              className="swiper-panduan-next absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+                strokeWidth="2.5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <Swiper
+              modules={[FreeMode, Navigation, Autoplay]}
+              spaceBetween={24}
+              slidesPerView={1.15}
+              freeMode
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              grabCursor
+              navigation={{
+                prevEl: ".swiper-panduan-prev",
+                nextEl: ".swiper-panduan-next",
+              }}
+              breakpoints={{
+                640: { slidesPerView: 2.2 },
+                1024: { slidesPerView: 3.2 },
+              }}
+              className="!px-6"
+            >
+              {INFORMASI_LIST.map((item) => (
+                <SwiperSlide key={item.id} className="!h-auto">
+                  <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                    <div className="h-48 w-full overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-4">
+                      <div className="text-xs text-slate-500">{item.date}</div>
+
+                      <h3 className="mt-2 text-sm font-bold text-slate-900 line-clamp-2">
+                        {item.title}
+                      </h3>
+
+                      <div className="flex-1" />
+
+                      <div className="pt-8 flex justify-center">
+                        <a
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center rounded-full border border-[#6B5B51] px-4 py-2 text-xs font-semibold text-[#6B5B51] transition hover:bg-[#6B5B51] hover:text-white"
+                        >
+                          Lihat Selengkapnya →
+                        </a>
+                      </div>
+                    </div>
+
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </motion.section>
+
         {/* SECTION: Program Studi */}
         <motion.section id="program-studi" className="mt-16" variants={sectionItem} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
           <ProdiExplorer />
@@ -2720,10 +2481,6 @@ const PMBLanding = () => {
                   <>Pantau Terus Info<br /><span className="text-yellow-300">Pendaftaran UNPAS</span></>
                 )}
               </h2>
-              {/* <p className="mb-7 text-sm font-medium text-slate-400">
-                Setelah 25 Maret, potongan turun jadi Rp 1,5 juta — dan kuota semakin sedikit.
-              </p> */}
-
               {/* Countdown — hanya tampil saat ada target */}
               {momentumState.mode !== "ended" && (
                 <div className="mb-6 flex justify-center gap-3">
@@ -2836,142 +2593,7 @@ const PMBLanding = () => {
         </motion.section>
         )}
 
-        <motion.section>
-          {/* Panduan PDF (Modern Horizontal Slider + Arrow) */}
-          <div className="relative mt-16">
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10" />
-
-            <button
-              className="swiper-panduan-prev absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="white"
-                strokeWidth="2.5"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <button
-              className="swiper-panduan-next absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-11 w-11 items-center justify-center rounded-xl bg-[#6B5B51]/70 backdrop-blur border border-white/20 shadow-md hover:bg-[#6B5B51]/90 transition cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="white"
-                strokeWidth="2.5"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-
-            <Swiper
-              modules={[FreeMode, Navigation, Autoplay]}
-              spaceBetween={24}
-              slidesPerView={1.15}
-              freeMode
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-              }}
-              grabCursor
-              navigation={{
-                prevEl: ".swiper-panduan-prev",
-                nextEl: ".swiper-panduan-next",
-              }}
-              breakpoints={{
-                640: { slidesPerView: 2.2 },
-                1024: { slidesPerView: 3.2 },
-              }}
-              className="!px-6"
-            >
-              {INFORMASI_LIST.map((item) => (
-                <SwiperSlide key={item.id} className="!h-auto">
-                  <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                    <div className="h-48 w-full overflow-hidden">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-
-                    <div className="flex flex-1 flex-col p-4">
-                      <div className="text-xs text-slate-500">{item.date}</div>
-
-                      <h3 className="mt-2 text-sm font-bold text-slate-900 line-clamp-2">
-                        {item.title}
-                      </h3>
-
-                      <div className="flex-1" />
-
-                      <div className="pt-8 flex justify-center">
-                        <a
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center rounded-full border border-[#6B5B51] px-4 py-2 text-xs font-semibold text-[#6B5B51] transition hover:bg-[#6B5B51] hover:text-white"
-                        >
-                          Lihat Selengkapnya →
-                        </a>
-                      </div>
-                    </div>
-
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        </motion.section>
-
-        {/* SECTION: Ketentuan Refund — LAMA (di-comment, uncomment untuk mengembalikan) */}
-        {/*
-        <section className="mt-16" id="ketentuan-refund">
-          <div className="space-y-3 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold">Ketentuan Pengembalian Biaya Registrasi Calon Mahasiswa baru UNPAS</h2>
-          </div>
-
-          <div className="mt-8 rounded-2xl border border-slate-200 bg-[#F3EFEC] p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-[1.03]">
-            <div className="w-full">
-              <p className="mt-1 text-md text-black-800/80 font-bold">
-                Jangan khawatir! UNPAS memberi perlindungan pengembalian biaya untuk situasi tertentu.
-                <br />Unduh dan baca dokumen ketentuan resminya agar kamu mendaftar tanpa ragu.
-              </p>
-            </div>
-            <div className="w-full mt-4">
-              <a
-                href="https://pmb.unpas.ac.id/form_refund"
-                target="_blank"
-                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
-              >
-                📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Universitas Pasundan 2026-2027
-              </a>
-            </div>
-            <div className="w-full mt-4">
-              <a
-                href="https://pmb.unpas.ac.id/form_refund_fk"
-                target="_blank"
-                className="inline-flex w-full justify-center items-center gap-2 rounded-xl bg-[#6B5B51] px-5 py-3 text-sm font-semibold text-white shadow hover:bg-[#5a4c43] transition"
-              >
-                📄 Unduh Dokumen Persetujuan Ketentuan Refund Camaba Kedokteran Universitas Pasundan 2026-2027
-              </a>
-            </div>
-          </div>
-        </section>
-        */}
-
-        {/* SECTION: Ketentuan Refund — REDESIGN v2 */}
+        {/* SECTION: Ketentuan Refund */}
         <section className="mt-16" id="ketentuan-refund">
 
           {/* Hero Banner + Download — ALL IN ONE CARD */}
