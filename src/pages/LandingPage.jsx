@@ -2339,7 +2339,7 @@ const PMBLanding = () => {
         {/* Panduan PDF (Modern Horizontal Slider + Arrow) */}
         <motion.section>
           <div className="text-center mb-6 mt-16">
-            <h2 className="text-xl sm:text-2xl font-bold">Dokumen & Panduan</h2>
+            <h2 className="text-xl sm:text-2xl font-bold">Dokumen Panduan</h2>
           </div>
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10" />
