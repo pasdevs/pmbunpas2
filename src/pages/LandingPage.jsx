@@ -33,7 +33,10 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
       {/* Card */}
       <div
         className={`bg-white border-2 rounded-2xl p-5 transition-all duration-300 relative overflow-hidden
-          ${isOpen ? "border-[#6B5B51] rounded-b-none border-b-0" : "border-slate-200 hover:border-[#a08c83] hover:shadow-lg hover:-translate-y-0.5"}`}
+          ${j.subgroup === "utbk"
+            ? isOpen ? "border-red-500 rounded-b-none border-b-0" : "border-red-400 hover:border-red-600 hover:shadow-lg hover:-translate-y-0.5"
+            : isOpen ? "border-[#6B5B51] rounded-b-none border-b-0" : "border-slate-200 hover:border-[#a08c83] hover:shadow-lg hover:-translate-y-0.5"
+          }`}
       >
         {j.popular && (
           <div className="self-start inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-900 text-[11px] font-extrabold px-2.5 py-1 rounded-full mb-3 uppercase tracking-wide">
@@ -106,7 +109,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
             transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <div className="bg-white border-2 border-t-0 border-[#6B5B51] rounded-b-2xl px-5 pb-5">
+            <div className={`bg-white border-2 border-t-0 rounded-b-2xl px-5 pb-5 ${j.subgroup === "utbk" ? "border-red-500" : "border-[#6B5B51]"}`}>
               <div className="h-4" />
 
               {/* 1. Persyaratan */}
@@ -328,7 +331,7 @@ const PMBLanding = () => {
   const popupVariant = (() => {
     const now = new Date();
     if (now <= new Date("2026-06-14T23:59:59+07:00")) return "sesi1";
-    if (now >= new Date("2026-06-15T00:00:00+07:00") && now <= new Date("2026-06-28T23:59:59+07:00")) return "sesi2";
+    if (now >= new Date("2026-06-15T00:00:00+07:00") && now <= new Date("2026-07-14T23:59:59+07:00")) return "sesi2";
     return null;
   })();
 
@@ -391,6 +394,7 @@ const PMBLanding = () => {
   const [jalurProfile, setJalurProfile] = useState("maba");
   const [openJalurId, setOpenJalurId] = useState(null);
   const [showPromoPopup, setShowPromoPopup] = useState(false);
+  const [showUTBKWidget, setShowUTBKWidget] = useState(false);
 
   const MONTHS_ID = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
   const _today = new Date();
@@ -881,9 +885,9 @@ const PMBLanding = () => {
     };
   };
 
-  // GENERATE DATA USM NILAI UTBK — SESI 2 (Dibuka 15 Juni, Upload 16–28 Juni 2026)
+  // GENERATE DATA USM NILAI UTBK — LAST CALL (Sesi 2 diperpanjang s.d 14 Juli + Sesi 3 Tes Tulis 5 Juli)
   const createUSMUTBKSesi2 = () => {
-    const { status, text } = getStatusInfo("2026-06-15", "2026-06-28");
+    const { status, text } = getStatusInfo("2026-06-15", "2026-07-14");
     const gelUsm2 = GELOMBANG_USM[1];
     const m = getActiveMomentum(gelUsm2.momentums);
     const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
@@ -894,34 +898,32 @@ const PMBLanding = () => {
       group: "maba",
       subgroup: "utbk",
 
-      // visibleFrom: kartu ini hanya ditampilkan mulai tanggal ini
       visibleFrom: "2026-06-15",
-      // visibleUntil: kartu ini disembunyikan mulai tanggal ini (konsisten dengan pola Sesi 1)
-      visibleUntil: "2026-06-29",
+      visibleUntil: "2026-07-15",
 
       icon: FileBadge,
-      iconBg: "bg-indigo-100 text-indigo-700",
+      iconBg: "bg-red-100 text-red-700",
 
-      badge: "Upload Sertifikat UTBK",
-      badgeColor: "bg-indigo-50 text-indigo-700",
+      badge: "🔴 LAST CALL",
+      badgeColor: "bg-red-50 text-red-700",
 
-      name: "USM via Nilai UTBK – Sesi 2",
-      nameButton: "USM Nilai UTBK Sesi 2",
+      name: "USM via Nilai UTBK – Last Call",
+      nameButton: "USM Nilai UTBK",
 
       popular: false,
 
-      value: "Sesi 1 sudah ditutup? Masih ada Sesi 2. Mekanisme sama — upload sertifikat UTBK, hasil 1 hari kerja.",
+      value: "Periode diperpanjang s.d 14 Juli 2026. Tidak punya sertifikat UTBK? Ikut Tes Tulis Sesi 3 tanggal 5 Juli.",
 
-      tags: ["📤 Upload Sertifikat UTBK", "📅 Upload 15–28 Juni"],
+      tags: ["📤 Upload Sertifikat UTBK", "⏰ Last Call – 14 Juli"],
 
       status,
       statusText: text,
 
-      gel: "USM Gel. 2 · Sesi 2",
+      gel: "USM Gel. 2 · Last Call",
 
-      period: "15 Juni 2026 – 28 Juni 2026",
+      period: "Diperpanjang s.d 14 Juli 2026",
       startDate: "2026-06-15",
-      deadline: "2026-06-28",
+      deadline: "2026-07-14",
 
       link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/306",
 
@@ -929,16 +931,16 @@ const PMBLanding = () => {
 
       elig: [
         "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
-        "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 — upload dilakukan 15–28 Juni 2026",
+        "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 — upload hingga 14 Juli 2026",
         "Skor minimum: F. Teknik ≥ 400 · FISIP/FEB/Hukum ≥ 375 · FKIP/FISS ≥ 350",
         "Tidak sedang terdaftar aktif di perguruan tinggi lain",
-        "Program Studi Kedokteran tidak tersedia di jalur ini",
+        "Tidak punya sertifikat UTBK? Daftar dan ikut Tes Tulis Konvensional Sesi 3 pada 5 Juli 2026",
       ],
 
       steps: [
         { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
-        { ic: "📤", lb: "Upload Sertifikat UTBK (15–28 Juni)" },
-        { ic: "⏳", lb: "Verifikasi Skor Panitia (1 hari kerja)" },
+        { ic: "📤", lb: "Upload Sertifikat UTBK" },
+        { ic: "⏳", lb: "Verifikasi Skor (1 hari kerja)" },
         { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
       ],
 
@@ -954,18 +956,13 @@ const PMBLanding = () => {
       ] : [],
 
       benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
-      benefitNote: "⚠️ Prodi dengan uji keterampilan (DKV, Fotografi & Film, Seni Musik) tetap wajib mengikuti audisi/portofolio meski skor UTBK memenuhi minimum. Hubungi admisi untuk jadwal uji keterampilan.",
+      benefitNote: "⚠️ Prodi dengan uji keterampilan (DKV, Fotografi & Film, Seni Musik) tetap wajib mengikuti audisi/portofolio. Hubungi admisi untuk jadwal.",
 
       timeline: [
-        { date: "14 Juni 2026", label: "Batas akhir pendaftaran jalur USM via Nilai UTBK Sesi 1", state: tls("2026-06-14") },
-        { date: "15 Juni 2026", label: "Pendaftaran dibuka", state: tls("2026-06-15") },
-        {
-          date: todayLabel,
-          label: "Sesi 2 sedang berlangsung",
-          state: "active",
-          now: true,
-        },
-        { date: "28 Juni 2026", label: "Batas akhir pendaftaran jalur USM via Nilai UTBK Sesi 2", state: "upcoming" },
+        { date: "2 – 14 Juni 2026", label: "Sesi 1 — Upload Sertifikat UTBK (Selesai)", state: "done" },
+        { date: todayLabel, label: "Sesi 2 — Upload Sertifikat UTBK · Diperpanjang s.d 14 Juli", state: "active", now: true },
+        { date: "5 Juli 2026", label: "Sesi 3 — Tes Tulis Konvensional (bagi yang tidak punya sertifikat UTBK)", state: tls("2026-07-05") },
+        { date: "14 Juli 2026", label: "Batas akhir pendaftaran — Last Call ditutup", state: "upcoming" },
       ],
     };
   };
@@ -1389,6 +1386,29 @@ const PMBLanding = () => {
       setUrgencyTimeLeft(calculateUrgencyTimeLeft());
     }, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  const UTBK_DEADLINE = "2026-07-14T23:59:59+07:00";
+  const calculateUTBKTimeLeft = () => {
+    const diff = new Date(UTBK_DEADLINE).getTime() - Date.now();
+    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    return {
+      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((diff / (1000 * 60)) % 60),
+      seconds: Math.floor((diff / 1000) % 60),
+    };
+  };
+  const [utbkTimeLeft, setUtbkTimeLeft] = useState(calculateUTBKTimeLeft());
+
+  useEffect(() => {
+    const timer = setInterval(() => setUtbkTimeLeft(calculateUTBKTimeLeft()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const t = setTimeout(() => setShowUTBKWidget(true), 4000);
+    return () => clearTimeout(t);
   }, []);
 
   const scrollToSection = (id) => {
@@ -1914,9 +1934,15 @@ const PMBLanding = () => {
                 return (
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-xs font-bold text-slate-700">USM via Nilai UTBK</span>
-                      <div className="flex-1 h-px bg-slate-200" />
-                      <span className="text-[9px] font-bold bg-teal-50 text-teal-700 px-2 py-1 rounded-full uppercase tracking-wide">Bagian dari USM Gel. 2</span>
+                      <span className="text-xs font-bold text-slate-700">Jalur Khusus</span>
+                      <div className="flex-1 h-px bg-red-200" />
+                      <span className="inline-flex items-center gap-1.5 text-[9px] font-bold bg-red-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wide">
+                        <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+                        </span>
+                        LAST CALL
+                      </span>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4 items-start">
                       {utbkCards.map(j => (
@@ -2811,19 +2837,20 @@ const PMBLanding = () => {
           img: "banner/utbk1.webp",
           imgAlt: "USM Nilai UTBK Sesi 1 – Universitas Pasundan",
         } : popupVariant === "sesi2" ? {
-          badge: "USM Gelombang 2 · via Nilai UTBK · Sesi 2",
-          title: "Masih Punya Sertifikat UTBK?",
-          subtitle: "Sesi 2 Dibuka — Tanpa Tes Tulis",
+          badge: "USM Gel. 2 · via Nilai UTBK · Last Call",
+          title: "Masih Bisa Daftar —",
+          titleHighlight: "LAST CALL!",
+          subtitle: "",
           points: [
-            { ic: "📤", text: "Upload sertifikat UTBK 2024, 2025, atau 2026" },
+            { ic: "📤", text: "Upload sertifikat UTBK 2024, 2025, atau 2026 hingga 14 Juli" },
+            { ic: "✏️", text: "Tidak punya sertifikat UTBK? Ikut Tes Tulis Konvensional Sesi 3 — 5 Juli 2026" },
             { ic: "⚡", text: "Hasil seleksi keluar dalam 1 hari kerja" },
-            { ic: "📅", text: "Upload Sesi 2: 15 – 28 Juni 2026" },
           ],
           cost: "💳 Formulir Rp 400.000",
-          deadline: "⏳ Tutup 28 Juni 2026",
+          deadline: "⏳ Tutup 14 Juli 2026",
           link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/306",
-          img: "banner/utbk2.webp",
-          imgAlt: "USM Nilai UTBK Sesi 2 – Universitas Pasundan",
+          img: "banner/utbk3.webp",
+          imgAlt: "USM Nilai UTBK Last Call – Universitas Pasundan",
         } : null;
         if (!popupContent) return null;
         return (
@@ -2874,12 +2901,32 @@ const PMBLanding = () => {
                   {popupContent.badge}
                 </div>
 
-                <h2 className="text-lg md:text-xl font-extrabold text-slate-900 leading-tight mb-1">
-                  {popupContent.title}
+                <h2 className="text-base md:text-xl font-extrabold text-slate-900 leading-tight mb-1">
+                  {popupContent.title}{" "}
+                  {popupContent.titleHighlight && (
+                    <span className="relative text-red-600 animate-pulse inline-block">
+                      {popupContent.titleHighlight}
+                      <motion.span
+                        initial={{ width: "0%" }}
+                        animate={{ width: ["0%", "100%", "100%", "0%"] }}
+                        transition={{
+                          duration: 2.5,
+                          delay: 0.4,
+                          ease: "easeInOut",
+                          times: [0, 0.4, 0.7, 1],
+                          repeat: Infinity,
+                          repeatDelay: 0.5,
+                        }}
+                        className="absolute bottom-0 left-0 h-[2.5px] bg-red-600 rounded-full"
+                      />
+                    </span>
+                  )}
                 </h2>
-                <p className="text-sm font-semibold text-teal-600 mb-3">
-                  {popupContent.subtitle}
-                </p>
+                {popupContent.subtitle && (
+                  <p className="text-xs md:text-sm font-semibold text-teal-600 mb-3">
+                    {popupContent.subtitle}
+                  </p>
+                )}
 
                 {/* Key points */}
                 <div className="flex flex-col gap-1.5 mb-3">
@@ -2924,6 +2971,79 @@ const PMBLanding = () => {
       </AnimatePresence>
         );
       })()}
+
+      {/* FLOATING WIDGET: USM UTBK — Last Call */}
+      <AnimatePresence>
+        {showUTBKWidget && new Date() <= new Date(UTBK_DEADLINE) && (
+          <motion.div
+            key="utbk-widget"
+            initial={{ opacity: 0, y: 24, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 24, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            className="fixed bottom-20 right-4 z-[9990] w-[260px] rounded-2xl shadow-2xl overflow-hidden border border-red-200"
+            style={{ background: "linear-gradient(135deg, #1a0a0a 0%, #3d1010 100%)" }}
+          >
+            {/* Close */}
+            <button
+              onClick={() => setShowUTBKWidget(false)}
+              className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/70 hover:text-white text-xs transition cursor-pointer"
+            >✕</button>
+
+            <div className="p-4">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-1.5 bg-red-500/20 border border-red-400/30 text-red-300 text-[9px] font-extrabold px-2 py-1 rounded-full mb-2 uppercase tracking-widest">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping inline-block" />
+                USM UTBK — Last Call
+              </div>
+
+              {/* Info */}
+              <p className="text-white text-[11px] font-semibold leading-snug mb-3">
+                Sesi 2 Upload Sertifikat UTBK<br />
+                <span className="text-red-300 font-bold">Diperpanjang s.d 14 Juli 2026</span>
+              </p>
+
+              {/* Countdown */}
+              <div className="bg-white/8 rounded-xl p-2.5 mb-3" style={{ background: "rgba(255,255,255,0.07)" }}>
+                <div className="text-[9px] font-bold text-white/50 uppercase tracking-widest text-center mb-1.5">Waktu Tersisa</div>
+                <div className="flex items-center justify-center gap-1.5">
+                  {[
+                    { val: utbkTimeLeft.days, lbl: "Hari" },
+                    { val: utbkTimeLeft.hours, lbl: "Jam" },
+                    { val: utbkTimeLeft.minutes, lbl: "Mnt" },
+                    { val: utbkTimeLeft.seconds, lbl: "Dtk" },
+                  ].map(({ val, lbl }, i, arr) => (
+                    <div key={lbl} className="flex items-center gap-1.5">
+                      <div className="text-center">
+                        <div className="text-white font-black text-lg leading-none">{String(val).padStart(2, "0")}</div>
+                        <div className="text-white/40 text-[8px] font-semibold">{lbl}</div>
+                      </div>
+                      {i < arr.length - 1 && <span className="text-white/30 font-bold text-sm pb-3">:</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA */}
+              <a
+                href="https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/306"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 w-full text-white font-extrabold text-[12px] py-2.5 rounded-xl transition"
+                style={{ backgroundColor: "#00967B" }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = "#007d67"}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = "#00967B"}
+                onClick={() => {
+                  window.dataLayer = window.dataLayer || [];
+                  window.dataLayer.push({ event: "click_widget_utbk_lastcall", page: "pmb.unpas.ac.id" });
+                }}
+              >
+                Daftar Sekarang →
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <ScrollToTop
         smooth
