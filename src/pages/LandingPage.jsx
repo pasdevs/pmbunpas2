@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
-  ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, Repeat, FileBadge
+  ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, Repeat, FileBadge, IdCard
 } from "lucide-react";
 import ScrollToTop from "react-scroll-to-top";
 import { motion, AnimatePresence } from "framer-motion";
@@ -276,7 +276,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
                   >
                     🎯 Cek Kecocokan Prodi
                   </a>
-                  {j.group !== "transfer" && (
+                  {j.group !== "transfer" && j.subgroup !== "kip" && (
                     <a
                       href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2"
                       target="_blank"
@@ -912,7 +912,7 @@ const PMBLanding = () => {
 
       popular: false,
 
-      value: "Periode diperpanjang s.d 14 Juli 2026. Tidak punya sertifikat UTBK? Ikut Tes Tulis Sesi 3 tanggal 5 Juli.",
+      value: "Periode diperpanjang s.d 14 Juli 2026, khusus bagi pemilik sertifikat UTBK 2024, 2025, atau 2026.",
 
       tags: ["📤 Upload Sertifikat UTBK", "⏰ Last Call – 14 Juli"],
 
@@ -934,7 +934,7 @@ const PMBLanding = () => {
         "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 — upload hingga 14 Juli 2026",
         "Skor minimum: F. Teknik ≥ 400 · FISIP/FEB/Hukum ≥ 375 · FKIP/FISS ≥ 350",
         "Tidak sedang terdaftar aktif di perguruan tinggi lain",
-        "Tidak punya sertifikat UTBK? Daftar dan ikut Tes Tulis Konvensional Sesi 3 pada 5 Juli 2026",
+        "Tidak punya sertifikat UTBK? Daftar via jalur PMDK atau USM Reguler (Tes Tulis) yang masih dibuka",
       ],
 
       steps: [
@@ -961,7 +961,7 @@ const PMBLanding = () => {
       timeline: [
         { date: "2 – 14 Juni 2026", label: "Sesi 1 — Upload Sertifikat UTBK (Selesai)", state: "done" },
         { date: todayLabel, label: "Sesi 2 — Upload Sertifikat UTBK · Diperpanjang s.d 14 Juli", state: "active", now: true },
-        { date: "5 Juli 2026", label: "Sesi 3 — Tes Tulis Konvensional (bagi yang tidak punya sertifikat UTBK)", state: tls("2026-07-05") },
+        { date: "5 Juli 2026", label: "Sesi 3 — Tes Tulis Konvensional (sudah ditutup)", state: tls("2026-07-05") },
         { date: "14 Juli 2026", label: "Batas akhir pendaftaran — Last Call ditutup", state: "upcoming" },
       ],
     };
@@ -1066,12 +1066,103 @@ const PMBLanding = () => {
   };
 
 
+  // GENERATE DATA SESUAI FORMAT KIP-KULIAH
+  const createKIPKuliahActive = () => {
+    const start = "2026-07-07";
+    const end = "2026-07-31";
+    const { status, text } = getStatusInfo(start, end);
+    const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
+
+    return {
+      id: "kip",
+      group: "maba",
+      subgroup: "kip",
+
+      icon: IdCard,
+      iconBg: "bg-amber-100 text-amber-700",
+
+      badge: "KIP-Kuliah",
+      badgeColor: "bg-amber-50 text-amber-700",
+
+      name: "KIP-Kuliah Gelombang 1",
+      nameButton: "KIP-Kuliah",
+
+      popular: false,
+
+      value: "Melalui tes tulis peserta didik baru dari SMA/SMK khusus program BIDIKMISI / KIP.",
+
+      tags: ["🆔 Khusus Pemilik KIP", "🆓 Gratis Pendaftaran"],
+
+      status,
+      statusText: text,
+
+      gel: "Gelombang 1",
+
+      period: "7 Jul 2026 – 31 Jul 2026",
+      startDate: start,
+      deadline: end,
+
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/307",
+
+      elig: [
+        "Peserta didik baru SMA/SMK/MA khusus program BIDIKMISI / KIP",
+      ],
+
+      steps: [
+        { ic: "🌐", lb: "Pendaftaran Web Kemendiktisaintek" },
+        { ic: "📝", lb: "Pendaftaran KIP-K UNPAS" },
+        { ic: "✏️", lb: "Pelaksanaan Tes Tertulis" },
+        { ic: "📢", lb: "Pengumuman Tes Tertulis" },
+        { ic: "📮", lb: "Pengumpulan Berkas Fisik" },
+        { ic: "🗣️", lb: "Seleksi Wawancara" },
+      ],
+
+      costForm: "Gratis",
+      costFormNote: "Tidak dipungut biaya pendaftaran",
+
+      costSave: "—",
+      costSaveNote: "Skema potongan momentum tidak berlaku untuk jalur KIP-Kuliah",
+
+      benefits: [],
+      benefitTotal: "—",
+
+      benefitNote: "Tanya jawab intensif mengenai jalur KIP-Kuliah — PIC KIP-K UNPAS: 0811-960-193",
+
+      timeline: (() => {
+        const milestones = [
+          { start: "2026-02-03", date: "3 Feb – 31 Okt 2026", label: "Portal Kemendiktisaintek dibuka" },
+          { start: "2026-07-07", date: "7–31 Jul 2026", label: "Pendaftaran KIP-K UNPAS dibuka" },
+          { start: "2026-08-09", date: "9 Agu 2026", label: "Pelaksanaan Tes Tertulis" },
+          { start: "2026-08-11", date: "11 Agu 2026", label: "Pengumuman Tes Tertulis" },
+          { start: "2026-08-12", date: "12–21 Agu 2026", label: "Pengumpulan Berkas Fisik" },
+          { start: "2026-08-27", date: "27 Agu 2026", label: "Seleksi Wawancara" },
+        ];
+
+        const entries = [];
+        let todayInserted = false;
+        milestones.forEach((ms) => {
+          const state = tls(ms.start);
+          if (!todayInserted && state === "upcoming") {
+            entries.push({ date: todayLabel, label: "Menunggu tahap berikutnya", state: "active", now: true });
+            todayInserted = true;
+          }
+          entries.push({ date: ms.date, label: ms.label, state });
+        });
+        if (!todayInserted) {
+          entries.push({ date: todayLabel, label: "Proses seleksi KIP-Kuliah sedang berlangsung", state: "active", now: true });
+        }
+        return entries;
+      })(),
+    };
+  };
+
   const JALUR_DATA = [
     createPMDKActive(),
     createUSMActive(),
     createUSMUTBKSesi1(),
     createUSMUTBKSesi2(),
     createFKUSMActive(),
+    createKIPKuliahActive(),
 
 
     {
@@ -1889,7 +1980,7 @@ const PMBLanding = () => {
           {/* Self-select toggle */}
           <motion.div variants={sectionItem} className="flex flex-col sm:flex-row gap-3 mb-8">
             {[
-              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "5 jalur" },
+              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "6 jalur" },
               { key: "transfer", ic: "🔄", title: "RPL (Rekognisi Pembelajaran Lampau)", sub: "Lulusan Diploma (D1–D3), SMA/SMK yang memiliki pengalaman kerja.", count: "2 jalur" },
             ].map((opt) => (
               <button
@@ -1974,6 +2065,19 @@ const PMBLanding = () => {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4 items-start">
                   {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kedokteran").map(j => (
+                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                  ))}
+                </div>
+              </div>
+              {/* Jalur KIP-Kuliah */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-slate-700">Jalur KIP-Kuliah</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                  <span className="text-[9px] font-bold bg-amber-50 text-amber-700 px-2 py-1 rounded-full uppercase tracking-wide">Khusus BIDIKMISI / KIP</span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 items-start">
+                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kip").map(j => (
                     <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
                   ))}
                 </div>
@@ -2843,7 +2947,7 @@ const PMBLanding = () => {
           subtitle: "",
           points: [
             { ic: "📤", text: "Upload sertifikat UTBK 2024, 2025, atau 2026 hingga 14 Juli" },
-            { ic: "✏️", text: "Tidak punya sertifikat UTBK? Ikut Tes Tulis Konvensional Sesi 3 — 5 Juli 2026" },
+            { ic: "✏️", text: "Tidak punya sertifikat UTBK? Daftar via jalur PMDK atau USM Reguler (Tes Tulis) yang masih dibuka" },
             { ic: "⚡", text: "Hasil seleksi keluar dalam 1 hari kerja" },
           ],
           cost: "💳 Formulir Rp 400.000",
