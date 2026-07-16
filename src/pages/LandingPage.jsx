@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, Repeat, FileBadge, IdCard
 } from "lucide-react";
 import ScrollToTop from "react-scroll-to-top";
+// eslint-disable-next-line no-unused-vars -- `motion` used via JSX member tags (<motion.div>), which core no-unused-vars can't see without eslint-plugin-react
 import { motion, AnimatePresence } from "framer-motion";
 import ProdiExplorer from "../components/ProdiExplorer";
 import INFORMASI_LIST from "../data/InformasiList";
@@ -339,17 +340,19 @@ const PMBLanding = () => {
     if (!popupVariant) return;
     const t = setTimeout(() => setShowPromoPopup(true), 2500);
     return () => clearTimeout(t);
-  }, []);
+  }, [popupVariant]);
 
   // UTM tracking — deteksi scan QR / spanduk
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("utm_source") === "spanduk") {
-      fbq("trackCustom", "ScanSpanduk", {
-        lokasi: urlParams.get("utm_content"),
-        campaign: urlParams.get("utm_campaign"),
-        currency: "IDR",
-      });
+      if (window.fbq) {
+        window.fbq("trackCustom", "ScanSpanduk", {
+          lokasi: urlParams.get("utm_content"),
+          campaign: urlParams.get("utm_campaign"),
+          currency: "IDR",
+        });
+      }
     }
   }, []);
 
@@ -1274,7 +1277,7 @@ const PMBLanding = () => {
     }, 2500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [badges.length]);
 
   const LANGUAGES = [
     { code: "id", short: "ID", label: "Indonesian", icon: "/img/id.png" },
@@ -1302,7 +1305,7 @@ const PMBLanding = () => {
     return parts[2] || null;
   }
 
-  const changeLanguage = (lang) => {
+  const changeLanguage = useCallback((lang) => {
     setGoogTrans(lang);
 
     if (lang === "id") {
@@ -1327,7 +1330,7 @@ const PMBLanding = () => {
       }
       tries++;
     }, 300);
-  };
+  }, []);
 
   useEffect(() => {
     const saved = getGoogTrans();
@@ -1341,7 +1344,7 @@ const PMBLanding = () => {
       setSelectedLang(saved);
       changeLanguage(saved);
     }
-  }, []);
+  }, [changeLanguage]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -1456,7 +1459,7 @@ const PMBLanding = () => {
     return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
   };
 
-  const calculateUrgencyTimeLeft = () => {
+  const calculateUrgencyTimeLeft = useCallback(() => {
     const target = new Date(URGENCY_DEADLINE).getTime();
     const now = Date.now();
     const diff = target - now;
@@ -1467,7 +1470,7 @@ const PMBLanding = () => {
       minutes: Math.floor((diff / (1000 * 60)) % 60),
       seconds: Math.floor((diff / 1000) % 60),
     };
-  };
+  }, [URGENCY_DEADLINE]);
 
   const [urgencyTimeLeft, setUrgencyTimeLeft] = useState(calculateUrgencyTimeLeft());
 
@@ -1477,7 +1480,7 @@ const PMBLanding = () => {
       setUrgencyTimeLeft(calculateUrgencyTimeLeft());
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [URGENCY_DEADLINE, calculateUrgencyTimeLeft]);
 
   const UTBK_DEADLINE = "2026-07-14T23:59:59+07:00";
   const calculateUTBKTimeLeft = () => {
