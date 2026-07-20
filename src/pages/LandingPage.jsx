@@ -167,12 +167,16 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
                   </div>
                 </div>
                 {/* Metode Pembayaran */}
-                <div className="text-[12px] font-semibold text-slate-500 mb-1.5">Metode Pembayaran:</div>
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {["🏧 VA Mandiri", "🛒 Tokopedia", "🛍️ Shopee (+Rp 4rb)", "🏦 BJB (+Rp 3rb)"].map((p, i) => (
-                    <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{p}</span>
-                  ))}
-                </div>
+                {j.subgroup !== "kip" && (
+                  <>
+                    <div className="text-[12px] font-semibold text-slate-500 mb-1.5">Metode Pembayaran:</div>
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {["🏧 VA Mandiri", "🏦 BJB (+Rp 3rb)"].map((p, i) => (
+                        <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{p}</span>
+                      ))}
+                    </div>
+                  </>
+                )}
                 {j.benefits.length > 0 && (
                   <div className="bg-gradient-to-br from-green-800 to-teal-700 rounded-xl p-3 text-white">
                     <div className="text-[11px] font-bold uppercase tracking-wide opacity-60 mb-2">Benefit daftar di Momentum {j.momentumLabel || "Aktif"}</div>
@@ -729,7 +733,7 @@ const PMBLanding = () => {
 
       value: "Seleksi masuk Fakultas Kedokteran via ujian. 4 gelombang penerimaan, kuota terbatas per gelombang.",
 
-      tags: ["📝 Tes Tertulis", "🔬 Tes Kesehatan"],
+      tags: [],
 
       status,
       statusText: text,
@@ -752,9 +756,11 @@ const PMBLanding = () => {
 
       steps: [
         { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "✏️", lb: "Ikut Ujian Tertulis" },
-        { ic: "🔬", lb: "Tes Kesehatan & Verifikasi" },
-        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+        { ic: "🩺", lb: "USM Kedokteran" },
+        { ic: "❤️‍🩹", lb: "Kesehatan dan MMPI" },
+        { ic: "🏫", lb: "Open House" },
+        { ic: "🧩", lb: "Psikometri" },
+        { ic: "🗣️", lb: "Wawancara" },
       ],
 
       costForm: "Rp 300.000",
@@ -772,24 +778,101 @@ const PMBLanding = () => {
         {
           date: g.period.split(" – ")[0],
           label: `Pendaftaran Gel.${g.gel} dibuka`,
-          state: "done",
+          state: status === "soon" ? "upcoming" : "done",
         },
-        {
+        ...(status === "open" || status === "closing" ? [{
           date: todayLabel,
           label: `Gelombang ${g.gel} sedang berlangsung`,
           state: "active",
           now: true,
-        },
+        }] : []),
         {
           date: g.period.split(" – ")[1],
           label: `Deadline Gel.${g.gel} Kedokteran USM`,
-          state: "upcoming",
+          state: status === "closed" ? "done" : "upcoming",
         },
         ...(g.gel < GELOMBANG_FK[GELOMBANG_FK.length - 1].gel ? [{
           date: "Gel. berikutnya",
           label: "Biaya naik di gelombang selanjutnya",
           state: "upcoming",
         }] : []),
+      ],
+    };
+  };
+
+  // GENERATE DATA USM KEDOKTERAN VIA NILAI UTBK — GELOMBANG 1 (16 Jul – 8 Agu 2026)
+  const createFKUTBK = () => {
+    const { status, text } = getStatusInfo("2026-07-16", "2026-08-08");
+    const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
+
+    return {
+      id: "fk_utbk",
+      group: "maba",
+      subgroup: "kedokteran",
+
+      icon: FileBadge,
+      iconBg: "bg-blue-100 text-blue-700",
+
+      badge: "Kedokteran · Nilai UTBK",
+      badgeColor: "bg-blue-50 text-blue-700",
+
+      name: "USM Kedokteran via Nilai UTBK",
+      nameButton: "USM FK Nilai UTBK",
+
+      popular: false,
+
+      value: "Punya skor UTBK 2026 minimal 500? Langsung dinyatakan lulus Tahap I (Seleksi Akademik).",
+
+      tags: [],
+
+      status,
+      statusText: text,
+
+      gel: "Gelombang 1",
+
+      period: "16 Jul 2026 – 8 Agu 2026",
+      startDate: "2026-07-16",
+      deadline: "2026-08-08",
+
+      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/315",
+
+      elig: [
+        "Calon peserta telah mengikuti UTBK Tahun 2026",
+        "Memiliki skor UTBK minimal 500",
+        "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
+        "Bersedia melanjutkan ke tahapan seleksi berikutnya setelah dinyatakan lulus Tahap I (Seleksi Akademik)",
+      ],
+
+      steps: [
+        { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
+        { ic: "📊", lb: "Verifikasi Skor UTBK ≥ 500" },
+        { ic: "🩺", lb: "USM Kedokteran" },
+        { ic: "❤️‍🩹", lb: "Kesehatan dan MMPI" },
+        { ic: "🏫", lb: "Open House" },
+        { ic: "🧩", lb: "Psikometri" },
+        { ic: "🗣️", lb: "Wawancara" },
+      ],
+
+      costForm: "Rp 400.000",
+      costFormNote: "Formulir pendaftaran Gelombang 1",
+
+      costSave: "—",
+      costSaveNote: "Tidak ada potongan untuk Kedokteran",
+
+      benefits: [],
+      benefitTotal: "—",
+
+      benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP maupun insentif. Skor UTBK minimal 500 dinyatakan lulus Tahap I (seleksi akademik) dan berhak melanjutkan ke tahapan seleksi berikutnya.",
+
+      timeline: [
+        { date: "16 Juli 2026", label: "Pendaftaran Gel.1 dibuka", state: tls("2026-07-16") },
+        ...(status === "open" || status === "closing" ? [{
+          date: todayLabel,
+          label: "Gelombang 1 sedang berlangsung",
+          state: "active",
+          now: true,
+        }] : []),
+        { date: "8 Agustus 2026", label: "Batas akhir pendaftaran Gel.1 Kedokteran via Nilai UTBK", state: status === "closed" ? "done" : "upcoming" },
       ],
     };
   };
@@ -1165,6 +1248,7 @@ const PMBLanding = () => {
     createUSMUTBKSesi1(),
     createUSMUTBKSesi2(),
     createFKUSMActive(),
+    createFKUTBK(),
     createKIPKuliahActive(),
 
 
