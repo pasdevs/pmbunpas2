@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ShieldCheck, Users, GraduationCap
 } from "lucide-react";
@@ -11,6 +11,8 @@ import { GELOMBANG_PMDK } from "../data/gelombang";
 import { wibDate, getDeadlineLabel, formatDateShort, formatDateLong } from "../utils/dateUtils";
 import { formatDPLabel, formatDPShort } from "../utils/formatUtils";
 import { buildJalurData } from "../data/jalurData";
+import { useCountdown } from "../hooks/useCountdown";
+import { useGoogleTranslate, LANGUAGES } from "../hooks/useGoogleTranslate";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, FreeMode } from "swiper/modules";
@@ -314,12 +316,11 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
 
 const PMBLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-  const [selectedLang, setSelectedLang] = useState("id");
-  const langRef = useRef(null);
+  const { langOpen, setLangOpen, selectedLang, setSelectedLang, langRef, changeLanguage } = useGoogleTranslate();
 
   const [showWA, setShowWA] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState(() => window.location.hash.replace("#", ""));
+  const [showPromoPopup, setShowPromoPopup] = useState(false);
 
   const handleClickWhatsApp = () => {
     if (window.dataLayer) {
@@ -404,7 +405,6 @@ const PMBLanding = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [jalurProfile, setJalurProfile] = useState("maba");
   const [openJalurId, setOpenJalurId] = useState(null);
-  const [showPromoPopup, setShowPromoPopup] = useState(false);
   const [showUTBKWidget, setShowUTBKWidget] = useState(false);
 
   const JALUR_DATA = buildJalurData();
@@ -433,84 +433,6 @@ const PMBLanding = () => {
 
     return () => clearInterval(interval);
   }, [badges.length]);
-
-  const LANGUAGES = [
-    { code: "id", short: "ID", label: "Indonesian", icon: "/img/id.png" },
-    { code: "ar", short: "AR", label: "Arabic", icon: "/img/ar.png" },
-    { code: "su", short: "SU", label: "Sundanese", icon: "/img/su.png" },
-    { code: "en", short: "EN", label: "English", icon: "/img/en.png" },
-  ];
-
-  function setGoogTrans(lang) {
-    if (lang === "id") {
-      // HAPUS COOKIE = balik ke bahasa asli
-      document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-      document.cookie = "googtrans=; path=/; domain=" + window.location.hostname + "; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    } else {
-      const value = `/id/${lang}`;
-      document.cookie = `googtrans=${value}; path=/`;
-      document.cookie = `googtrans=${value}; path=/; domain=${window.location.hostname}`;
-    }
-  }
-
-  function getGoogTrans() {
-    const match = document.cookie.match(/googtrans=([^;]+)/);
-    if (!match) return null;
-    const parts = match[1].split("/");
-    return parts[2] || null;
-  }
-
-  const changeLanguage = useCallback((lang) => {
-    setGoogTrans(lang);
-
-    if (lang === "id") {
-      // Reload halaman untuk reset DOM Google Translate
-      window.location.reload();
-      return;
-    }
-
-    const tryChange = () => {
-      const select = document.querySelector(".goog-te-combo");
-      if (!select) return false;
-
-      select.value = lang;
-      select.dispatchEvent(new Event("change"));
-      return true;
-    };
-
-    let tries = 0;
-    const interval = setInterval(() => {
-      if (tryChange() || tries > 20) {
-        clearInterval(interval);
-      }
-      tries++;
-    }, 300);
-  }, []);
-
-  useEffect(() => {
-    const saved = getGoogTrans();
-
-    if (!saved || saved === "id") {
-      setSelectedLang("id");
-      return;
-    }
-
-    if (["en", "ar", "su"].includes(saved)) {
-      setSelectedLang(saved);
-      changeLanguage(saved);
-    }
-  }, [changeLanguage]);
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (langRef.current && !langRef.current.contains(e.target)) {
-        setLangOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const container = {
     hidden: { opacity: 0 },
@@ -590,46 +512,10 @@ const PMBLanding = () => {
 
   const URGENCY_KUOTA_TOTAL = activeMomentum ? parseInt(activeMomentum.kuota) || 100 : 100;
 
-  const calculateUrgencyTimeLeft = useCallback(() => {
-    const target = new Date(URGENCY_DEADLINE).getTime();
-    const now = Date.now();
-    const diff = target - now;
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    return {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((diff / (1000 * 60)) % 60),
-      seconds: Math.floor((diff / 1000) % 60),
-    };
-  }, [URGENCY_DEADLINE]);
-
-  const [urgencyTimeLeft, setUrgencyTimeLeft] = useState(calculateUrgencyTimeLeft());
-
-  useEffect(() => {
-    if (!URGENCY_DEADLINE) return;
-    const timer = setInterval(() => {
-      setUrgencyTimeLeft(calculateUrgencyTimeLeft());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [URGENCY_DEADLINE, calculateUrgencyTimeLeft]);
+  const urgencyTimeLeft = useCountdown(URGENCY_DEADLINE);
 
   const UTBK_DEADLINE = "2026-07-14T23:59:59+07:00";
-  const calculateUTBKTimeLeft = () => {
-    const diff = new Date(UTBK_DEADLINE).getTime() - Date.now();
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    return {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((diff / (1000 * 60)) % 60),
-      seconds: Math.floor((diff / 1000) % 60),
-    };
-  };
-  const [utbkTimeLeft, setUtbkTimeLeft] = useState(calculateUTBKTimeLeft());
-
-  useEffect(() => {
-    const timer = setInterval(() => setUtbkTimeLeft(calculateUTBKTimeLeft()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const utbkTimeLeft = useCountdown(UTBK_DEADLINE);
 
   useEffect(() => {
     const t = setTimeout(() => setShowUTBKWidget(true), 4000);
@@ -656,7 +542,6 @@ const PMBLanding = () => {
 
     const hash = window.location.hash.replace("#", "");
     if (hash) {
-      setActiveSection(hash);
       // Delay agar DOM dan sticky-header sudah ter-render
       const t = setTimeout(() => scrollToSection(hash), 300);
       return () => clearTimeout(t);
