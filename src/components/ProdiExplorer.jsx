@@ -101,7 +101,7 @@ const DATA_PRODI = [
   },
   {
     id: 15,
-    nama: "Ekonomi Bisnis",
+    nama: "Ekonomi Pembangunan",
     fakultas: "FEB",
     jenjang: "S1",
     url: "https://situ2.unpas.ac.id/spmbfront/program-studi-detail/detail/60201",
