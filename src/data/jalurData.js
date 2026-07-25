@@ -1,4 +1,4 @@
-import { Award, Stethoscope, FileBadge, Laptop, IdCard, GraduationCap, Repeat } from "lucide-react";
+import { Award, Stethoscope, FileBadge, Laptop, IdCard, GraduationCap, Repeat, Zap } from "lucide-react";
 import { GELOMBANG_PMDK, GELOMBANG_FK, GELOMBANG_USM } from "./gelombang";
 import { getSmartActive, getActiveMomentum, getStatusInfo, wibDate } from "../utils/dateUtils";
 import { formatRupiah } from "../utils/formatUtils";
@@ -13,6 +13,79 @@ const getTodayLabel = () => {
 const getActivePMDK = () => getSmartActive(GELOMBANG_PMDK);
 const getActiveUSM = () => getSmartActive(GELOMBANG_USM);
 const getActiveGelombang = () => getSmartActive(GELOMBANG_FK);
+
+// GENERATE DATA ONE DAY RESULT — ODS GELOMBANG 3 (25 Jul – 4 Sep 2026)
+const createODSActive = (todayLabel) => {
+  const { status, text } = getStatusInfo("2026-07-25", "2026-09-04");
+  const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
+
+  return {
+    id: "ods",
+    group: "maba",
+    subgroup: "ods",
+
+    icon: Zap,
+    iconBg: "bg-purple-100 text-purple-700",
+
+    badge: "ODS",
+    badgeColor: "bg-purple-50 text-purple-700",
+
+    name: "One Day Result – ODS Gelombang 3",
+    nameButton: "ODS Gelombang 3",
+
+    popular: false,
+
+    value: "Kemudahan pendaftaran dengan hasil cepat (maksimal 2 hari kerja) untuk calon mahasiswa berprestasi dan umum.",
+
+    tags: ["⚡ Hasil Maks. 2 Hari Kerja", "🎓 Berprestasi & Umum"],
+
+    status,
+    statusText: text,
+
+    gel: "Gelombang 3",
+
+    period: "25 Jul 2026 – 4 Sep 2026",
+    startDate: "2026-07-25",
+    deadline: "2026-09-04",
+
+    link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/314",
+
+    elig: [
+      "KTP / SIM / Kartu Pelajar",
+      "Dokumen Persetujuan Ketentuan Pengembalian Biaya Registrasi (tautan: pmb.unpas.ac.id/form_refund)",
+      "Transkrip Nilai tervalidasi / Sertifikat UTBK tervalidasi",
+    ],
+
+    steps: [
+      { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
+      { ic: "📤", lb: "Upload Transkrip / Sertifikat UTBK" },
+      { ic: "⚡", lb: "Verifikasi Maks. 2 Hari Kerja" },
+      { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
+    ],
+
+    costForm: "Rp 400.000",
+    costFormNote: "Formulir pendaftaran Gelombang 3",
+
+    costSave: "—",
+    costSaveNote: "Tidak ada potongan untuk jalur ODS",
+
+    benefits: [],
+    benefitTotal: "—",
+
+    benefitNote: "Jalur ODS (One Day Service) — sistem kuliah reguler 100% luring, jenjang Strata 1.",
+
+    timeline: [
+      { date: "25 Juli 2026", label: "Pendaftaran ODS Gelombang 3 dibuka", state: tls("2026-07-25") },
+      ...(status === "open" || status === "closing" ? [{
+        date: todayLabel,
+        label: "Pendaftaran sedang berlangsung",
+        state: "active",
+        now: true,
+      }] : []),
+      { date: "4 September 2026", label: "Batas akhir pendaftaran ODS Gelombang 3", state: status === "closed" ? "done" : "upcoming" },
+    ],
+  };
+};
 
 // GENERATE DATA SESUAI FORMAT PMDK
 const createPMDKActive = (todayLabel) => {
@@ -647,6 +720,7 @@ export const buildJalurData = () => {
   const todayLabel = getTodayLabel();
 
   return [
+    createODSActive(todayLabel),
     createPMDKActive(todayLabel),
     createUSMActive(todayLabel),
     createUSMUTBKSesi1(todayLabel),
