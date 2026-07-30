@@ -257,7 +257,7 @@ const createFKUSMActive = (todayLabel) => {
       },
       ...(status === "open" || status === "closing" ? [{
         date: todayLabel,
-        label: `${gelLabel} sedang berlangsung`,
+        label: "Pendaftaran sedang berlangsung",
         state: "active",
         now: true,
       }] : []),
@@ -343,7 +343,7 @@ const createFKUTBK = (todayLabel) => {
       { date: "16 Juli 2026", label: "Pendaftaran Kedokteran via Nilai UTBK Gel.1 dibuka", state: tls("2026-07-16") },
       ...(status === "open" || status === "closing" ? [{
         date: todayLabel,
-        label: "Gelombang 1 sedang berlangsung",
+        label: "Pendaftaran sedang berlangsung",
         state: "active",
         now: true,
       }] : []),
