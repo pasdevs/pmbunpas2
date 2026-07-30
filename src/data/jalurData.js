@@ -266,11 +266,6 @@ const createFKUSMActive = (todayLabel) => {
         label: `Batas akhir pendaftaran Kedokteran ${gelLabel}`,
         state: status === "closed" ? "done" : "upcoming",
       },
-      ...(g.gel < GELOMBANG_FK[GELOMBANG_FK.length - 1].gel ? [{
-        date: "Gel. berikutnya",
-        label: "Biaya naik di gelombang selanjutnya",
-        state: "upcoming",
-      }] : []),
     ],
   };
 };
