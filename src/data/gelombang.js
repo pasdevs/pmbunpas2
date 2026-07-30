@@ -72,6 +72,7 @@ export const GELOMBANG_FK = [
   },
   {
     gel: 4,
+    label: "Gelombang Khusus Agustus",
     start: "2026-06-25",
     end: "2026-08-08",
     period: "25 Jun – 8 Agt 2026",

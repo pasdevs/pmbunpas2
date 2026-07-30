@@ -188,6 +188,7 @@ const createPMDKActive = (todayLabel) => {
 // GENERATE DATA SESUAI FORMAT KEDOKTERAN
 const createFKUSMActive = (todayLabel) => {
   const g = getActiveGelombang();
+  const gelLabel = g.label || `Gelombang ${g.gel}`;
   const { status, text } = getStatusInfo(g.start, g.end);
 
   return {
@@ -206,14 +207,14 @@ const createFKUSMActive = (todayLabel) => {
 
     popular: false,
 
-    value: "Seleksi masuk Fakultas Kedokteran via ujian. 4 gelombang penerimaan, kuota terbatas per gelombang.",
+    value: "Jalur Penerimaan khusus yang memilih Fakultas Kedokteran Universitas Pasundan, melalui tes tulis dan Tes Lainnya: Wawancara, MMPI.",
 
     tags: [],
 
     status,
     statusText: text,
 
-    gel: `Gelombang ${g.gel}`,
+    gel: gelLabel,
 
     period: g.period,
     startDate: g.start,
@@ -226,7 +227,6 @@ const createFKUSMActive = (todayLabel) => {
       "Pendaftar maksimal 3 tahun setelah lulus SMA (2024-2026)",
       "Siap mengikuti ujian tertulis dan tes kesehatan",
       "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
-      "Bersedia membayar biaya sesuai gelombang yang dipilih",
     ],
 
     steps: [
@@ -247,23 +247,23 @@ const createFKUSMActive = (todayLabel) => {
     benefits: [],
     benefitTotal: "—",
 
-    benefitNote: `Prodi Kedokteran tidak mendapatkan potongan DP maupun insentif. Biaya Gel.${g.gel} mulai ${g.biaya}.`,
+    benefitNote: "",
 
     timeline: [
       {
         date: g.period.split(" – ")[0],
-        label: `Pendaftaran Gel.${g.gel} dibuka`,
+        label: `Pendaftaran Kedokteran ${gelLabel} dibuka`,
         state: status === "soon" ? "upcoming" : "done",
       },
       ...(status === "open" || status === "closing" ? [{
         date: todayLabel,
-        label: `Gelombang ${g.gel} sedang berlangsung`,
+        label: `${gelLabel} sedang berlangsung`,
         state: "active",
         now: true,
       }] : []),
       {
         date: g.period.split(" – ")[1],
-        label: `Deadline Gel.${g.gel} Kedokteran USM`,
+        label: `Batas akhir pendaftaran Kedokteran ${gelLabel}`,
         state: status === "closed" ? "done" : "upcoming",
       },
       ...(g.gel < GELOMBANG_FK[GELOMBANG_FK.length - 1].gel ? [{
@@ -337,17 +337,17 @@ const createFKUTBK = (todayLabel) => {
     benefits: [],
     benefitTotal: "—",
 
-    benefitNote: "Prodi Kedokteran tidak mendapatkan potongan DP maupun insentif. Skor UTBK minimal 500 dinyatakan lulus Tahap I (seleksi akademik) dan berhak melanjutkan ke tahapan seleksi berikutnya.",
+    benefitNote: "",
 
     timeline: [
-      { date: "16 Juli 2026", label: "Pendaftaran Gel.1 dibuka", state: tls("2026-07-16") },
+      { date: "16 Juli 2026", label: "Pendaftaran Kedokteran via Nilai UTBK Gel.1 dibuka", state: tls("2026-07-16") },
       ...(status === "open" || status === "closing" ? [{
         date: todayLabel,
         label: "Gelombang 1 sedang berlangsung",
         state: "active",
         now: true,
       }] : []),
-      { date: "8 Agustus 2026", label: "Batas akhir pendaftaran Gel.1 Kedokteran via Nilai UTBK", state: status === "closed" ? "done" : "upcoming" },
+      { date: "8 Agustus 2026", label: "Batas akhir pendaftaran Kedokteran via Nilai UTBK Gel.1", state: status === "closed" ? "done" : "upcoming" },
     ],
   };
 };
