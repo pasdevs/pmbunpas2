@@ -1031,15 +1031,15 @@ const PMBLanding = () => {
           {/* Cards per group */}
           {jalurProfile === "maba" && (
             <div className="space-y-6">
-              {/* Jalur ODS */}
+              {/* Jalur ODR */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">Jalur ODS</span>
+                  <span className="text-xs font-bold text-slate-700">Jalur ODR</span>
                   <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-purple-50 text-purple-700 px-2 py-1 rounded-full uppercase tracking-wide">One Day Service</span>
+                  <span className="text-[9px] font-bold bg-purple-50 text-purple-700 px-2 py-1 rounded-full uppercase tracking-wide">One Day Result</span>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "ods").map(j => (
+                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "odr").map(j => (
                     <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
                   ))}
                 </div>

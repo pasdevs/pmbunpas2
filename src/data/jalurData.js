@@ -14,30 +14,30 @@ const getActivePMDK = () => getSmartActive(GELOMBANG_PMDK);
 const getActiveUSM = () => getSmartActive(GELOMBANG_USM);
 const getActiveGelombang = () => getSmartActive(GELOMBANG_FK);
 
-// GENERATE DATA ONE DAY RESULT — ODS GELOMBANG 3 (25 Jul – 4 Sep 2026)
-const createODSActive = (todayLabel) => {
+// GENERATE DATA ONE DAY RESULT — ODR GELOMBANG 3 (25 Jul – 4 Sep 2026)
+const createODRActive = (todayLabel) => {
   const { status, text } = getStatusInfo("2026-07-25", "2026-09-04");
   const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
 
   return {
-    id: "ods",
+    id: "odr",
     group: "maba",
-    subgroup: "ods",
+    subgroup: "odr",
 
     icon: Zap,
     iconBg: "bg-purple-100 text-purple-700",
 
-    badge: "ODS",
+    badge: "ODR",
     badgeColor: "bg-purple-50 text-purple-700",
 
-    name: "One Day Result – ODS Gelombang 3",
-    nameButton: "ODS Gelombang 3",
+    name: "One Day Result – ODR Gelombang 3",
+    nameButton: "ODR Gelombang 3",
 
     popular: false,
 
     value: "Kemudahan pendaftaran dengan hasil cepat (maksimal 2 hari kerja) untuk calon mahasiswa berprestasi dan umum.",
 
-    tags: ["⚡ Hasil Maks. 2 Hari Kerja", "🎓 Berprestasi & Umum"],
+    tags: ["📄 Transkrip Nilai", "📊 Sertifikat UTBK"],
 
     status,
     statusText: text,
@@ -67,22 +67,22 @@ const createODSActive = (todayLabel) => {
     costFormNote: "Formulir pendaftaran Gelombang 3",
 
     costSave: "—",
-    costSaveNote: "Tidak ada potongan untuk jalur ODS",
+    costSaveNote: "Tidak ada potongan untuk jalur ODR",
 
     benefits: [],
     benefitTotal: "—",
 
-    benefitNote: "Jalur ODS (One Day Service) — sistem kuliah reguler 100% luring, jenjang Strata 1.",
+    benefitNote: "Jalur ODR (One Day Result) — sistem kuliah reguler 100% luring, jenjang Strata 1.",
 
     timeline: [
-      { date: "25 Juli 2026", label: "Pendaftaran ODS Gelombang 3 dibuka", state: tls("2026-07-25") },
+      { date: "25 Juli 2026", label: "Pendaftaran ODR Gelombang 3 dibuka", state: tls("2026-07-25") },
       ...(status === "open" || status === "closing" ? [{
         date: todayLabel,
         label: "Pendaftaran sedang berlangsung",
         state: "active",
         now: true,
       }] : []),
-      { date: "4 September 2026", label: "Batas akhir pendaftaran ODS Gelombang 3", state: status === "closed" ? "done" : "upcoming" },
+      { date: "4 September 2026", label: "Batas akhir pendaftaran ODR Gelombang 3", state: status === "closed" ? "done" : "upcoming" },
     ],
   };
 };
@@ -720,7 +720,7 @@ export const buildJalurData = () => {
   const todayLabel = getTodayLabel();
 
   return [
-    createODSActive(todayLabel),
+    createODRActive(todayLabel),
     createPMDKActive(todayLabel),
     createUSMActive(todayLabel),
     createUSMUTBKSesi1(todayLabel),
