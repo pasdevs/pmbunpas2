@@ -711,6 +711,98 @@ const createKIPKuliahActive = (todayLabel) => {
   };
 };
 
+// GENERATE DATA RPL PEROLEHAN
+const createRPLPerolehanActive = (todayLabel) => {
+  const { status, text } = getStatusInfo("2026-01-05", "2026-09-30");
+
+  return {
+    id: "rpl_p", group: "transfer", subgroup: "rpl",
+    icon: GraduationCap, iconBg: "bg-orange-100 text-orange-700",
+    badge: "RPL", badgeColor: "bg-teal-50 text-teal-700",
+    name: "RPL Perolehan 2026 Ganjil",
+    nameButton: "RPL Perolehan",
+    popular: false,
+    value: "Konversi pengalaman kerja menjadi SKS. Untuk profesional yang ingin gelar S1 tanpa mulai dari nol.",
+    tags: ["💼 Portofolio Kerja", "🤝 Asesmen Kompetensi"],
+    status, statusText: text, gel: "Gelombang 1",
+    period: "5 Jan – 30 Sep 2026", startDate: "2026-01-05", deadline: "2026-09-30",
+    link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/287",
+    elig: [
+      "Memiliki pengalaman kerja minimal 2–3 tahun di bidang relevan",
+      "Memiliki ijazah SMA/SMK/D3 atau sederajat",
+      "Dapat menunjukkan portofolio dan bukti kompetensi kerja",
+      "Bersedia mengikuti asesmen kompetensi",
+    ],
+    steps: [
+      { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+      { ic: "💼", lb: "Submit Portofolio Kerja" },
+      { ic: "👤", lb: "Asesmen Kompetensi" },
+      { ic: "🎉", lb: "Konversi SKS & Daftar Ulang" },
+    ],
+    costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
+    costSave: "—", costSaveNote: "Benefit momentum tidak berlaku untuk RPL",
+    benefits: [],
+    benefitTotal: "—",
+    benefitNote: "Skema potongan momentum hanya berlaku untuk jalur PMDK/USM reguler. Konfirmasi ke bagian Registrasi untuk RPL.",
+    timeline: [
+      { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
+      ...(status === "open" || status === "closing" ? [{
+        date: todayLabel,
+        label: "Pendaftaran masih dibuka",
+        state: "active",
+        now: true,
+      }] : []),
+      { date: "30 September 2026", label: "Batas akhir pendaftaran jalur RPL Perolehan", state: status === "closed" ? "done" : "upcoming" },
+    ],
+  };
+};
+
+// GENERATE DATA RPL TRANSFER
+const createRPLTransferActive = (todayLabel) => {
+  const { status, text } = getStatusInfo("2026-01-05", "2026-09-30");
+
+  return {
+    id: "rpl_t", group: "transfer", subgroup: "rpl",
+    icon: Repeat, iconBg: "bg-pink-100 text-pink-700",
+    badge: "Transfer", badgeColor: "bg-teal-50 text-teal-700",
+    name: "RPL Transfer 2026 Ganjil",
+    nameButton: "RPL Transfer",
+    popular: false,
+    value: "Calon mahasiswa lulusan dari Diploma (D1, D2 dan D3).",
+    tags: ["📄 Transkrip Asal", "✅ Konversi SKS"],
+    status, statusText: text, gel: "Gelombang 1",
+    period: "5 Jan – 30 Sep 2026", startDate: "2026-01-05", deadline: "2026-09-30",
+    link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/211",
+    elig: [
+      "Mahasiswa aktif atau cuti dari perguruan tinggi terakreditasi",
+      "Memiliki transkrip nilai dari kampus asal",
+      "Prodi tujuan di UNPAS relevan dengan prodi asal",
+      "Bersedia mengikuti proses konversi SKS",
+    ],
+    steps: [
+      { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+      { ic: "📄", lb: "Submit Transkrip & Berkas Asal" },
+      { ic: "🔍", lb: "Penilaian Konversi SKS" },
+      { ic: "🎉", lb: "Penetapan SKS & Daftar Ulang" },
+    ],
+    costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
+    costSave: "—", costSaveNote: "Benefit momentum tidak berlaku untuk Transfer",
+    benefits: [],
+    benefitTotal: "—",
+    benefitNote: "Skema potongan momentum hanya berlaku untuk jalur PMDK/USM reguler. Konfirmasi ke bagian Registrasi untuk RPL.",
+    timeline: [
+      { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
+      ...(status === "open" || status === "closing" ? [{
+        date: todayLabel,
+        label: "Pendaftaran masih dibuka",
+        state: "active",
+        now: true,
+      }] : []),
+      { date: "30 September 2026", label: "Batas akhir pendaftaran jalur RPL Transfer", state: status === "closed" ? "done" : "upcoming" },
+    ],
+  };
+};
+
 export const buildJalurData = () => {
   const todayLabel = getTodayLabel();
 
@@ -723,77 +815,7 @@ export const buildJalurData = () => {
     createFKUSMActive(todayLabel),
     createFKUTBK(todayLabel),
     createKIPKuliahActive(todayLabel),
-
-
-    {
-      id: "rpl_p", group: "transfer", subgroup: "rpl",
-      icon: GraduationCap, iconBg: "bg-orange-100 text-orange-700",
-      badge: "RPL", badgeColor: "bg-teal-50 text-teal-700",
-      name: "RPL Perolehan 2026 Ganjil",
-      nameButton: "RPL Perolehan",
-      popular: false,
-      value: "Konversi pengalaman kerja menjadi SKS. Untuk profesional yang ingin gelar S1 tanpa mulai dari nol.",
-      tags: ["💼 Portofolio Kerja", "🤝 Asesmen Kompetensi"],
-      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
-      period: "5 Jan – 30 Sep 2026", deadline: "2026-09-30",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/287",
-      elig: [
-        "Memiliki pengalaman kerja minimal 2–3 tahun di bidang relevan",
-        "Memiliki ijazah SMA/SMK/D3 atau sederajat",
-        "Dapat menunjukkan portofolio dan bukti kompetensi kerja",
-        "Bersedia mengikuti asesmen kompetensi",
-      ],
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "💼", lb: "Submit Portofolio Kerja" },
-        { ic: "👤", lb: "Asesmen Kompetensi" },
-        { ic: "🎉", lb: "Konversi SKS & Daftar Ulang" },
-      ],
-      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
-      costSave: "—", costSaveNote: "Benefit momentum tidak berlaku untuk RPL",
-      benefits: [],
-      benefitTotal: "—",
-      benefitNote: "Skema potongan momentum hanya berlaku untuk jalur PMDK/USM reguler. Konfirmasi ke bagian Registrasi untuk RPL.",
-      timeline: [
-        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
-        { date: todayLabel, label: "Pendaftaran masih dibuka", state: "active", now: true },
-        { date: "30 September 2026", label: "Batas akhir pendaftaran jalur RPL Perolehan", state: "upcoming" },
-      ],
-    },
-    {
-      id: "rpl_t", group: "transfer", subgroup: "rpl",
-      icon: Repeat, iconBg: "bg-pink-100 text-pink-700",
-      badge: "Transfer", badgeColor: "bg-teal-50 text-teal-700",
-      name: "RPL Transfer 2026 Ganjil",
-      nameButton: "RPL Transfer",
-      popular: false,
-      value: "Calon mahasiswa lulusan dari Diploma (D1, D2 dan D3).",
-      tags: ["📄 Transkrip Asal", "✅ Konversi SKS"],
-      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
-      period: "5 Jan – 30 Sep 2026", deadline: "2026-09-30",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/211",
-      elig: [
-        "Mahasiswa aktif atau cuti dari perguruan tinggi terakreditasi",
-        "Memiliki transkrip nilai dari kampus asal",
-        "Prodi tujuan di UNPAS relevan dengan prodi asal",
-        "Bersedia mengikuti proses konversi SKS",
-      ],
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "📄", lb: "Submit Transkrip & Berkas Asal" },
-        { ic: "🔍", lb: "Penilaian Konversi SKS" },
-        { ic: "🎉", lb: "Penetapan SKS & Daftar Ulang" },
-      ],
-      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
-      costSave: "—", costSaveNote: "Benefit momentum tidak berlaku untuk Transfer",
-      benefits: [],
-      benefitTotal: "—",
-      benefitNote: "Skema potongan momentum hanya berlaku untuk jalur PMDK/USM reguler. Konfirmasi ke bagian Registrasi untuk RPL.",
-      timeline: [
-        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
-        { date: todayLabel, label: "Pendaftaran masih dibuka", state: "active", now: true },
-        { date: "30 September 2026", label: "Batas akhir pendaftaran jalur RPL Transfer", state: "upcoming" },
-      ],
-    },
+    createRPLPerolehanActive(todayLabel),
+    createRPLTransferActive(todayLabel),
   ];
 };

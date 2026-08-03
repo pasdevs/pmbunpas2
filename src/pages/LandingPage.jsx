@@ -407,7 +407,8 @@ const PMBLanding = () => {
   const [openJalurId, setOpenJalurId] = useState(null);
   const [showUTBKWidget, setShowUTBKWidget] = useState(false);
 
-  const JALUR_DATA = buildJalurData();
+  // Card jalur yang sudah closed disembunyikan dari daftar (bukan cuma ditandai "Ditutup")
+  const JALUR_DATA = buildJalurData().filter(j => j.status !== "closed");
 
   const badges = [
     {
@@ -1031,19 +1032,25 @@ const PMBLanding = () => {
           {/* Cards per group */}
           {jalurProfile === "maba" && (
             <div className="space-y-6">
-              {/* Jalur ODR */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">Jalur ODR</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-purple-50 text-purple-700 px-2 py-1 rounded-full uppercase tracking-wide">One Day Result</span>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "odr").map(j => (
-                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                  ))}
-                </div>
-              </div>
+              {/* Jalur ODR — section hanya tampil jika ada kartu yang lolos filter */}
+              {(() => {
+                const odrCards = JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "odr");
+                if (odrCards.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">Jalur ODR</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-purple-50 text-purple-700 px-2 py-1 rounded-full uppercase tracking-wide">One Day Result</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {odrCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
               {/* USM via Nilai UTBK — section hanya tampil jika ada kartu yang lolos filter */}
               {(() => {
                 const today = new Date();
@@ -1075,61 +1082,83 @@ const PMBLanding = () => {
                   </div>
                 );
               })()}
-              {/* Jalur Utama */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">Jalur Utama</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full uppercase tracking-wide">Paling Banyak Dipilih</span>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama").map(j => (
-                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                  ))}
-                </div>
-              </div>
-              {/* Jalur Kedokteran */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">Jalur Kedokteran</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-blue-50 text-blue-700 px-2 py-1 rounded-full uppercase tracking-wide">Program Khusus</span>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kedokteran").map(j => (
-                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                  ))}
-                </div>
-              </div>
-              {/* Jalur KIP-Kuliah */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">Jalur KIP-Kuliah</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-amber-50 text-amber-700 px-2 py-1 rounded-full uppercase tracking-wide">Khusus BIDIKMISI / KIP</span>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kip").map(j => (
-                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                  ))}
-                </div>
-              </div>
+              {/* Jalur Utama — section hanya tampil jika ada kartu yang lolos filter */}
+              {(() => {
+                const utamaCards = JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama");
+                if (utamaCards.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">Jalur Utama</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full uppercase tracking-wide">Paling Banyak Dipilih</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {utamaCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+              {/* Jalur Kedokteran — section hanya tampil jika ada kartu yang lolos filter */}
+              {(() => {
+                const kedokteranCards = JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kedokteran");
+                if (kedokteranCards.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">Jalur Kedokteran</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-blue-50 text-blue-700 px-2 py-1 rounded-full uppercase tracking-wide">Program Khusus</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {kedokteranCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+              {/* Jalur KIP-Kuliah — section hanya tampil jika ada kartu yang lolos filter */}
+              {(() => {
+                const kipCards = JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kip");
+                if (kipCards.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">Jalur KIP-Kuliah</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-amber-50 text-amber-700 px-2 py-1 rounded-full uppercase tracking-wide">Khusus BIDIKMISI / KIP</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {kipCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           )}
 
-          {jalurProfile === "transfer" && (
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-slate-700">Jalur RPL (Rekognisi Pembelajaran Lampau)</span>
-                <div className="flex-1 h-px bg-slate-200" />
+          {jalurProfile === "transfer" && (() => {
+            const rplCards = JALUR_DATA.filter(j => j.group === "transfer");
+            if (rplCards.length === 0) return null;
+            return (
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-slate-700">Jalur RPL (Rekognisi Pembelajaran Lampau)</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 items-start">
+                  {rplCards.map(j => (
+                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                  ))}
+                </div>
               </div>
-              <div className="grid sm:grid-cols-2 gap-4 items-start">
-                {JALUR_DATA.filter(j => j.group === "transfer").map(j => (
-                  <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                ))}
-              </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Guided CTA */}
           {/* <motion.div variants={sectionItem} className="mt-8 rounded-2xl bg-slate-900 p-5 flex flex-col sm:flex-row items-center gap-4">
