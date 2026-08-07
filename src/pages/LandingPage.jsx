@@ -407,8 +407,13 @@ const PMBLanding = () => {
   const [openJalurId, setOpenJalurId] = useState(null);
   const [showUTBKWidget, setShowUTBKWidget] = useState(false);
 
-  // Card jalur yang sudah closed disembunyikan dari daftar (bukan cuma ditandai "Ditutup")
-  const JALUR_DATA = buildJalurData().filter(j => j.status !== "closed");
+  // ALL_JALUR_DATA: semua jalur apa adanya — dipakai untuk Jalur Utama & RPL yang harus tetap
+  // tampil (dengan status "Ditutup") supaya pengunjung selalu bisa lihat jalur pendaftaran
+  // utama UNPAS meski sedang tidak ada gelombang aktif.
+  // JALUR_DATA: closed card disembunyikan — dipakai untuk jalur lain (ODR, Kedokteran, KIP,
+  // UTBK) yang memang dimaksudkan hilang begitu tutup.
+  const ALL_JALUR_DATA = buildJalurData();
+  const JALUR_DATA = ALL_JALUR_DATA.filter(j => j.status !== "closed");
 
   const badges = [
     {
@@ -1082,10 +1087,9 @@ const PMBLanding = () => {
                   </div>
                 );
               })()}
-              {/* Jalur Utama — section hanya tampil jika ada kartu yang lolos filter */}
+              {/* Jalur Utama — selalu tampil (termasuk saat closed) supaya pengunjung selalu bisa lihat jalur utama UNPAS */}
               {(() => {
-                const utamaCards = JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama");
-                if (utamaCards.length === 0) return null;
+                const utamaCards = ALL_JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama");
                 return (
                   <div>
                     <div className="flex items-center gap-2 mb-3">
@@ -1143,8 +1147,7 @@ const PMBLanding = () => {
           )}
 
           {jalurProfile === "transfer" && (() => {
-            const rplCards = JALUR_DATA.filter(j => j.group === "transfer");
-            if (rplCards.length === 0) return null;
+            const rplCards = ALL_JALUR_DATA.filter(j => j.group === "transfer");
             return (
               <div>
                 <div className="flex items-center gap-2 mb-3">
