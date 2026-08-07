@@ -42,6 +42,14 @@ export const GELOMBANG_PMDK = [
     link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/303",
     momentums: [],
   },
+  {
+    gel: 3,
+    start: "2026-08-15",
+    end: "2026-09-04",
+    period: "15 Agt 2026 – 4 Sep 2026",
+    link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/310",
+    momentums: [],
+  },
 ];
 
 //CONFIG GELOMBANG FK
