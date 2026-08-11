@@ -32,10 +32,11 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
   const isOpen = openId === j.id;
   const dl = getDeadlineLabel(j.deadline);
   const Icon = j.icon;
-  // Jalur Utama (PMDK/USM) yang sudah closed pakai tampilan ringkas — tanpa status/gelombang,
-  // metode pembayaran, potensi hemat, dan timeline — supaya tidak menampilkan info gelombang
-  // yang sudah tidak berlaku lagi.
-  const isClosedUtama = j.subgroup === "utama" && j.status === "closed";
+  // Jalur Utama (PMDK/USM) & USM Kedokteran yang sudah closed pakai tampilan ringkas — tanpa
+  // status/gelombang, metode pembayaran, potensi hemat, dan timeline — supaya tidak menampilkan
+  // info gelombang yang sudah tidak berlaku lagi. Kedokteran via Nilai UTBK (dan jalur lain)
+  // tidak termasuk — perilakunya tetap hilang begitu closed.
+  const isClosedSimple = (j.subgroup === "utama" || j.id === "fk_usm") && j.status === "closed";
 
   const toggle = () => setOpenId(isOpen ? null : j.id);
 
@@ -69,7 +70,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
             <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{t}</span>
           ))}
         </div>
-        {isClosedUtama ? (
+        {isClosedSimple ? (
           <div className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
             <div className="w-2 h-2 rounded-full bg-red-500" />
             <span className="text-[13px] font-semibold text-red-500">Pendaftaran Sudah Ditutup</span>
@@ -169,7 +170,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
               </div>
 
               {/* 3. Biaya */}
-              {!isClosedUtama && (
+              {!isClosedSimple && (
                 <div className="mb-5">
                   <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
                     <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">3</div>
@@ -219,7 +220,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
               )}
 
               {/* 4. Timeline */}
-              {!isClosedUtama && (
+              {!isClosedSimple && (
                 <div className="mb-5">
                   <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
                     <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">4</div>
@@ -257,7 +258,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
 
               {/* 5. CTA */}
               <div className="mb-3">
-                {!isClosedUtama && (
+                {!isClosedSimple && (
                   <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
                     <div className="w-6 h-6 rounded-full bg-[#6B5B51] flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">5</div>
                     <span className="text-[14px] font-bold text-slate-900">
@@ -426,11 +427,11 @@ const PMBLanding = () => {
   const [openJalurId, setOpenJalurId] = useState(null);
   const [showUTBKWidget, setShowUTBKWidget] = useState(false);
 
-  // ALL_JALUR_DATA: semua jalur apa adanya — dipakai untuk Jalur Utama & RPL yang harus tetap
-  // tampil (dengan status "Ditutup") supaya pengunjung selalu bisa lihat jalur pendaftaran
-  // utama UNPAS meski sedang tidak ada gelombang aktif.
-  // JALUR_DATA: closed card disembunyikan — dipakai untuk jalur lain (ODR, Kedokteran, KIP,
-  // UTBK) yang memang dimaksudkan hilang begitu tutup.
+  // ALL_JALUR_DATA: semua jalur apa adanya — dipakai untuk Jalur Utama, USM Kedokteran, & RPL
+  // yang harus tetap tampil (dengan status "Ditutup") supaya pengunjung selalu bisa lihat jalur
+  // pendaftaran UNPAS meski sedang tidak ada gelombang aktif.
+  // JALUR_DATA: closed card disembunyikan — dipakai untuk jalur lain (ODR, Kedokteran via Nilai
+  // UTBK, KIP, UTBK) yang memang dimaksudkan hilang begitu tutup.
   const ALL_JALUR_DATA = buildJalurData();
   const JALUR_DATA = ALL_JALUR_DATA.filter(j => j.status !== "closed");
 
@@ -1124,10 +1125,13 @@ const PMBLanding = () => {
                   </div>
                 );
               })()}
-              {/* Jalur Kedokteran — section hanya tampil jika ada kartu yang lolos filter */}
+              {/* Jalur Kedokteran — USM Kedokteran selalu tampil (termasuk saat closed); kartu
+                  lain di section ini (Kedokteran via Nilai UTBK, momentum lain) tetap hilang
+                  begitu closed, seperti jalur non-utama lainnya. */}
               {(() => {
-                const kedokteranCards = JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kedokteran");
-                if (kedokteranCards.length === 0) return null;
+                const kedokteranCards = ALL_JALUR_DATA.filter(j =>
+                  j.group === "maba" && j.subgroup === "kedokteran" && (j.id === "fk_usm" || j.status !== "closed")
+                );
                 return (
                   <div>
                     <div className="flex items-center gap-2 mb-3">

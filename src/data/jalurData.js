@@ -190,6 +190,8 @@ const createFKUSMActive = (todayLabel) => {
   const g = getActiveGelombang();
   const gelLabel = g.label || `Gelombang ${g.gel}`;
   const { status, text } = getStatusInfo(g.start, g.end);
+  const currentYear = new Date().getFullYear();
+  const lulusYearRange = `${currentYear - 2}-${currentYear}`;
 
   return {
     id: "fk_usm",
@@ -224,7 +226,7 @@ const createFKUSMActive = (todayLabel) => {
 
     elig: [
       "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
-      "Pendaftar maksimal 3 tahun setelah lulus SMA (2024-2026)",
+      `Pendaftar maksimal 3 tahun setelah lulus SMA (${lulusYearRange})`,
       "Siap mengikuti ujian tertulis dan tes kesehatan",
       "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
     ],
