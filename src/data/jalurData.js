@@ -57,7 +57,7 @@ const createODRActive = (todayLabel) => {
     ],
 
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "📤", lb: "Upload Transkrip / Sertifikat UTBK" },
       { ic: "⚡", lb: "Verifikasi Maks. 2 Hari Kerja" },
       { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
@@ -137,7 +137,7 @@ const createPMDKActive = (todayLabel) => {
     ],
 
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "📊", lb: "Input Nilai Rapor Sem 1–5" },
       { ic: "📤", lb: "Upload Berkas & Verifikasi" },
       { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
@@ -230,7 +230,7 @@ const createFKUSMActive = (todayLabel) => {
     ],
 
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "🩺", lb: "USM Kedokteran" },
       { ic: "❤️‍🩹", lb: "Kesehatan dan MMPI" },
       { ic: "🏫", lb: "Open House" },
@@ -314,7 +314,7 @@ const createFKUTBK = (todayLabel) => {
     ],
 
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "📊", lb: "Verifikasi Skor UTBK ≥ 500" },
       { ic: "🩺", lb: "USM Kedokteran" },
       { ic: "❤️‍🩹", lb: "Kesehatan dan MMPI" },
@@ -400,7 +400,7 @@ const createUSMUTBKSesi1 = (todayLabel) => {
     ],
 
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 350rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "📤", lb: "Upload Sertifikat UTBK (2–14 Juni)" },
       { ic: "⏳", lb: "Verifikasi Skor Panitia (1 hari kerja)" },
       { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
@@ -494,7 +494,7 @@ const createUSMUTBKSesi2 = (todayLabel) => {
     ],
 
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "📤", lb: "Upload Sertifikat UTBK" },
       { ic: "⏳", lb: "Verifikasi Skor (1 hari kerja)" },
       { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
@@ -571,7 +571,7 @@ const createUSMActive = (todayLabel) => {
     ],
 
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "✏️", lb: "Ikut Ujian Tertulis" },
       { ic: "📤", lb: "Upload Berkas & Verifikasi" },
       { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
@@ -734,7 +734,7 @@ const createRPLPerolehanActive = (todayLabel) => {
       "Bersedia mengikuti asesmen kompetensi",
     ],
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "💼", lb: "Submit Portofolio Kerja" },
       { ic: "👤", lb: "Asesmen Kompetensi" },
       { ic: "🎉", lb: "Konversi SKS & Daftar Ulang" },
@@ -780,7 +780,7 @@ const createRPLTransferActive = (todayLabel) => {
       "Bersedia mengikuti proses konversi SKS",
     ],
     steps: [
-      { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
+      { ic: "📝", lb: "Isi dan Bayar Formulir" },
       { ic: "📄", lb: "Submit Transkrip & Berkas Asal" },
       { ic: "🔍", lb: "Penilaian Konversi SKS" },
       { ic: "🎉", lb: "Penetapan SKS & Daftar Ulang" },

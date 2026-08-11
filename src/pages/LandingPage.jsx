@@ -32,6 +32,10 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
   const isOpen = openId === j.id;
   const dl = getDeadlineLabel(j.deadline);
   const Icon = j.icon;
+  // Jalur Utama (PMDK/USM) yang sudah closed pakai tampilan ringkas — tanpa status/gelombang,
+  // metode pembayaran, potensi hemat, dan timeline — supaya tidak menampilkan info gelombang
+  // yang sudah tidak berlaku lagi.
+  const isClosedUtama = j.subgroup === "utama" && j.status === "closed";
 
   const toggle = () => setOpenId(isOpen ? null : j.id);
 
@@ -65,39 +69,48 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
             <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{t}</span>
           ))}
         </div>
-        <div className="flex items-center justify-between gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
-          <div className="flex items-center gap-2">
-            {j.status === 'closed' ? (
-              <>
-                <div className="w-2 h-2 rounded-full bg-red-500" />
-                <span className="text-[13px] font-semibold text-red-500">{j.statusText}</span>
-              </>
-            ) : j.status === 'soon' ? (
-              <>
-                <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_0_3px_rgba(59,130,246,0.15)]" />
-                <span className="text-[13px] font-semibold text-blue-600">{j.statusText}</span>
-              </>
-            ) : j.status === 'closing' ? (
-              <>
-                <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]" />
-                <span className="text-[13px] font-semibold text-amber-600">{j.statusText}</span>
-              </>
-            ) : (
-              <>
-                <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]" />
-                <span className="text-[13px] font-semibold text-green-600">{j.statusText}</span>
-              </>
-            )}
+        {isClosedUtama ? (
+          <div className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
+            <div className="w-2 h-2 rounded-full bg-red-500" />
+            <span className="text-[13px] font-semibold text-red-500">Pendaftaran Sudah Ditutup</span>
           </div>
-          <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{j.gel}</span>
-        </div>
-        <div className="flex items-center flex-wrap gap-2 mb-3">
-          <span className="text-[12.5px] text-slate-500 font-medium">{j.period}</span>
-          {j.status === 'soon'
-            ? <span className="text-[11px] font-bold px-2 py-0.5 rounded-md text-blue-600 bg-blue-50">Buka {new Date(j.startDate + 'T00:00:00+07:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-            : <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${dl.cls}`}>{dl.text}</span>
-          }
-        </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
+              <div className="flex items-center gap-2">
+                {j.status === 'closed' ? (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-red-500" />
+                    <span className="text-[13px] font-semibold text-red-500">{j.statusText}</span>
+                  </>
+                ) : j.status === 'soon' ? (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_0_3px_rgba(59,130,246,0.15)]" />
+                    <span className="text-[13px] font-semibold text-blue-600">{j.statusText}</span>
+                  </>
+                ) : j.status === 'closing' ? (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]" />
+                    <span className="text-[13px] font-semibold text-amber-600">{j.statusText}</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]" />
+                    <span className="text-[13px] font-semibold text-green-600">{j.statusText}</span>
+                  </>
+                )}
+              </div>
+              <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{j.gel}</span>
+            </div>
+            <div className="flex items-center flex-wrap gap-2 mb-3">
+              <span className="text-[12.5px] text-slate-500 font-medium">{j.period}</span>
+              {j.status === 'soon'
+                ? <span className="text-[11px] font-bold px-2 py-0.5 rounded-md text-blue-600 bg-blue-50">Buka {new Date(j.startDate + 'T00:00:00+07:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                : <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${dl.cls}`}>{dl.text}</span>
+              }
+            </div>
+          </>
+        )}
         <button
           onClick={toggle}
           className="w-full py-2.5 rounded-xl text-[14px] font-bold text-center transition-all duration-200 bg-[#6B5B51] text-white hover:bg-[#5a4c43] cursor-pointer"
@@ -156,96 +169,102 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
               </div>
 
               {/* 3. Biaya */}
-              <div className="mb-5">
-                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
-                  <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">3</div>
-                  <span className="text-[14px] font-bold text-slate-900">Berapa biayanya?</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2 mb-3">
-                  <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-3 text-center">
-                    <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-1">Formulir Pendaftaran</div>
-                    <div className="text-2xl font-black text-slate-800">{j.costForm}</div>
+              {!isClosedUtama && (
+                <div className="mb-5">
+                  <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                    <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">3</div>
+                    <span className="text-[14px] font-bold text-slate-900">Berapa biayanya?</span>
                   </div>
-                  <div className="bg-green-50 border-2 border-green-100 rounded-xl p-3 text-center">
-                    <div className="text-[11px] font-bold uppercase tracking-wide text-green-600 mb-1">Potensi Hemat</div>
-                    <div className="text-2xl font-black text-green-600">{j.costSave}</div>
-                    <div className="text-[10.5px] text-green-500 font-medium mt-1">{j.costSaveNote}</div>
-                  </div>
-                </div>
-                {/* Metode Pembayaran */}
-                {j.subgroup !== "kip" && (
-                  <>
-                    <div className="text-[12px] font-semibold text-slate-500 mb-1.5">Metode Pembayaran:</div>
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {["🏧 VA Mandiri", "🏦 BJB (+Rp 3rb)"].map((p, i) => (
-                        <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{p}</span>
-                      ))}
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-3 text-center">
+                      <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-1">Formulir Pendaftaran</div>
+                      <div className="text-2xl font-black text-slate-800">{j.costForm}</div>
                     </div>
-                  </>
-                )}
-                {j.benefits.length > 0 && (
-                  <div className="bg-gradient-to-br from-green-800 to-teal-700 rounded-xl p-3 text-white">
-                    <div className="text-[11px] font-bold uppercase tracking-wide opacity-60 mb-2">Benefit daftar di Momentum {j.momentumLabel || "Aktif"}</div>
-                    {j.benefits.map((b, i) => (
-                      <div key={i} className="flex items-center justify-between text-[12.5px] font-semibold py-0.5">
-                        <span className="opacity-85">{b.label}</span>
-                        <span className="font-extrabold">{b.val}</span>
+                    <div className="bg-green-50 border-2 border-green-100 rounded-xl p-3 text-center">
+                      <div className="text-[11px] font-bold uppercase tracking-wide text-green-600 mb-1">Potensi Hemat</div>
+                      <div className="text-2xl font-black text-green-600">{j.costSave}</div>
+                      <div className="text-[10.5px] text-green-500 font-medium mt-1">{j.costSaveNote}</div>
+                    </div>
+                  </div>
+                  {/* Metode Pembayaran */}
+                  {j.subgroup !== "kip" && (
+                    <>
+                      <div className="text-[12px] font-semibold text-slate-500 mb-1.5">Metode Pembayaran:</div>
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {["🏧 VA Mandiri", "🏦 BJB (+Rp 3rb)"].map((p, i) => (
+                          <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{p}</span>
+                        ))}
                       </div>
-                    ))}
-                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-white/15 text-xs font-extrabold">
-                      <span>Total Potensi Hemat</span>
-                      <span>{j.benefitTotal}</span>
+                    </>
+                  )}
+                  {j.benefits.length > 0 && (
+                    <div className="bg-gradient-to-br from-green-800 to-teal-700 rounded-xl p-3 text-white">
+                      <div className="text-[11px] font-bold uppercase tracking-wide opacity-60 mb-2">Benefit daftar di Momentum {j.momentumLabel || "Aktif"}</div>
+                      {j.benefits.map((b, i) => (
+                        <div key={i} className="flex items-center justify-between text-[12.5px] font-semibold py-0.5">
+                          <span className="opacity-85">{b.label}</span>
+                          <span className="font-extrabold">{b.val}</span>
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between pt-2 mt-2 border-t border-white/15 text-xs font-extrabold">
+                        <span>Total Potensi Hemat</span>
+                        <span>{j.benefitTotal}</span>
+                      </div>
                     </div>
-                  </div>
-                )}
-                {j.benefitNote && (
-                  <p className="text-[11.5px] text-slate-500 italic mt-2 leading-relaxed">{j.benefitNote}</p>
-                )}
-              </div>
+                  )}
+                  {j.benefitNote && (
+                    <p className="text-[11.5px] text-slate-500 italic mt-2 leading-relaxed">{j.benefitNote}</p>
+                  )}
+                </div>
+              )}
 
               {/* 4. Timeline */}
-              <div className="mb-5">
-                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
-                  <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">4</div>
-                  <span className="text-[14px] font-bold text-slate-900">Kapan deadline-nya?</span>
-                </div>
-                <div className="flex flex-col">
-                  {j.timeline.map((t, i) => (
-                    <div key={i} className="flex gap-3">
-                      {/* Kolom kiri: dot + garis penghubung */}
-                      <div className="flex flex-col items-center flex-shrink-0 w-[10px]">
-                        <div className={`w-2.5 h-2.5 rounded-full border-2 flex-shrink-0 mt-[3px]
-                          ${t.state === "active" ? "border-green-500 bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]"
-                            : t.state === "done" ? "border-slate-400 bg-slate-400" : "border-slate-300 bg-white"}`} />
-                        {i < j.timeline.length - 1 && (
-                          <div className="w-0.5 flex-1 bg-slate-200 mt-1 min-h-[28px]" />
-                        )}
-                      </div>
-                      {/* Kolom kanan: teks */}
-                      <div className="flex-1 pb-7 last:pb-0">
-                        <div className="flex items-center gap-1.5 mb-0.5">
-                          <span className={`text-[11px] font-bold ${t.state === "active" ? "text-green-500" : "text-slate-400"}`}>{t.date}</span>
-                          {t.now && (
-                            <span className="text-[9px] font-extrabold text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded whitespace-nowrap leading-none">
-                              KAMU DI SINI
-                            </span>
+              {!isClosedUtama && (
+                <div className="mb-5">
+                  <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                    <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">4</div>
+                    <span className="text-[14px] font-bold text-slate-900">Kapan deadline-nya?</span>
+                  </div>
+                  <div className="flex flex-col">
+                    {j.timeline.map((t, i) => (
+                      <div key={i} className="flex gap-3">
+                        {/* Kolom kiri: dot + garis penghubung */}
+                        <div className="flex flex-col items-center flex-shrink-0 w-[10px]">
+                          <div className={`w-2.5 h-2.5 rounded-full border-2 flex-shrink-0 mt-[3px]
+                            ${t.state === "active" ? "border-green-500 bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]"
+                              : t.state === "done" ? "border-slate-400 bg-slate-400" : "border-slate-300 bg-white"}`} />
+                          {i < j.timeline.length - 1 && (
+                            <div className="w-0.5 flex-1 bg-slate-200 mt-1 min-h-[28px]" />
                           )}
                         </div>
-                        <div className={`text-[13px] font-semibold ${t.state === "active" ? "text-green-600" : "text-slate-600"}`}>{t.label}</div>
+                        {/* Kolom kanan: teks */}
+                        <div className="flex-1 pb-7 last:pb-0">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <span className={`text-[11px] font-bold ${t.state === "active" ? "text-green-500" : "text-slate-400"}`}>{t.date}</span>
+                            {t.now && (
+                              <span className="text-[9px] font-extrabold text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded whitespace-nowrap leading-none">
+                                KAMU DI SINI
+                              </span>
+                            )}
+                          </div>
+                          <div className={`text-[13px] font-semibold ${t.state === "active" ? "text-green-600" : "text-slate-600"}`}>{t.label}</div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* 5. CTA */}
               <div className="mb-3">
-                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
-                  <div className="w-6 h-6 rounded-full bg-[#6B5B51] flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">5</div>
-                  <span className="text-[14px] font-bold text-slate-900">
-                    {j.status === 'closed' ? 'Pendaftaran sudah ditutup' : j.status === 'soon' ? 'Pendaftaran belum dibuka' : 'Siap daftar?'}
-                  </span>
-                </div>
+                {!isClosedUtama && (
+                  <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                    <div className="w-6 h-6 rounded-full bg-[#6B5B51] flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">5</div>
+                    <span className="text-[14px] font-bold text-slate-900">
+                      {j.status === 'closed' ? 'Pendaftaran sudah ditutup' : j.status === 'soon' ? 'Pendaftaran belum dibuka' : 'Siap daftar?'}
+                    </span>
+                  </div>
+                )}
                 {j.status === 'closed' ? (
                   <div className="flex items-center justify-center gap-2 w-full bg-slate-200 text-slate-400 rounded-xl py-3.5 text-sm font-extrabold mb-2 cursor-not-allowed">
                     Pendaftaran Ditutup
