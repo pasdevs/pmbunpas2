@@ -96,6 +96,15 @@ export const GELOMBANG_FK = [
     biaya: "Rp 202 juta",
     link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/317",
   },
+  {
+    gel: 6,
+    label: "Gelombang Last Call",
+    start: "2026-09-01",
+    end: "2026-09-05",
+    period: "1 Sep 2026 – 5 Sep 2026",
+    biaya: "Rp 202 juta",
+    link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/321",
+  },
 ];
 
 //CONFIG GELOMBANG USM
