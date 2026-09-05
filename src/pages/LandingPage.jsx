@@ -1,11 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  ShieldCheck, Users, Stethoscope, GraduationCap, Laptop, Award, Repeat, FileBadge
+  ShieldCheck, Users, GraduationCap
 } from "lucide-react";
 import ScrollToTop from "react-scroll-to-top";
+// eslint-disable-next-line no-unused-vars -- `motion` used via JSX member tags (<motion.div>), which core no-unused-vars can't see without eslint-plugin-react
 import { motion, AnimatePresence } from "framer-motion";
 import ProdiExplorer from "../components/ProdiExplorer";
 import INFORMASI_LIST from "../data/InformasiList";
+import { GELOMBANG_PMDK } from "../data/gelombang";
+import { wibDate, getDeadlineLabel, formatDateShort, formatDateLong } from "../utils/dateUtils";
+import { formatDPLabel, formatDPShort } from "../utils/formatUtils";
+import { buildJalurData } from "../data/jalurData";
+import { useCountdown } from "../hooks/useCountdown";
+import { useGoogleTranslate, LANGUAGES } from "../hooks/useGoogleTranslate";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, FreeMode } from "swiper/modules";
@@ -25,6 +32,11 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
   const isOpen = openId === j.id;
   const dl = getDeadlineLabel(j.deadline);
   const Icon = j.icon;
+  // Jalur Utama (PMDK/USM) & USM Kedokteran yang sudah closed pakai tampilan ringkas — tanpa
+  // status/gelombang, metode pembayaran, potensi hemat, dan timeline — supaya tidak menampilkan
+  // info gelombang yang sudah tidak berlaku lagi. Kedokteran via Nilai UTBK (dan jalur lain)
+  // tidak termasuk — perilakunya tetap hilang begitu closed.
+  const isClosedSimple = (j.subgroup === "utama" || j.id === "fk_usm") && j.status === "closed";
 
   const toggle = () => setOpenId(isOpen ? null : j.id);
 
@@ -58,39 +70,48 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
             <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{t}</span>
           ))}
         </div>
-        <div className="flex items-center justify-between gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
-          <div className="flex items-center gap-2">
-            {j.status === 'closed' ? (
-              <>
-                <div className="w-2 h-2 rounded-full bg-red-500" />
-                <span className="text-[13px] font-semibold text-red-500">{j.statusText}</span>
-              </>
-            ) : j.status === 'soon' ? (
-              <>
-                <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_0_3px_rgba(59,130,246,0.15)]" />
-                <span className="text-[13px] font-semibold text-blue-600">{j.statusText}</span>
-              </>
-            ) : j.status === 'closing' ? (
-              <>
-                <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]" />
-                <span className="text-[13px] font-semibold text-amber-600">{j.statusText}</span>
-              </>
-            ) : (
-              <>
-                <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]" />
-                <span className="text-[13px] font-semibold text-green-600">{j.statusText}</span>
-              </>
-            )}
+        {isClosedSimple ? (
+          <div className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
+            <div className="w-2 h-2 rounded-full bg-red-500" />
+            <span className="text-[13px] font-semibold text-red-500">Pendaftaran Sudah Ditutup</span>
           </div>
-          <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{j.gel}</span>
-        </div>
-        <div className="flex items-center flex-wrap gap-2 mb-3">
-          <span className="text-[12.5px] text-slate-500 font-medium">{j.period}</span>
-          {j.status === 'soon'
-            ? <span className="text-[11px] font-bold px-2 py-0.5 rounded-md text-blue-600 bg-blue-50">Buka {new Date(j.startDate + 'T00:00:00+07:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-            : <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${dl.cls}`}>{dl.text}</span>
-          }
-        </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between gap-2 bg-slate-50 rounded-xl px-3 py-2 mb-3">
+              <div className="flex items-center gap-2">
+                {j.status === 'closed' ? (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-red-500" />
+                    <span className="text-[13px] font-semibold text-red-500">{j.statusText}</span>
+                  </>
+                ) : j.status === 'soon' ? (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_0_3px_rgba(59,130,246,0.15)]" />
+                    <span className="text-[13px] font-semibold text-blue-600">{j.statusText}</span>
+                  </>
+                ) : j.status === 'closing' ? (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]" />
+                    <span className="text-[13px] font-semibold text-amber-600">{j.statusText}</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]" />
+                    <span className="text-[13px] font-semibold text-green-600">{j.statusText}</span>
+                  </>
+                )}
+              </div>
+              <span className="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{j.gel}</span>
+            </div>
+            <div className="flex items-center flex-wrap gap-2 mb-3">
+              <span className="text-[12.5px] text-slate-500 font-medium">{j.period}</span>
+              {j.status === 'soon'
+                ? <span className="text-[11px] font-bold px-2 py-0.5 rounded-md text-blue-600 bg-blue-50">Buka {new Date(j.startDate + 'T00:00:00+07:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                : <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${dl.cls}`}>{dl.text}</span>
+              }
+            </div>
+          </>
+        )}
         <button
           onClick={toggle}
           className="w-full py-2.5 rounded-xl text-[14px] font-bold text-center transition-all duration-200 bg-[#6B5B51] text-white hover:bg-[#5a4c43] cursor-pointer"
@@ -149,92 +170,102 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
               </div>
 
               {/* 3. Biaya */}
-              <div className="mb-5">
-                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
-                  <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">3</div>
-                  <span className="text-[14px] font-bold text-slate-900">Berapa biayanya?</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2 mb-3">
-                  <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-3 text-center">
-                    <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-1">Formulir Pendaftaran</div>
-                    <div className="text-2xl font-black text-slate-800">{j.costForm}</div>
+              {!isClosedSimple && (
+                <div className="mb-5">
+                  <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                    <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">3</div>
+                    <span className="text-[14px] font-bold text-slate-900">Berapa biayanya?</span>
                   </div>
-                  <div className="bg-green-50 border-2 border-green-100 rounded-xl p-3 text-center">
-                    <div className="text-[11px] font-bold uppercase tracking-wide text-green-600 mb-1">Potensi Hemat</div>
-                    <div className="text-2xl font-black text-green-600">{j.costSave}</div>
-                    <div className="text-[10.5px] text-green-500 font-medium mt-1">{j.costSaveNote}</div>
-                  </div>
-                </div>
-                {/* Metode Pembayaran */}
-                <div className="text-[12px] font-semibold text-slate-500 mb-1.5">Metode Pembayaran:</div>
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {["🏧 VA Mandiri", "🛒 Tokopedia", "🛍️ Shopee (+Rp 4rb)", "🏦 BJB (+Rp 3rb)"].map((p, i) => (
-                    <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{p}</span>
-                  ))}
-                </div>
-                {j.benefits.length > 0 && (
-                  <div className="bg-gradient-to-br from-green-800 to-teal-700 rounded-xl p-3 text-white">
-                    <div className="text-[11px] font-bold uppercase tracking-wide opacity-60 mb-2">Benefit daftar di Momentum {j.momentumLabel || "Aktif"}</div>
-                    {j.benefits.map((b, i) => (
-                      <div key={i} className="flex items-center justify-between text-[12.5px] font-semibold py-0.5">
-                        <span className="opacity-85">{b.label}</span>
-                        <span className="font-extrabold">{b.val}</span>
-                      </div>
-                    ))}
-                    <div className="flex items-center justify-between pt-2 mt-2 border-t border-white/15 text-xs font-extrabold">
-                      <span>Total Potensi Hemat</span>
-                      <span>{j.benefitTotal}</span>
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-3 text-center">
+                      <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-1">Formulir Pendaftaran</div>
+                      <div className="text-2xl font-black text-slate-800">{j.costForm}</div>
+                    </div>
+                    <div className="bg-green-50 border-2 border-green-100 rounded-xl p-3 text-center">
+                      <div className="text-[11px] font-bold uppercase tracking-wide text-green-600 mb-1">Potensi Hemat</div>
+                      <div className="text-2xl font-black text-green-600">{j.costSave}</div>
+                      <div className="text-[10.5px] text-green-500 font-medium mt-1">{j.costSaveNote}</div>
                     </div>
                   </div>
-                )}
-                {j.benefitNote && (
-                  <p className="text-[11.5px] text-slate-500 italic mt-2 leading-relaxed">{j.benefitNote}</p>
-                )}
-              </div>
+                  {/* Metode Pembayaran */}
+                  {j.subgroup !== "kip" && (
+                    <>
+                      <div className="text-[12px] font-semibold text-slate-500 mb-1.5">Metode Pembayaran:</div>
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {["🏧 VA Mandiri", "🏦 BJB (+Rp 3rb)"].map((p, i) => (
+                          <span key={i} className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2 py-1 border border-slate-200 rounded-md bg-white">{p}</span>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {j.benefits.length > 0 && (
+                    <div className="bg-gradient-to-br from-green-800 to-teal-700 rounded-xl p-3 text-white">
+                      <div className="text-[11px] font-bold uppercase tracking-wide opacity-60 mb-2">Benefit daftar di Momentum {j.momentumLabel || "Aktif"}</div>
+                      {j.benefits.map((b, i) => (
+                        <div key={i} className="flex items-center justify-between text-[12.5px] font-semibold py-0.5">
+                          <span className="opacity-85">{b.label}</span>
+                          <span className="font-extrabold">{b.val}</span>
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between pt-2 mt-2 border-t border-white/15 text-xs font-extrabold">
+                        <span>Total Potensi Hemat</span>
+                        <span>{j.benefitTotal}</span>
+                      </div>
+                    </div>
+                  )}
+                  {j.benefitNote && (
+                    <p className="text-[11.5px] text-slate-500 italic mt-2 leading-relaxed">{j.benefitNote}</p>
+                  )}
+                </div>
+              )}
 
               {/* 4. Timeline */}
-              <div className="mb-5">
-                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
-                  <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">4</div>
-                  <span className="text-[14px] font-bold text-slate-900">Kapan deadline-nya?</span>
-                </div>
-                <div className="flex flex-col">
-                  {j.timeline.map((t, i) => (
-                    <div key={i} className="flex gap-3">
-                      {/* Kolom kiri: dot + garis penghubung */}
-                      <div className="flex flex-col items-center flex-shrink-0 w-[10px]">
-                        <div className={`w-2.5 h-2.5 rounded-full border-2 flex-shrink-0 mt-[3px]
-                          ${t.state === "active" ? "border-green-500 bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]"
-                            : t.state === "done" ? "border-slate-400 bg-slate-400" : "border-slate-300 bg-white"}`} />
-                        {i < j.timeline.length - 1 && (
-                          <div className="w-0.5 flex-1 bg-slate-200 mt-1 min-h-[28px]" />
-                        )}
-                      </div>
-                      {/* Kolom kanan: teks */}
-                      <div className="flex-1 pb-7 last:pb-0">
-                        <div className="flex items-center gap-1.5 mb-0.5">
-                          <span className={`text-[11px] font-bold ${t.state === "active" ? "text-green-500" : "text-slate-400"}`}>{t.date}</span>
-                          {t.now && (
-                            <span className="text-[9px] font-extrabold text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded whitespace-nowrap leading-none">
-                              KAMU DI SINI
-                            </span>
+              {!isClosedSimple && (
+                <div className="mb-5">
+                  <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                    <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">4</div>
+                    <span className="text-[14px] font-bold text-slate-900">Kapan deadline-nya?</span>
+                  </div>
+                  <div className="flex flex-col">
+                    {j.timeline.map((t, i) => (
+                      <div key={i} className="flex gap-3">
+                        {/* Kolom kiri: dot + garis penghubung */}
+                        <div className="flex flex-col items-center flex-shrink-0 w-[10px]">
+                          <div className={`w-2.5 h-2.5 rounded-full border-2 flex-shrink-0 mt-[3px]
+                            ${t.state === "active" ? "border-green-500 bg-green-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]"
+                              : t.state === "done" ? "border-slate-400 bg-slate-400" : "border-slate-300 bg-white"}`} />
+                          {i < j.timeline.length - 1 && (
+                            <div className="w-0.5 flex-1 bg-slate-200 mt-1 min-h-[28px]" />
                           )}
                         </div>
-                        <div className={`text-[13px] font-semibold ${t.state === "active" ? "text-green-600" : "text-slate-600"}`}>{t.label}</div>
+                        {/* Kolom kanan: teks */}
+                        <div className="flex-1 pb-7 last:pb-0">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <span className={`text-[11px] font-bold ${t.state === "active" ? "text-green-500" : "text-slate-400"}`}>{t.date}</span>
+                            {t.now && (
+                              <span className="text-[9px] font-extrabold text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded whitespace-nowrap leading-none">
+                                KAMU DI SINI
+                              </span>
+                            )}
+                          </div>
+                          <div className={`text-[13px] font-semibold ${t.state === "active" ? "text-green-600" : "text-slate-600"}`}>{t.label}</div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* 5. CTA */}
               <div className="mb-3">
-                <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
-                  <div className="w-6 h-6 rounded-full bg-[#6B5B51] flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">5</div>
-                  <span className="text-[14px] font-bold text-slate-900">
-                    {j.status === 'closed' ? 'Pendaftaran sudah ditutup' : j.status === 'soon' ? 'Pendaftaran belum dibuka' : 'Siap daftar?'}
-                  </span>
-                </div>
+                {!isClosedSimple && (
+                  <div className="flex items-center gap-2 mb-3 pb-1 border-b border-slate-100">
+                    <div className="w-6 h-6 rounded-full bg-[#6B5B51] flex items-center justify-center text-[10px] font-extrabold text-white flex-shrink-0">5</div>
+                    <span className="text-[14px] font-bold text-slate-900">
+                      {j.status === 'closed' ? 'Pendaftaran sudah ditutup' : j.status === 'soon' ? 'Pendaftaran belum dibuka' : 'Siap daftar?'}
+                    </span>
+                  </div>
+                )}
                 {j.status === 'closed' ? (
                   <div className="flex items-center justify-center gap-2 w-full bg-slate-200 text-slate-400 rounded-xl py-3.5 text-sm font-extrabold mb-2 cursor-not-allowed">
                     Pendaftaran Ditutup
@@ -276,7 +307,7 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
                   >
                     🎯 Cek Kecocokan Prodi
                   </a>
-                  {j.group !== "transfer" && (
+                  {j.group !== "transfer" && j.subgroup !== "kip" && (
                     <a
                       href="https://pmb.unpas.ac.id/biaya/rincian-lengkap-v2"
                       target="_blank"
@@ -305,12 +336,11 @@ function JalurCard({ j, openId, setOpenId, getDeadlineLabel }) {
 
 const PMBLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-  const [selectedLang, setSelectedLang] = useState("id");
-  const langRef = useRef(null);
+  const { langOpen, setLangOpen, selectedLang, setSelectedLang, langRef, changeLanguage } = useGoogleTranslate();
 
   const [showWA, setShowWA] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState(() => window.location.hash.replace("#", ""));
+  const [showPromoPopup, setShowPromoPopup] = useState(false);
 
   const handleClickWhatsApp = () => {
     if (window.dataLayer) {
@@ -339,17 +369,19 @@ const PMBLanding = () => {
     if (!popupVariant) return;
     const t = setTimeout(() => setShowPromoPopup(true), 2500);
     return () => clearTimeout(t);
-  }, []);
+  }, [popupVariant]);
 
   // UTM tracking — deteksi scan QR / spanduk
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("utm_source") === "spanduk") {
-      fbq("trackCustom", "ScanSpanduk", {
-        lokasi: urlParams.get("utm_content"),
-        campaign: urlParams.get("utm_campaign"),
-        currency: "IDR",
-      });
+      if (window.fbq) {
+        window.fbq("trackCustom", "ScanSpanduk", {
+          lokasi: urlParams.get("utm_content"),
+          campaign: urlParams.get("utm_campaign"),
+          currency: "IDR",
+        });
+      }
     }
   }, []);
 
@@ -393,772 +425,15 @@ const PMBLanding = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [jalurProfile, setJalurProfile] = useState("maba");
   const [openJalurId, setOpenJalurId] = useState(null);
-  const [showPromoPopup, setShowPromoPopup] = useState(false);
   const [showUTBKWidget, setShowUTBKWidget] = useState(false);
 
-  const MONTHS_ID = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-  const _today = new Date();
-  const todayLabel = `Hari ini — ${_today.getDate()} ${MONTHS_ID[_today.getMonth()]} ${_today.getFullYear()}`;
-
-  //CONFIG GELOMBANG PMDK
-  const GELOMBANG_PMDK = [
-    {
-      gel: 1,
-      start: "2026-01-05",
-      end: "2026-06-04",
-      period: "5 Jan 2026 – 4 Jun 2026",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/286",
-
-      momentums: [
-        {
-          label: "Pra-SNBP",
-          start: "2026-01-05",
-          end: "2026-03-25",
-          dp: 2000000,
-          dpp: 1000000,
-          kuota: "200 kuota",
-        },
-        {
-          label: "Pasca-SNBP",
-          start: "2026-03-31",
-          end: "2026-04-30",
-          dp: 1500000,
-          dpp: 1000000,
-          kuota: "100 kuota",
-        },
-        {
-          label: "Pasca-SNBT",
-          start: "2026-05-25",
-          end: "2026-06-04",
-          dp: 1000000,
-          dpp: 1000000,
-          kuota: "100 kuota",
-        },
-      ],
-    },
-    {
-      gel: 2,
-      start: "2026-06-07",
-      end: "2026-08-14",
-      period: "7 Jun 2026 – 14 Agt 2026",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/303",
-      momentums: [],
-    },
-  ];
-
-  //CONFIG GELOMBANG FK
-  const GELOMBANG_FK = [
-    {
-      gel: 1,
-      start: "2026-01-05",
-      end: "2026-03-24",
-      period: "5 Jan – 24 Mar 2026",
-      biaya: "Rp 165,15 juta",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/285",
-    },
-    {
-      gel: 2,
-      start: "2026-02-25",
-      end: "2026-05-19",
-      period: "25 Feb – 19 Mei 2026",
-      biaya: "Rp 177 juta",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/301",
-    },
-    {
-      gel: 3,
-      start: "2026-05-20",
-      end: "2026-06-24",
-      period: "20 Mei – 24 Jun 2026",
-      biaya: "Rp 190 juta",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/302"
-    },
-    {
-      gel: 4,
-      start: "2026-06-25",
-      end: "2026-08-08",
-      period: "25 Jun – 8 Agt 2026",
-      biaya: "Rp 202 juta",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/309",
-    },
-  ];
-
-  //CONFIG GELOMBANG USM
-  const GELOMBANG_USM = [
-    {
-      gel: 1,
-      start: "2026-01-05",
-      end: "2026-04-10",
-      period: "5 Jan 2026 – 10 April 2026",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/283",
-
-      momentums: [
-        {
-          label: "Pra-SNBP",
-          start: "2026-01-05",
-          end: "2026-03-25",
-          dp: 2000000,
-          dpp: 1000000,
-          kuota: "200 kuota",
-        },
-        {
-          label: "Pasca-SNBP",
-          start: "2026-03-31",
-          end: "2026-04-30",
-          dp: 1500000,
-          dpp: 1000000,
-          kuota: "100 kuota",
-        },
-        {
-          label: "Pasca-SNBT",
-          start: "2026-05-25",
-          end: "2026-06-04",
-          dp: 1000000,
-          dpp: 1000000,
-          kuota: "100 kuota",
-        },
-      ],
-    },
-    {
-      gel: 2,
-      start: "2026-04-14",
-      end: "2026-07-03",
-      period: "14 Apr 2026 – 3 Juli 2026",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/288",
-
-      momentums: [
-        {
-          label: "Pra-SNBP",
-          start: "2026-01-05",
-          end: "2026-03-25",
-          dp: 2000000,
-          dpp: 1000000,
-          kuota: "200 kuota",
-        },
-        {
-          label: "Pasca-SNBP",
-          start: "2026-03-31",
-          end: "2026-04-30",
-          dp: 1500000,
-          dpp: 1000000,
-          kuota: "100 kuota",
-        },
-        {
-          label: "Pasca-SNBT",
-          start: "2026-05-25",
-          end: "2026-06-04",
-          dp: 1000000,
-          dpp: 1000000,
-          kuota: "100 kuota",
-        },
-      ],
-    },
-    {
-      gel: 3,
-      start: "2026-07-04",
-      end: "2026-08-07",
-      period: "4 Jul 2026 – 7 Agustus 2026",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/289",
-      momentums: [],
-    },
-  ];
-
-  const wibDate = (dateStr, endOfDay) => {
-    const [y, m, d] = dateStr.split('-').map(Number);
-    return endOfDay
-      ? new Date(Date.UTC(y, m - 1, d, 16, 59, 59))    // 23:59:59 WIB = 16:59:59 UTC
-      : new Date(Date.UTC(y, m - 1, d - 1, 17, 0, 0)); // 00:00:00 WIB = 17:00:00 UTC hari sebelumnya
-  };
-
-  // Ambil gelombang aktif, atau berikutnya jika di gap, atau terakhir jika semua tutup
-  const getSmartActive = (list) => {
-    const today = new Date();
-    const active = list.find(g => today >= wibDate(g.start, false) && today <= wibDate(g.end, true));
-    if (active) return active;
-    const next = list.find(g => today < wibDate(g.start, false));
-    return next || list[list.length - 1];
-  };
-
-  const getActivePMDK = () => getSmartActive(GELOMBANG_PMDK);
-  const getActiveUSM = () => getSmartActive(GELOMBANG_USM);
-  const getActiveGelombang = () => getSmartActive(GELOMBANG_FK);
-
-  const formatRupiah = (val) => {
-    if (!val) return "—";
-    return `−Rp ${val.toLocaleString("id-ID")}`;
-  };
-
-  // GET MOMENTUM AKTIF
-  const getActiveMomentum = (momentums) => {
-    const today = new Date();
-    return momentums.find(m => today >= wibDate(m.start, false) && today <= wibDate(m.end, true)) || null;
-  };
-
-  // 4 state: closed | soon | closing | open
-  const getStatusInfo = (startDate, endDate) => {
-    const today = new Date();
-    const diffStart = (wibDate(startDate, false) - today) / (1000 * 60 * 60 * 24);
-    const diffEnd   = (wibDate(endDate, true)   - today) / (1000 * 60 * 60 * 24);
-
-    if (diffEnd < 0)   return { status: 'closed',  text: 'Sudah Ditutup' };
-    if (diffStart > 0) return { status: 'soon',    text: `Dibuka ${Math.ceil(diffStart)} hari lagi` };
-    if (diffEnd <= 3)  return { status: 'closing', text: 'Segera Ditutup' };
-    return               { status: 'open',    text: 'Sedang Dibuka' };
-  };
-
-  // GENERATE DATA SESUAI FORMAT PMDK
-  const createPMDKActive = () => {
-    const g = getActivePMDK();
-    const m = getActiveMomentum(g.momentums);
-
-    const { status, text } = getStatusInfo(g.start, g.end);
-
-    const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
-
-    return {
-      id: "pmdk",
-      group: "maba",
-      subgroup: "utama",
-
-      icon: Award,
-      iconBg: "bg-yellow-100 text-yellow-700",
-
-      badge: "PMDK",
-      badgeColor: "bg-green-50 text-green-700",
-
-      name: "Penelusuran Minat & Kemampuan",
-      nameButton: "PMDK",
-
-      popular: true,
-
-      value: "Tanpa ujian — seleksi berbasis nilai rapor semester 1–5. Cocok jika nilai akademik bagus.",
-
-      tags: ["📋 Nilai Rapor", "✅ Tanpa Tes"],
-
-      status,
-      statusText: text,
-
-      gel: `Gelombang ${g.gel}`,
-
-      period: g.period,
-      startDate: g.start,
-      deadline: g.end,
-
-      link: g.link,
-
-      momentumLabel: m?.label || null,
-
-      elig: [
-        "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
-        "Memiliki rapor semester 1 sampai 5 yang lengkap",
-        "Tidak sedang terdaftar aktif di perguruan tinggi lain",
-        "Bersedia mengikuti ketentuan akademik UNPAS",
-      ],
-
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "📊", lb: "Input Nilai Rapor Sem 1–5" },
-        { ic: "📤", lb: "Upload Berkas & Verifikasi" },
-        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-      ],
-
-      costForm: "Rp 300.000",
-      costFormNote: "Satu kali bayar, berlaku semua prodi",
-
-      costSave: m && total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
-      costSaveNote: m ? `${m.label} • ${m.kuota}` : "Tidak ada momentum aktif saat ini",
-
-      benefits: m ? [
-        { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
-        { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
-      ] : [],
-
-      benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
-      benefitNote: "",
-
-      timeline: [
-        {
-          date: "5 Januari 2026",
-          label: "Pendaftaran dibuka",
-          state: "done",
-        },
-        ...(m ? [
-          {
-            date: todayLabel,
-            label: `Momentum ${m.label} sedang berlangsung`,
-            state: "active",
-            now: true,
-          },
-          {
-            date: m.end,
-            label: `Deadline Momentum ${m.label}`,
-            state: "upcoming",
-          },
-        ] : []),
-        {
-          date: g.end,
-          label: "Batas akhir pendaftaran jalur PMDK",
-          state: "upcoming",
-        },
-      ],
-    };
-  };
-
-  // GENERATE DATA SESUAI FORMAT KEDOKTERAN
-  const createFKUSMActive = () => {
-    const g = getActiveGelombang();
-    const { status, text } = getStatusInfo(g.start, g.end);
-
-    return {
-      id: "fk_usm",
-      group: "maba",
-      subgroup: "kedokteran",
-
-      icon: Stethoscope,
-      iconBg: "bg-red-100 text-red-700",
-
-      badge: "Kedokteran",
-      badgeColor: "bg-red-50 text-red-600",
-
-      name: "USM Kedokteran",
-      nameButton: "USM FK",
-
-      popular: false,
-
-      value: "Seleksi masuk Fakultas Kedokteran via ujian. 4 gelombang penerimaan, kuota terbatas per gelombang.",
-
-      tags: ["📝 Tes Tertulis", "🔬 Tes Kesehatan"],
-
-      status,
-      statusText: text,
-
-      gel: `Gelombang ${g.gel}`,
-
-      period: g.period,
-      startDate: g.start,
-      deadline: g.end,
-
-      link: g.link,
-
-      elig: [
-        "Lulusan SMA / MA jurusan IPA (atau akan lulus tahun ini)",
-        "Pendaftar maksimal 3 tahun setelah lulus SMA (2024-2026)",
-        "Siap mengikuti ujian tertulis dan tes kesehatan",
-        "Tidak sedang terdaftar aktif di fakultas kedokteran lain",
-        "Bersedia membayar biaya sesuai gelombang yang dipilih",
-      ],
-
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "✏️", lb: "Ikut Ujian Tertulis" },
-        { ic: "🔬", lb: "Tes Kesehatan & Verifikasi" },
-        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-      ],
-
-      costForm: "Rp 300.000",
-      costFormNote: "Formulir pendaftaran",
-
-      costSave: "—",
-      costSaveNote: "Tidak ada potongan untuk Kedokteran",
-
-      benefits: [],
-      benefitTotal: "—",
-
-      benefitNote: `Prodi Kedokteran tidak mendapatkan potongan DP maupun insentif. Biaya Gel.${g.gel} mulai ${g.biaya}.`,
-
-      timeline: [
-        {
-          date: g.period.split(" – ")[0],
-          label: `Pendaftaran Gel.${g.gel} dibuka`,
-          state: "done",
-        },
-        {
-          date: todayLabel,
-          label: `Gelombang ${g.gel} sedang berlangsung`,
-          state: "active",
-          now: true,
-        },
-        {
-          date: g.period.split(" – ")[1],
-          label: `Deadline Gel.${g.gel} Kedokteran USM`,
-          state: "upcoming",
-        },
-        ...(g.gel < GELOMBANG_FK[GELOMBANG_FK.length - 1].gel ? [{
-          date: "Gel. berikutnya",
-          label: "Biaya naik di gelombang selanjutnya",
-          state: "upcoming",
-        }] : []),
-      ],
-    };
-  };
-
-  // GENERATE DATA USM NILAI UTBK — SESI 1 (Upload 2–14 Juni 2026)
-  const createUSMUTBKSesi1 = () => {
-    const { status, text } = getStatusInfo("2026-05-25", "2026-06-14");
-    const gelUsm2 = GELOMBANG_USM[1];
-    const m = getActiveMomentum(gelUsm2.momentums);
-    const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
-    const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
-
-    return {
-      id: "usm_utbk_s1",
-      group: "maba",
-      subgroup: "utbk",
-
-      // visibleUntil: kartu ini disembunyikan mulai tanggal ini (digantikan Sesi 2)
-      visibleUntil: "2026-06-15",
-
-      icon: FileBadge,
-      iconBg: "bg-teal-100 text-teal-700",
-
-      badge: "Upload Sertifikat UTBK",
-      badgeColor: "bg-teal-50 text-teal-700",
-
-      name: "USM via Nilai UTBK – Sesi 1",
-      nameButton: "USM Nilai UTBK Sesi 1",
-
-      popular: false,
-
-      value: "Punya sertifikat UTBK? Upload dan seleksi selesai dalam 1 hari kerja — tanpa tes tulis.",
-
-      tags: ["📤 Upload Sertifikat UTBK", "⚡ Hasil 1 Hari Kerja"],
-
-      status,
-      statusText: text,
-
-      gel: "USM Gel. 2 · Sesi 1",
-
-      period: "25 Mei 2026 – 14 Juni 2026",
-      startDate: "2026-05-25",
-      deadline: "2026-06-14",
-
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/305",
-
-      momentumLabel: m?.label || null,
-
-      elig: [
-        "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
-        "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 (sertifikat 2026 dapat diunduh mulai 2 Juni)",
-        "Skor minimum: F. Teknik ≥ 400 · FISIP/FEB/Hukum ≥ 375 · FKIP/FISS ≥ 350",
-        "Tidak sedang terdaftar aktif di perguruan tinggi lain",
-        "Program Studi Kedokteran tidak tersedia di jalur ini",
-      ],
-
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 350rb" },
-        { ic: "📤", lb: "Upload Sertifikat UTBK (2–14 Juni)" },
-        { ic: "⏳", lb: "Verifikasi Skor Panitia (1 hari kerja)" },
-        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-      ],
-
-      costForm: "Rp 350.000",
-      costFormNote: "Satu kali bayar, berlaku semua prodi",
-
-      costSave: m && total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
-      costSaveNote: m ? `${m.label} • ${m.kuota}` : "Tidak ada momentum aktif saat ini",
-
-      benefits: m ? [
-        { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
-        { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
-      ] : [],
-
-      benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
-      benefitNote: "⚠️ Prodi dengan uji keterampilan (DKV, Fotografi & Film, Seni Musik) tetap wajib mengikuti audisi/portofolio meski skor UTBK memenuhi minimum. Hubungi admisi untuk jadwal uji keterampilan.",
-
-      timeline: [
-        { date: "25 Mei 2026", label: "Pendaftaran dibuka", state: tls("2026-05-25") },
-        { date: "2 Juni 2026", label: "Sertifikat UTBK dapat diunduh — mulai upload", state: tls("2026-06-02") },
-        ...(m ? [
-          {
-            date: todayLabel,
-            label: `Momentum ${m.label} sedang berlangsung`,
-            state: "active",
-            now: true,
-          },
-          {
-            date: m.end,
-            label: `Deadline Momentum ${m.label}`,
-            state: "upcoming",
-          },
-        ] : []),
-        { date: "14 Juni 2026", label: "Batas akhir pendaftaran jalur USM via Nilai UTBK Sesi 1", state: "upcoming" },
-      ],
-    };
-  };
-
-  // GENERATE DATA USM NILAI UTBK — LAST CALL (Sesi 2 diperpanjang s.d 14 Juli + Sesi 3 Tes Tulis 5 Juli)
-  const createUSMUTBKSesi2 = () => {
-    const { status, text } = getStatusInfo("2026-06-15", "2026-07-14");
-    const gelUsm2 = GELOMBANG_USM[1];
-    const m = getActiveMomentum(gelUsm2.momentums);
-    const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
-    const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
-
-    return {
-      id: "usm_utbk_s2",
-      group: "maba",
-      subgroup: "utbk",
-
-      visibleFrom: "2026-06-15",
-      visibleUntil: "2026-07-15",
-
-      icon: FileBadge,
-      iconBg: "bg-red-100 text-red-700",
-
-      badge: "🔴 LAST CALL",
-      badgeColor: "bg-red-50 text-red-700",
-
-      name: "USM via Nilai UTBK – Last Call",
-      nameButton: "USM Nilai UTBK",
-
-      popular: false,
-
-      value: "Periode diperpanjang s.d 14 Juli 2026. Tidak punya sertifikat UTBK? Ikut Tes Tulis Sesi 3 tanggal 5 Juli.",
-
-      tags: ["📤 Upload Sertifikat UTBK", "⏰ Last Call – 14 Juli"],
-
-      status,
-      statusText: text,
-
-      gel: "USM Gel. 2 · Last Call",
-
-      period: "Diperpanjang s.d 14 Juli 2026",
-      startDate: "2026-06-15",
-      deadline: "2026-07-14",
-
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/306",
-
-      momentumLabel: m?.label || null,
-
-      elig: [
-        "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
-        "Memiliki sertifikat UTBK tahun 2024, 2025, atau 2026 — upload hingga 14 Juli 2026",
-        "Skor minimum: F. Teknik ≥ 400 · FISIP/FEB/Hukum ≥ 375 · FKIP/FISS ≥ 350",
-        "Tidak sedang terdaftar aktif di perguruan tinggi lain",
-        "Tidak punya sertifikat UTBK? Daftar dan ikut Tes Tulis Konvensional Sesi 3 pada 5 Juli 2026",
-      ],
-
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 400rb" },
-        { ic: "📤", lb: "Upload Sertifikat UTBK" },
-        { ic: "⏳", lb: "Verifikasi Skor (1 hari kerja)" },
-        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-      ],
-
-      costForm: "Rp 400.000",
-      costFormNote: "Satu kali bayar, berlaku semua prodi",
-
-      costSave: m && total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
-      costSaveNote: m ? `${m.label} • ${m.kuota}` : "Tidak ada momentum aktif saat ini",
-
-      benefits: m ? [
-        { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
-        { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
-      ] : [],
-
-      benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
-      benefitNote: "⚠️ Prodi dengan uji keterampilan (DKV, Fotografi & Film, Seni Musik) tetap wajib mengikuti audisi/portofolio. Hubungi admisi untuk jadwal.",
-
-      timeline: [
-        { date: "2 – 14 Juni 2026", label: "Sesi 1 — Upload Sertifikat UTBK (Selesai)", state: "done" },
-        { date: todayLabel, label: "Sesi 2 — Upload Sertifikat UTBK · Diperpanjang s.d 14 Juli", state: "active", now: true },
-        { date: "5 Juli 2026", label: "Sesi 3 — Tes Tulis Konvensional (bagi yang tidak punya sertifikat UTBK)", state: tls("2026-07-05") },
-        { date: "14 Juli 2026", label: "Batas akhir pendaftaran — Last Call ditutup", state: "upcoming" },
-      ],
-    };
-  };
-
-  //GENERATE DATA SESUAI FORMAT USM
-  const createUSMActive = () => {
-    const g = getActiveUSM();
-    const m = getActiveMomentum(g.momentums);
-
-    const { status, text } = getStatusInfo(g.start, g.end);
-
-    const total = m ? (m.dp || 0) + (m.dpp || 0) : 0;
-
-    return {
-      id: "usm",
-      group: "maba",
-      subgroup: "utama",
-
-      icon: Laptop,
-      iconBg: "bg-blue-100 text-blue-700",
-
-      badge: "USM Sarjana",
-      badgeColor: "bg-blue-50 text-blue-700",
-
-      name: "Ujian Saringan Masuk",
-      nameButton: "USM",
-
-      popular: true,
-
-      value: "Ujian seleksi — terbuka untuk semua lulusan SMA/SMK/MA sederajat. Cocok jika ingin ikut tes masuk.",
-
-      tags: ["📝 Tes Tertulis", "📋 Seleksi Berkas"],
-
-      status,
-      statusText: text,
-
-      gel: `Gelombang ${g.gel}`,
-
-      period: g.period,
-      startDate: g.start,
-      deadline: g.end,
-
-      link: g.link,
-
-      elig: [
-        "Lulusan SMA / SMK / MA / sederajat (atau akan lulus tahun ini)",
-        "Siap mengikuti ujian tertulis seleksi masuk",
-        "Tidak sedang terdaftar aktif di perguruan tinggi lain",
-        "Bersedia mengikuti ketentuan akademik UNPAS",
-      ],
-
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "✏️", lb: "Ikut Ujian Tertulis" },
-        { ic: "📤", lb: "Upload Berkas & Verifikasi" },
-        { ic: "🎉", lb: "Pengumuman & Daftar Ulang" },
-      ],
-
-      costForm: "Rp 300.000",
-      costFormNote: "Satu kali bayar, termasuk biaya tes",
-
-      costSave: m && total ? `s.d. Rp ${total.toLocaleString("id-ID")}` : "—",
-      costSaveNote: m ? `${m.label} • ${m.kuota}` : "Tidak ada momentum aktif saat ini",
-
-      momentumLabel: m?.label || null,
-
-      benefits: m ? [
-        { label: "⚡ Potongan DP Momentum", val: formatRupiah(m.dp) },
-        { label: "💎 Insentif Pelunasan DPP", val: formatRupiah(m.dpp) },
-      ] : [],
-
-      benefitTotal: m && total ? `Rp ${total.toLocaleString("id-ID")}` : "—",
-      benefitNote: "",
-
-      timeline: [
-        {
-          date: "5 Januari 2026",
-          label: "Pendaftaran dibuka",
-          state: "done",
-        },
-        ...(m ? [
-          {
-            date: todayLabel,
-            label: `Momentum ${m.label} sedang berlangsung`,
-            state: "active",
-            now: true,
-          },
-          {
-            date: m.end,
-            label: `Deadline Momentum ${m.label}`,
-            state: "upcoming",
-          },
-        ] : []),
-        {
-          date: g.end,
-          label: `Batas akhir pendaftaran jalur USM Gel. ${g.gel}`,
-          state: "upcoming",
-        },
-      ],
-    };
-  };
-
-
-  const JALUR_DATA = [
-    createPMDKActive(),
-    createUSMActive(),
-    createUSMUTBKSesi1(),
-    createUSMUTBKSesi2(),
-    createFKUSMActive(),
-
-
-    {
-      id: "rpl_p", group: "transfer", subgroup: "rpl",
-      icon: GraduationCap, iconBg: "bg-orange-100 text-orange-700",
-      badge: "RPL", badgeColor: "bg-teal-50 text-teal-700",
-      name: "RPL Perolehan 2026 Ganjil",
-      nameButton: "RPL Perolehan",
-      popular: false,
-      value: "Konversi pengalaman kerja menjadi SKS. Untuk profesional yang ingin gelar S1 tanpa mulai dari nol.",
-      tags: ["💼 Portofolio Kerja", "🤝 Asesmen Kompetensi"],
-      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
-      period: "5 Jan – 30 Sep 2026", deadline: "2026-09-30",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/287",
-      elig: [
-        "Memiliki pengalaman kerja minimal 2–3 tahun di bidang relevan",
-        "Memiliki ijazah SMA/SMK/D3 atau sederajat",
-        "Dapat menunjukkan portofolio dan bukti kompetensi kerja",
-        "Bersedia mengikuti asesmen kompetensi",
-      ],
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "💼", lb: "Submit Portofolio Kerja" },
-        { ic: "👤", lb: "Asesmen Kompetensi" },
-        { ic: "🎉", lb: "Konversi SKS & Daftar Ulang" },
-      ],
-      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
-      costSave: "—", costSaveNote: "Benefit momentum tidak berlaku untuk RPL",
-      benefits: [],
-      benefitTotal: "—",
-      benefitNote: "Skema potongan momentum hanya berlaku untuk jalur PMDK/USM reguler. Konfirmasi ke bagian Registrasi untuk RPL.",
-      timeline: [
-        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
-        { date: todayLabel, label: "Pendaftaran masih dibuka", state: "active", now: true },
-        { date: "30 September 2026", label: "Batas akhir pendaftaran jalur RPL Perolehan", state: "upcoming" },
-      ],
-    },
-    {
-      id: "rpl_t", group: "transfer", subgroup: "rpl",
-      icon: Repeat, iconBg: "bg-pink-100 text-pink-700",
-      badge: "Transfer", badgeColor: "bg-teal-50 text-teal-700",
-      name: "RPL Transfer 2026 Ganjil",
-      nameButton: "RPL Transfer",
-      popular: false,
-      value: "Calon mahasiswa lulusan dari Diploma (D1, D2 dan D3).",
-      tags: ["📄 Transkrip Asal", "✅ Konversi SKS"],
-      status: "open", statusText: "Sedang Dibuka", gel: "Gelombang 1",
-      period: "5 Jan – 30 Sep 2026", deadline: "2026-09-30",
-      link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/211",
-      elig: [
-        "Mahasiswa aktif atau cuti dari perguruan tinggi terakreditasi",
-        "Memiliki transkrip nilai dari kampus asal",
-        "Prodi tujuan di UNPAS relevan dengan prodi asal",
-        "Bersedia mengikuti proses konversi SKS",
-      ],
-      steps: [
-        { ic: "📝", lb: "Isi Formulir & Bayar Rp 300rb" },
-        { ic: "📄", lb: "Submit Transkrip & Berkas Asal" },
-        { ic: "🔍", lb: "Penilaian Konversi SKS" },
-        { ic: "🎉", lb: "Penetapan SKS & Daftar Ulang" },
-      ],
-      costForm: "Rp 300.000", costFormNote: "Formulir pendaftaran",
-      costSave: "—", costSaveNote: "Benefit momentum tidak berlaku untuk Transfer",
-      benefits: [],
-      benefitTotal: "—",
-      benefitNote: "Skema potongan momentum hanya berlaku untuk jalur PMDK/USM reguler. Konfirmasi ke bagian Registrasi untuk RPL.",
-      timeline: [
-        { date: "5 Januari 2026", label: "Pendaftaran dibuka", state: "done" },
-        { date: todayLabel, label: "Pendaftaran masih dibuka", state: "active", now: true },
-        { date: "30 September 2026", label: "Batas akhir pendaftaran jalur RPL Transfer", state: "upcoming" },
-      ],
-    },
-  ];
-
-  const getDeadlineLabel = (deadlineStr) => {
-    const now = new Date();
-    const wibOffset = 7 * 60;
-    const localOffset = now.getTimezoneOffset();
-    const wib = new Date(now.getTime() + (localOffset + wibOffset) * 60000);
-    const d = new Date(deadlineStr + "T23:59:59");
-    const diff = d - wib;
-    const days = Math.max(0, Math.ceil(diff / 86400000));
-    if (days <= 0) return { text: "Sudah Ditutup", cls: "text-red-600 bg-red-50" };
-    if (days <= 7) return { text: `⚠ Tutup ${days} hari lagi!`, cls: "text-red-600 bg-red-50" };
-    if (days <= 30) return { text: `Tutup ${days} hari lagi`, cls: "text-amber-600 bg-amber-50" };
-    return { text: `Tutup ${days} hari lagi`, cls: "text-green-600 bg-green-50" };
-  };
+  // ALL_JALUR_DATA: semua jalur apa adanya — dipakai untuk Jalur Utama, USM Kedokteran, & RPL
+  // yang harus tetap tampil (dengan status "Ditutup") supaya pengunjung selalu bisa lihat jalur
+  // pendaftaran UNPAS meski sedang tidak ada gelombang aktif.
+  // JALUR_DATA: closed card disembunyikan — dipakai untuk jalur lain (ODR, Kedokteran via Nilai
+  // UTBK, KIP, UTBK) yang memang dimaksudkan hilang begitu tutup.
+  const ALL_JALUR_DATA = buildJalurData();
+  const JALUR_DATA = ALL_JALUR_DATA.filter(j => j.status !== "closed");
 
   const badges = [
     {
@@ -1183,85 +458,7 @@ const PMBLanding = () => {
     }, 2500);
 
     return () => clearInterval(interval);
-  }, []);
-
-  const LANGUAGES = [
-    { code: "id", short: "ID", label: "Indonesian", icon: "/img/id.png" },
-    { code: "ar", short: "AR", label: "Arabic", icon: "/img/ar.png" },
-    { code: "su", short: "SU", label: "Sundanese", icon: "/img/su.png" },
-    { code: "en", short: "EN", label: "English", icon: "/img/en.png" },
-  ];
-
-  function setGoogTrans(lang) {
-    if (lang === "id") {
-      // HAPUS COOKIE = balik ke bahasa asli
-      document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-      document.cookie = "googtrans=; path=/; domain=" + window.location.hostname + "; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    } else {
-      const value = `/id/${lang}`;
-      document.cookie = `googtrans=${value}; path=/`;
-      document.cookie = `googtrans=${value}; path=/; domain=${window.location.hostname}`;
-    }
-  }
-
-  function getGoogTrans() {
-    const match = document.cookie.match(/googtrans=([^;]+)/);
-    if (!match) return null;
-    const parts = match[1].split("/");
-    return parts[2] || null;
-  }
-
-  const changeLanguage = (lang) => {
-    setGoogTrans(lang);
-
-    if (lang === "id") {
-      // Reload halaman untuk reset DOM Google Translate
-      window.location.reload();
-      return;
-    }
-
-    const tryChange = () => {
-      const select = document.querySelector(".goog-te-combo");
-      if (!select) return false;
-
-      select.value = lang;
-      select.dispatchEvent(new Event("change"));
-      return true;
-    };
-
-    let tries = 0;
-    const interval = setInterval(() => {
-      if (tryChange() || tries > 20) {
-        clearInterval(interval);
-      }
-      tries++;
-    }, 300);
-  };
-
-  useEffect(() => {
-    const saved = getGoogTrans();
-
-    if (!saved || saved === "id") {
-      setSelectedLang("id");
-      return;
-    }
-
-    if (["en", "ar", "su"].includes(saved)) {
-      setSelectedLang(saved);
-      changeLanguage(saved);
-    }
-  }, []);
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (langRef.current && !langRef.current.contains(e.target)) {
-        setLangOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [badges.length]);
 
   const container = {
     hidden: { opacity: 0 },
@@ -1341,70 +538,10 @@ const PMBLanding = () => {
 
   const URGENCY_KUOTA_TOTAL = activeMomentum ? parseInt(activeMomentum.kuota) || 100 : 100;
 
-  const formatDPLabel = (dp) => {
-    if (!dp) return "—";
-    const juta = dp / 1000000;
-    return `Rp ${juta % 1 === 0 ? juta : juta.toFixed(1).replace(".", ",")} Juta`;
-  };
-
-  const formatDPShort = (dp) => {
-    if (!dp) return "—";
-    const juta = dp / 1000000;
-    return `−Rp ${juta % 1 === 0 ? juta : juta.toFixed(1).replace(".", ",")}jt`;
-  };
-
-  const formatDateShort = (dateStr) => {
-    const months = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
-    const d = new Date(dateStr + "T00:00:00+07:00");
-    return `${d.getDate()} ${months[d.getMonth()]}`;
-  };
-
-  const formatDateLong = (dateStr) => {
-    const months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-    const d = new Date(dateStr + "T00:00:00+07:00");
-    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-  };
-
-  const calculateUrgencyTimeLeft = () => {
-    const target = new Date(URGENCY_DEADLINE).getTime();
-    const now = Date.now();
-    const diff = target - now;
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    return {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((diff / (1000 * 60)) % 60),
-      seconds: Math.floor((diff / 1000) % 60),
-    };
-  };
-
-  const [urgencyTimeLeft, setUrgencyTimeLeft] = useState(calculateUrgencyTimeLeft());
-
-  useEffect(() => {
-    if (!URGENCY_DEADLINE) return;
-    const timer = setInterval(() => {
-      setUrgencyTimeLeft(calculateUrgencyTimeLeft());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const urgencyTimeLeft = useCountdown(URGENCY_DEADLINE);
 
   const UTBK_DEADLINE = "2026-07-14T23:59:59+07:00";
-  const calculateUTBKTimeLeft = () => {
-    const diff = new Date(UTBK_DEADLINE).getTime() - Date.now();
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    return {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((diff / (1000 * 60)) % 60),
-      seconds: Math.floor((diff / 1000) % 60),
-    };
-  };
-  const [utbkTimeLeft, setUtbkTimeLeft] = useState(calculateUTBKTimeLeft());
-
-  useEffect(() => {
-    const timer = setInterval(() => setUtbkTimeLeft(calculateUTBKTimeLeft()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const utbkTimeLeft = useCountdown(UTBK_DEADLINE);
 
   useEffect(() => {
     const t = setTimeout(() => setShowUTBKWidget(true), 4000);
@@ -1431,7 +568,6 @@ const PMBLanding = () => {
 
     const hash = window.location.hash.replace("#", "");
     if (hash) {
-      setActiveSection(hash);
       // Delay agar DOM dan sticky-header sudah ter-render
       const t = setTimeout(() => scrollToSection(hash), 300);
       return () => clearTimeout(t);
@@ -1889,7 +1025,7 @@ const PMBLanding = () => {
           {/* Self-select toggle */}
           <motion.div variants={sectionItem} className="flex flex-col sm:flex-row gap-3 mb-8">
             {[
-              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "5 jalur" },
+              { key: "maba", ic: "🎓", title: "Lulusan SMA / SMK / MA", sub: "Baru lulus atau gap year — mau kuliah S1", count: "6 jalur" },
               { key: "transfer", ic: "🔄", title: "RPL (Rekognisi Pembelajaran Lampau)", sub: "Lulusan Diploma (D1–D3), SMA/SMK yang memiliki pengalaman kerja.", count: "2 jalur" },
             ].map((opt) => (
               <button
@@ -1921,6 +1057,25 @@ const PMBLanding = () => {
           {/* Cards per group */}
           {jalurProfile === "maba" && (
             <div className="space-y-6">
+              {/* Jalur ODR — section hanya tampil jika ada kartu yang lolos filter */}
+              {(() => {
+                const odrCards = JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "odr");
+                if (odrCards.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">Jalur ODR</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-purple-50 text-purple-700 px-2 py-1 rounded-full uppercase tracking-wide">One Day Result</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {odrCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
               {/* USM via Nilai UTBK — section hanya tampil jika ada kartu yang lolos filter */}
               {(() => {
                 const today = new Date();
@@ -1952,48 +1107,84 @@ const PMBLanding = () => {
                   </div>
                 );
               })()}
-              {/* Jalur Utama */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">Jalur Utama</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full uppercase tracking-wide">Paling Banyak Dipilih</span>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama").map(j => (
-                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                  ))}
-                </div>
-              </div>
-              {/* Jalur Kedokteran */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-slate-700">Jalur Kedokteran</span>
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="text-[9px] font-bold bg-blue-50 text-blue-700 px-2 py-1 rounded-full uppercase tracking-wide">Program Khusus</span>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 items-start">
-                  {JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kedokteran").map(j => (
-                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                  ))}
-                </div>
-              </div>
+              {/* Jalur Utama — selalu tampil (termasuk saat closed) supaya pengunjung selalu bisa lihat jalur utama UNPAS */}
+              {(() => {
+                const utamaCards = ALL_JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "utama");
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">Jalur Utama</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full uppercase tracking-wide">Paling Banyak Dipilih</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {utamaCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+              {/* Jalur Kedokteran — USM Kedokteran selalu tampil (termasuk saat closed); kartu
+                  lain di section ini (Kedokteran via Nilai UTBK, momentum lain) tetap hilang
+                  begitu closed, seperti jalur non-utama lainnya. */}
+              {(() => {
+                const kedokteranCards = ALL_JALUR_DATA.filter(j =>
+                  j.group === "maba" && j.subgroup === "kedokteran" && (j.id === "fk_usm" || j.status !== "closed")
+                );
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">Jalur Kedokteran</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-blue-50 text-blue-700 px-2 py-1 rounded-full uppercase tracking-wide">Program Khusus</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {kedokteranCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+              {/* Jalur KIP-Kuliah — section hanya tampil jika ada kartu yang lolos filter */}
+              {(() => {
+                const kipCards = JALUR_DATA.filter(j => j.group === "maba" && j.subgroup === "kip");
+                if (kipCards.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-bold text-slate-700">Jalur KIP-Kuliah</span>
+                      <div className="flex-1 h-px bg-slate-200" />
+                      <span className="text-[9px] font-bold bg-amber-50 text-amber-700 px-2 py-1 rounded-full uppercase tracking-wide">Khusus BIDIKMISI / KIP</span>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4 items-start">
+                      {kipCards.map(j => (
+                        <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           )}
 
-          {jalurProfile === "transfer" && (
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-slate-700">Jalur RPL (Rekognisi Pembelajaran Lampau)</span>
-                <div className="flex-1 h-px bg-slate-200" />
+          {jalurProfile === "transfer" && (() => {
+            const rplCards = ALL_JALUR_DATA.filter(j => j.group === "transfer");
+            return (
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-slate-700">Jalur RPL (Rekognisi Pembelajaran Lampau)</span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 items-start">
+                  {rplCards.map(j => (
+                    <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
+                  ))}
+                </div>
               </div>
-              <div className="grid sm:grid-cols-2 gap-4 items-start">
-                {JALUR_DATA.filter(j => j.group === "transfer").map(j => (
-                  <JalurCard key={j.id} j={j} openId={openJalurId} setOpenId={setOpenJalurId} getDeadlineLabel={getDeadlineLabel} />
-                ))}
-              </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Guided CTA */}
           {/* <motion.div variants={sectionItem} className="mt-8 rounded-2xl bg-slate-900 p-5 flex flex-col sm:flex-row items-center gap-4">
@@ -2999,7 +2190,7 @@ const PMBLanding = () => {
           subtitle: "",
           points: [
             { ic: "📤", text: "Upload sertifikat UTBK 2024, 2025, atau 2026 hingga 14 Juli" },
-            { ic: "✏️", text: "Tidak punya sertifikat UTBK? Ikut Tes Tulis Konvensional Sesi 3 — 5 Juli 2026" },
+            { ic: "✏️", text: "Tidak punya sertifikat UTBK? Daftar via jalur PMDK atau USM Reguler (Tes Tulis) yang masih dibuka" },
             { ic: "⚡", text: "Hasil seleksi keluar dalam 1 hari kerja" },
           ],
           cost: "💳 Formulir Rp 400.000",
