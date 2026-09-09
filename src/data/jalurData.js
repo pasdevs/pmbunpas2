@@ -114,7 +114,7 @@ const createPMDKActive = (todayLabel) => {
 
     value: "Tanpa ujian — seleksi berbasis nilai rapor semester 1–5. Cocok jika nilai akademik bagus.",
 
-    tags: ["📋 Nilai Rapor", "✅ Tanpa Tes"],
+    tags: ["📋 Nilai Rapor", "📋 Seleksi Berkas"],
 
     status,
     statusText: text,
@@ -552,7 +552,7 @@ const createUSMActive = (todayLabel) => {
 
     value: "Ujian seleksi — terbuka untuk semua lulusan SMA/SMK/MA sederajat. Cocok jika ingin ikut tes masuk.",
 
-    tags: ["📝 Tes Tertulis", "📋 Seleksi Berkas"],
+    tags: ["📝 Tes Tertulis"],
 
     status,
     statusText: text,
