@@ -14,9 +14,9 @@ const getActivePMDK = () => getSmartActive(GELOMBANG_PMDK);
 const getActiveUSM = () => getSmartActive(GELOMBANG_USM);
 const getActiveGelombang = () => getSmartActive(GELOMBANG_FK);
 
-// GENERATE DATA ONE DAY RESULT — ODR GELOMBANG 3 (25 Jul – 4 Sep 2026)
+// GENERATE DATA ONE DAY RESULT — ODR GELOMBANG 3 (25 Jul – 9 Sep 2026)
 const createODRActive = (todayLabel) => {
-  const { status, text } = getStatusInfo("2026-07-25", "2026-09-04");
+  const { status, text } = getStatusInfo("2026-07-25", "2026-09-09");
   const tls = (d) => new Date() >= wibDate(d, true) ? "done" : "upcoming";
 
   return {
@@ -44,9 +44,9 @@ const createODRActive = (todayLabel) => {
 
     gel: "Gelombang 3",
 
-    period: "25 Jul 2026 – 4 Sep 2026",
+    period: "25 Jul 2026 – 9 Sep 2026",
     startDate: "2026-07-25",
-    deadline: "2026-09-04",
+    deadline: "2026-09-09",
 
     link: "https://situ2.unpas.ac.id/spmbfront/jalur-seleksi-detail/314",
 
@@ -82,7 +82,7 @@ const createODRActive = (todayLabel) => {
         state: "active",
         now: true,
       }] : []),
-      { date: "4 September 2026", label: "Batas akhir pendaftaran ODR Gelombang 3", state: status === "closed" ? "done" : "upcoming" },
+      { date: "9 September 2026", label: "Batas akhir pendaftaran ODR Gelombang 3", state: status === "closed" ? "done" : "upcoming" },
     ],
   };
 };
